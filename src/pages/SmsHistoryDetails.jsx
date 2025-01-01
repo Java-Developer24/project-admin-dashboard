@@ -31,8 +31,9 @@ const SmsHistoryDetails = () => {
   useEffect(() => {
     const fetchSmsDetails = async () => {
       try {
-        const response = await axios.get(`/transaction-history?userId=${id}`);
+        const response = await axios.get(`http://localhost:3000/api/history/get-transaction-history-admin?userId=${id}`);
         setSmsDetails(Array.isArray(response.data) ? response.data : []);
+        console.log(Array.isArray(response.data) ? response.data : [])
       } catch (error) {
         console.error("Failed to fetch SMS history details:", error);
       }
@@ -40,7 +41,7 @@ const SmsHistoryDetails = () => {
 
     const fetchUser = async () => {
       try {
-        const user = await axios.get(`/get-user?userId=${id}`);
+        const user = await axios.get(`http://localhost:3000/api/user/get-user?userId=${id}`);
         setUserData(user.data);
       } catch (error) {
         console.error("Failed to fetch user data");
@@ -51,78 +52,70 @@ const SmsHistoryDetails = () => {
     fetchUser();
   }, [id]);
 
-  const filterTransactionHistory = (data) => {
-    if (!Array.isArray(data)) {
-      return [];
-    }
-
-    const groupedData = data.reduce((acc, entry) => {
-      if (!acc[entry.id]) {
-        acc[entry.id] = [];
-      }
-      acc[entry.id].push(entry);
-      return acc;
-    }, {});
-
-    const preparedData = Object.values(groupedData).map((entries) => {
-      const finishedEntries = entries.filter(
-        (entry) => entry.status === "FINISHED"
-      );
-      const cancelledEntries = entries.filter(
-        (entry) => entry.status === "CANCELLED"
-      );
-
-      const displayEntry =
-        cancelledEntries.length > 0
-          ? cancelledEntries[0]
-          : finishedEntries.find((entry) => entry.otp !== null) ||
-            finishedEntries[0];
-
-      return {
-        ...displayEntry,
-        otps:
-          finishedEntries
-            .filter((entry) => entry.otp)
-            .map((entry) => entry.otp)
-            .join(`<br><br>`) || "-",
-      };
-    });
-
-    return preparedData;
-  };
-
-  let filteredTransactionHistory = filterTransactionHistory(smsDetails);
-
-  if (tranFilter === "Success") {
-    filteredTransactionHistory = filteredTransactionHistory.filter(
-      (entry) => entry.status === "FINISHED"
-    );
-  } else if (tranFilter === "Cancelled") {
-    filteredTransactionHistory = filteredTransactionHistory.filter(
-      (entry) => entry.status === "CANCELLED"
-    );
+ // Filter Transaction History
+const filterTransactionHistory = (data) => {
+  if (!Array.isArray(data)) {
+    return [];
   }
 
-  const sortedFilteredTransactionHistory = filteredTransactionHistory
-    .sort((a, b) =>
-      moment(b.date_time, "MM/DD/YYYYTHH:mm:ss A").isBefore(
-        moment(a.date_time, "MM/DD/YYYYTHH:mm:ss A")
-      )
-        ? 1
-        : -1
-    )
-    .reverse();
+  const groupedData = data.reduce((acc, entry) => {
+    if (!acc[entry.id]) {
+      acc[entry.id] = [];
+    }
+    acc[entry.id].push(entry);
+    return acc;
+  }, {});
 
-  const getDateRange = (data) => {
-    if (data.length === 0) return "No data available";
-    const dates = data.map((entry) =>
-      moment(entry.date_time, "MM/DD/YYYYTHH:mm:ss A")
+  const preparedData = Object.values(groupedData).map((entries) => {
+    const successEntries = entries.filter((entry) => entry.status === "SUCCESS");
+    const cancelledEntries = entries.filter(
+      (entry) => entry.status === "CANCELLED"
     );
-    const minDate = moment.min(dates);
-    const maxDate = moment.max(dates);
-    return `${minDate.format("DD/MM/YY")} - ${maxDate.format("DD/MM/YY")}`;
-  };
 
+    const displayEntry =
+      cancelledEntries.length > 0
+        ? cancelledEntries[0]
+        : successEntries.find((entry) => entry.otp.length > 0) || successEntries[0];
+
+    return {
+      ...displayEntry,
+      otps:
+        successEntries
+          .flatMap((entry) => entry.otp.map((otp) => `${otp.message} (${moment(otp.date).format("DD/MM/YYYY hh:mm:ss A")})`))
+          .join(`<br><br>`) || "-",
+    };
+  });
+
+  return preparedData;
+};
+
+// Filter and Sort
+let filteredTransactionHistory = filterTransactionHistory(smsDetails);
+
+if (tranFilter === "Success") {
+  filteredTransactionHistory = filteredTransactionHistory.filter(
+    (entry) => entry.status === "SUCCESS"
+  );
+} else if (tranFilter === "Cancelled") {
+  filteredTransactionHistory = filteredTransactionHistory.filter(
+    (entry) => entry.status === "CANCELLED"
+  );
+}
+
+const sortedFilteredTransactionHistory = filteredTransactionHistory
+  .sort((a, b) =>
+    moment(b.date_time).isBefore(moment(a.date_time)) ? 1 : -1
+  )
+  .reverse();
+
+// Get Date Range
+const getDateRange = (data) => {
+  if (data.length === 0) return "No data available";
+  const dates = data.map((entry) => moment(entry.date_time));
+  const minDate = moment.min(dates);
+  const maxDate = moment.max(dates);
+  return `${minDate.format("DD/MM/YY")} - ${maxDate.format("DD/MM/YY")}`;
+};
   const handleTransactionLimitChange = (value) => {
     setTransactionLimit(Number(value));
     setTransactionCurrentPage(1); // Reset to the first page when limit changes
@@ -231,9 +224,8 @@ const SmsHistoryDetails = () => {
                         className="border-b-2 border-[#949494] p-3"
                         style={wrapStyle}
                       >
-                        {moment(item.date_time, "MM/DD/YYYYTHH:mm:ss A").format(
-                          "DD/MM/YYYY hh:mm:ss A"
-                        )}
+                        {moment(item.date_time).format("DD/MM/YYYY hh:mm:ss A")}
+
                       </td>
                     </tr>
                     <tr>

@@ -17,7 +17,7 @@ const UserRechargeHistory = () => {
     const fetchHistory = async () => {
       try {
         const rechargeResponse = await axios.get(
-          `/recharge-history?userId=${id}`
+          `http://localhost:3000/api/history/get-user-recharge-history?userId=${id}`
         );
         setRechargeHistory(rechargeResponse.data);
       } catch (error) {
@@ -27,7 +27,7 @@ const UserRechargeHistory = () => {
 
     const fetchUser = async () => {
       try {
-        const user = await axios.get(`/get-user?userId=${id}`);
+        const user = await axios.get(`http://localhost:3000/api/user/get-user?userId=${id}`);
         setUserData(user.data);
       } catch (error) {
         console.error("Failed to fetch user data");
@@ -119,9 +119,9 @@ const UserRechargeHistory = () => {
                         style={wrapStyle}
                       >
                         {moment(
-                          history.date_time,
-                          "MM/DD/YYYYThh:mm:ss A"
-                        ).format("DD/MM/YYYY hh:mm:ss A")}
+  history.date_time, // Input date string from backend
+  "DD/MM/YYYY[T]hh:mm A" // Input format
+).format("DD/MM/YYYY hh:mm:ss A")}
                       </td>
                     </tr>
                     <tr>

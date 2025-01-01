@@ -20,7 +20,7 @@ const AddServerDiscount = () => {
 
   const fetchDiscounts = async () => {
     try {
-      const response = await axios.get("/server/get-discount");
+      const response = await axios.get("http://localhost:3000/api/server/get-server-discount");
       setDiscounts(response.data);
     } catch (error) {
       console.error("Error fetching discounts:", error);
@@ -39,7 +39,7 @@ const AddServerDiscount = () => {
         return;
       }
 
-      await axios.post("/server/add-discount", {
+      await axios.post("http://localhost:3000/api/server/add-server-discount", {
         server: Id,
         discount: marginPrice,
       });
@@ -53,7 +53,7 @@ const AddServerDiscount = () => {
 
   const handleDelete = async (serverId) => {
     try {
-      await axios.delete(`/server/delete-discount?server=${serverId}`);
+      await axios.delete(`http://localhost:3000/api/server/delete-server-discount?server=${serverId}`);
       setDiscounts(
         discounts.filter((discount) => discount.server !== serverId)
       );

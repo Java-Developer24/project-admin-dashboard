@@ -21,12 +21,12 @@ const AddService = () => {
       const addService = async () => {
         try {
           // Submit to addccpayServiceNameData API
-          const response = await axios.post("/add-ccpay-service-name-data", {
+          const response = await axios.post("http://localhost:3000/api/service/addService", {
             name: serviceName,
             serviceName: serverNumber9,
           });
           resolve(response);
-        } catch (error) {
+        } catch (error) { 
           reject(error);
         }
       };

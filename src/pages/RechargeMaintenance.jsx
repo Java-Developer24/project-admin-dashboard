@@ -36,7 +36,7 @@ const RechargeMaintenance = () => {
 
   const toggleMaintenanceStatus = async (rechargeType, newStatus) => {
     try {
-      await axios.post(`/recharge-maintenance-toggle`, {
+      await axios.post(`http://localhost:3000/api/recharge/updateRechargeMaintence`, {
         rechargeType,
         status: newStatus,
       });
@@ -82,6 +82,7 @@ const RechargeMaintenance = () => {
               >
                 {type.type.toUpperCase()}
                 <Switch
+
                   checked={type.status}
                   onCheckedChange={(checked) =>
                     handleSwitchChange(type.type, checked)

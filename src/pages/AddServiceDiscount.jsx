@@ -22,8 +22,10 @@ const AddServiceDiscount = ({ serviceList }) => {
 
   const fetchDiscounts = async () => {
     try {
-      const response = await axios.get("/service/get-discount");
+      const response = await axios.get("http://localhost:3000/api/service/get-all-service-discount");
       setDiscount(response.data);
+      
+      console.log(response.data)
     } catch (error) {
       console.error("Error fetching discounts:", error);
     }
@@ -42,7 +44,7 @@ const AddServiceDiscount = ({ serviceList }) => {
         return;
       }
 
-      await axios.post("/service/add-discount", {
+      await axios.post("http://localhost:3000/api/service/add-service-discount", {
         service: selectedService,
         server: serverId,
         discount: discountAmount,
@@ -59,7 +61,7 @@ const AddServiceDiscount = ({ serviceList }) => {
   const handleDelete = async (service, server) => {
     try {
       await axios.delete(
-        `/service/delete-discount?service=${service}&server=${server}`
+        `http://localhost:3000/api/service/delete-service-discount?service=${service}&server=${server}`
       );
       fetchDiscounts();
       alert("Service discount deleted successfully");
@@ -68,6 +70,10 @@ const AddServiceDiscount = ({ serviceList }) => {
       alert("An error occurred while deleting the discount.");
     }
   };
+  useEffect(() => {
+    console.log("Current discounts state:", discount); // Log the current state of discount
+  }, [discount]); // Log whenever discount state changes
+
 
   return (
     <>
@@ -209,11 +215,11 @@ const AddServiceDiscount = ({ serviceList }) => {
               </thead>
               <tbody>
                 {discount
-                  .filter((discount) => discount.server.toString() === serverId)
+                  .filter((discount) => discount.server.toString())
                   .map((discount, index) => (
                     <tr key={index} className="h-12 border-b border-[#373737]">
                       <td className="p-2 font-normal text-sm">
-                        {discount.server}
+                        {serverId}
                       </td>
                       <td className="p-2 font-normal text-sm">
                         {discount.service}

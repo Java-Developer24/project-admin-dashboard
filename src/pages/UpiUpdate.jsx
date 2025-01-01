@@ -16,7 +16,7 @@ const UpiUpdate = () => {
   const navigate = useNavigate();
   const getApi = () =>
     axios
-      .get("/get-reacharge-api?type=upi")
+      .get("http://localhost:3000/api/recharge/get-recharge-api?type=upi")
       .then((response) => {
         setApi(response.data.api_key);
       })
@@ -90,9 +90,9 @@ const UpiUpdate = () => {
     const upiUpdatePromise = new Promise((resolve, reject) => {
       const upiUpdate = async () => {
         try {
-          const response = await axios.post("/add-recharge-api", {
+          const response = await axios.post("http://localhost:3000/api/recharge/update-recharge-api", {
             recharge_type: "upi",
-            api_key: newUpi, // Use the newApiKey state
+            newUpiId:newUpi // Use the newApiKey state
           });
           setNewUpi("");
           getApi();
@@ -177,14 +177,14 @@ const UpiUpdate = () => {
             />
 
             <div className="flex flex-col items-center w-full">
-              <Button
+              {/* <Button
                 variant="link"
                 type="button"
                 className="text-sm font-normal text-[#397CFF] !no-underline p-1"
                 onClick={handleFileUploadClick}
               >
                 Update QR Code
-              </Button>
+              </Button> */}
               {selectedFile && (
                 <>
                   <div>

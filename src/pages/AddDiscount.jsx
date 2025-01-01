@@ -48,7 +48,7 @@ const AddDiscount = () => {
   useEffect(() => {
     const fetchServiceData = async () => {
       try {
-        const response = await axios.get("/get-service-data-admin");
+        const response = await axios.get("http://localhost:3000/api/service/get-service-data-admin");
         setServiceList(response.data);
       } catch (err) {
         console.log(err.message);
@@ -82,7 +82,7 @@ const AddDiscount = () => {
     }
 
     try {
-      await axios.post("/users/add-discount", {
+      await axios.post("http://localhost:3000/api/user/add-user-discount", {
         email,
         service: selectedService,
         server: selectedServer,

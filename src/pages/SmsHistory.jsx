@@ -34,7 +34,7 @@ const SmsHistory = () => {
     // Fetch users data on component mount
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("/get-all-users");
+        const response = await axios.get("http://localhost:3000/api/user/get-all-users");
         setUsers(response.data);
         setLoading(false);
       } catch (error) {

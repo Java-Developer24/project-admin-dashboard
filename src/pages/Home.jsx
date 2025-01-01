@@ -31,35 +31,36 @@ const Home = () => {
         const [usersResponse, totalUsersCount, transactions, blockedUserCount] =
           await Promise.all([
             axios.get("/get-all-users"),
-            axios.get(`/total-user-count`),
+            axios.get(`http://localhost:3000/api/user/total-user-count`),
             axios.get("/transaction-history-count"),
-            axios.get("/get-all-blocked-users"),
+            axios.get("http://localhost:3000/api/user/get-all-blocked-users-count"),
           ]);
-
+  
         const usersData = usersResponse.data;
-
+  
         // Calculate the total balance of all users
         const totalBalance = usersData.reduce(
           (accumulator, user) => accumulator + user.balance,
           0
         );
-
+  
         setTotalUsers(totalUsersCount.data.totalUserCount);
         setTotalAmount(totalBalance.toFixed(2)); // Update total amount state
         setTrnSuccess(transactions.data.successCount);
         setTrnCancel(transactions.data.cancelledCount);
         setTrnPending(transactions.data.pendingCount);
-        const blockedUsers = Array.isArray(blockedUserCount.data.data)
-          ? blockedUserCount.data.data
-          : [];
+        
+        const blockedUsers = blockedUserCount.data?.blockedUser || 0;
         setBlockedUser(blockedUsers);
+       
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchUsers();
   }, []);
+  
 
   return (
     <div className="flex items-center justify-center pt-[1rem]">
@@ -85,11 +86,12 @@ const Home = () => {
           <span className="text-sm text-white font-normal">{trnPending}</span>
         </h3>
         <h3 className="font-normal text-base text-[#8C8C8C]">
-          Blocked User:{" "}
-          <span className="text-sm text-white font-normal">
-            {blockedUser ? blockedUser.length : 0}
-          </span>
-        </h3>
+  Blocked User:{" "}
+  <span className="text-sm text-white font-normal">
+    {blockedUser}
+  </span>
+</h3>
+
 
         <h3 className="font-normal text-sm text-[#8C8C8C] mt-2">
           Manage Website:

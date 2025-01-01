@@ -15,7 +15,7 @@ const UnsendTrx = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const rechargeResponse = await axios.get("/unsend-trx");
+        const rechargeResponse = await axios.get("http://localhost:3000/api/unsendtrx/unsend-trx");
         setUnsendTrx(rechargeResponse.data.data);
       } catch (error) {
         console.error("Failed to fetch history data", error);
@@ -27,7 +27,7 @@ const UnsendTrx = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/unsend-trx?id=${id}`);
+      await axios.delete(`http://localhost:3000/api/unsendtrx/unsend-trx?id=${id}`);
       setUnsendTrx((prevUnsendTrx) =>
         prevUnsendTrx.filter((trx) => trx._id !== id)
       );

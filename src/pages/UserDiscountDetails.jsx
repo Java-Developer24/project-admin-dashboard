@@ -18,10 +18,10 @@ const UserDiscountDetails = () => {
   useEffect(() => {
     const fetchUserDiscounts = async () => {
       try {
-        const response = await axios.get(
-          `/users/get-discount?userId=${userId}`
-        );
-        const data = await response.data;
+          const response = await axios.get(
+            `http://localhost:3000/api/user/get-user-discount-details?userId=${userId}`
+          );
+          const data = await response.data;
 
         if (data.length > 0) {
           setUserEmail(data[0].userId.email); // Assuming email is populated
@@ -38,16 +38,21 @@ const UserDiscountDetails = () => {
   const handleDelete = async (service, server) => {
     try {
       await axios.delete(
-        `/users/delete-discount?userId=${userId}&service=${service}&server=${server}`
+        `http://localhost:3000/api/user/delete-user-discount?userId=${userId}&service=${service}&server=${server}`
       );
 
+
+
       // Remove the deleted discount from the state
-      setDiscounts((prevDiscounts) =>
-        prevDiscounts.filter(
-          (discount) =>
-            discount.service !== service || discount.server !== server
-        )
-      );
+     // Remove the deleted discount from the state
+setDiscounts((prevDiscounts) =>
+  prevDiscounts.filter(
+    (discount) =>
+      discount.userId.service !== service || discount.userId.server !== server
+  )
+);
+
+
     } catch (error) {
       console.error("Failed to delete discount:", error);
     }
@@ -91,24 +96,24 @@ const UserDiscountDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {discounts.map(({ _id, service, discount, server }) => (
-                    <tr key={_id}>
-                      <td className="border-t-2 border-[#4B4B4B] p-3">
-                        {service}
-                      </td>
-                      <td className="border-t-2 border-[#4B4B4B] p-3">
-                        {server}
-                      </td>
-                      <td className="border-t-2 border-[#4B4B4B] p-3">
-                        {discount}
-                      </td>
-                      <td className="border-t-2 border-[#4B4B4B] p-3">
-                        <Button onClick={() => handleDelete(service, server)}>
-                          <Icon.trash className="w-4 h-4 text-red-600" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                {discounts.map(({ userId: { service, discount, server } }) => (
+  <tr key={service + server}> {/* Use service + server as a unique key */}
+    <td className="border-t-2 border-[#4B4B4B] p-3">
+      {service}
+    </td>
+    <td className="border-t-2 border-[#4B4B4B] p-3">
+      {server}
+    </td>
+    <td className="border-t-2 border-[#4B4B4B] p-3">
+      {discount}
+    </td>
+    <td className="border-t-2 border-[#4B4B4B] p-3">
+      <Button onClick={() => handleDelete(service, server)}>
+        <Icon.trash className="w-4 h-4 text-red-600" />
+      </Button>
+    </td>
+  </tr>
+))}
                 </tbody>
               </table>
             </div>

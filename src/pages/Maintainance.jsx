@@ -6,7 +6,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Maintainance = () => {
+const Maintenance = () => {
   const navigate = useNavigate();
   const [servers, setServers] = useState([]); // To store server data
   const [loading, setLoading] = useState(true); // To handle loading state
@@ -18,13 +18,13 @@ const Maintainance = () => {
     // Fetch server data
     const fetchServers = async () => {
       try {
-        const response = await axios.get("/get-server"); // Call the API endpoint
+        const response = await axios.get("http://localhost:3000/api/server/get-server"); // Call the API endpoint
         setServers(response.data); // Set server data
         // Find the master maintenance status
         const masterServer = response.data.find(
           (server) => server.server === 0
         );
-        setMasterMaintenace(masterServer?.maintainance || false); // Set master maintenance status
+        setMasterMaintenace(masterServer?.maintenance || false); // Set master maintenance status
       } catch (error) {
         console.error("Failed to fetch servers:", error);
       } finally {
@@ -37,14 +37,14 @@ const Maintainance = () => {
 
   const handleMasterSwitchChange = async (isChecked) => {
     try {
-      await axios.post(`/maintainance-server`, {
+      await axios.post(`http://localhost:3000/api/service/maintenance-all-servers`, {
         server: 0, // Server 0 for master maintenance
-        maintainance: isChecked,
+        maintenance: isChecked,
       }); // Update master maintenance status
       setMasterMaintenace(isChecked);
       setServers((prevServers) =>
         prevServers.map((server) =>
-          server.server !== 0 ? { ...server, maintainance: isChecked } : server
+          server.server !== 0 ? { ...server, maintenance: isChecked } : server
         )
       );
     } catch (error) {
@@ -54,14 +54,14 @@ const Maintainance = () => {
 
   const handleSwitchChange = async (serverNumber, isChecked) => {
     try {
-      await axios.post(`/maintainance-server`, {
-        server: serverNumber,
-        maintainance: isChecked,
+      await axios.post(`http://localhost:3000/api/service/maintainance-server`, {
+        serverNumber: serverNumber,
+        maintenance: isChecked,
       }); // Update server block status
       setServers((prevServers) =>
         prevServers.map((server) =>
           server.server === serverNumber
-            ? { ...server, maintainance: isChecked }
+            ? { ...server, maintenance: isChecked }
             : server
         )
       );
@@ -78,14 +78,14 @@ const Maintainance = () => {
           onClick={navigateBack}
           className="text-sm font-normal text-[#8C8C8C] !no-underline p-1 h-0 flex gap-2"
         >
-          <Icon.arrowLeft className="w-4 h-4" /> Maintainance
+          <Icon.arrowLeft className="w-4 h-4" /> Maintenance
         </Button>
       </div>
       <div className="flex items-center justify-center pt-[1rem]">
         <div className="bg-transparent w-full max-w-md rounded-lg mb-[60px] border-none dark">
           <div className="w-full flex items-center justify-between px-4">
             <h5 className="font-normal text-base text-[#757575]">
-              Master Maintainance
+              Master Maintenance
             </h5>
             <Switch
               checked={masterMaintenace}
@@ -109,7 +109,7 @@ const Maintainance = () => {
                   >
                     Server {server.server}
                     <Switch
-                      checked={server.maintainance}
+                      checked={server.maintenance}
                       onCheckedChange={(checked) =>
                         handleSwitchChange(server.server, checked)
                       }
@@ -124,4 +124,4 @@ const Maintainance = () => {
   );
 };
 
-export default AppLayout()(Maintainance);
+export default AppLayout()(Maintenance);

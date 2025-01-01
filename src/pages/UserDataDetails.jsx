@@ -21,7 +21,7 @@ const UserDataDetails = () => {
 
   const fetchUser = async () => {
     try {
-      const user = await axios.get(`/get-user?userId=${id}`);
+      const user = await axios.get(`http://localhost:3000/api/user/get-user?userId=${id}`);
       setUserData(user.data);
       setIsBlocked(user.data.blocked);
       setNewBalance(user.data.balance); // Initialize new balance
@@ -35,10 +35,19 @@ const UserDataDetails = () => {
 
   const handleBlockToggle = async () => {
     try {
-      const response = await axios.post("/user", {
+      // Construct the payload conditionally
+      const payload = {
         userId: id,
         blocked: !isBlocked,
-      });
+      };
+  
+      // Add blocked_reason only if the user is being blocked
+      if (!isBlocked) {
+        payload.blocked_reason = "Blocked by Admin";
+      }
+  
+      const response = await axios.post("http://localhost:3000/api/user/block-user", payload);
+  
       if (response.data.status === "SUCCESS") {
         setIsBlocked(!isBlocked);
       }
@@ -46,6 +55,7 @@ const UserDataDetails = () => {
       console.error("Failed to update block status:", error);
     }
   };
+  
 
   const handleEditClick = () => {
     setNewBalance(userData.balance); // Set balance to current value when editing starts
@@ -58,7 +68,7 @@ const UserDataDetails = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post("/edit-balance", {
+      const response = await axios.post("http://localhost:3000/api/user/update-user-balance", {
         userId: id,
         new_balance: parseFloat(newBalance), // Ensure balance is a number
       });

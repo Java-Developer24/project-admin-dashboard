@@ -14,15 +14,17 @@ const BlockedUser = () => {
   useEffect(() => {
     const fetchBlockedUsers = async () => {
       try {
-        const response = await axios.get("/get-all-blocked-users");
-        setBlockedUsers(response.data.data);
+        const response = await axios.get("http://localhost:3000/api/user/get-all-blocked-users");
+        // Update to use response.data directly, since it's already an array
+        setBlockedUsers(response.data); 
       } catch (error) {
         console.error("Failed to fetch blocked users data", error);
       }
     };
-
+  
     fetchBlockedUsers();
   }, []);
+  
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
