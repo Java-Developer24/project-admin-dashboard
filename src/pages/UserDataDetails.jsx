@@ -38,18 +38,14 @@ const UserDataDetails = () => {
       // Construct the payload conditionally
       const payload = {
         userId: id,
-        blocked: !isBlocked,
+        blocked: !isBlocked, // Toggle blocked status
+        blocked_reason: !isBlocked ? "Blocked by Admin" : null, // Set reason if blocking, else null for unblocking
       };
-  
-      // Add blocked_reason only if the user is being blocked
-      if (!isBlocked) {
-        payload.blocked_reason = "Blocked by Admin";
-      }
   
       const response = await axios.post("http://localhost:3000/api/user/block-user", payload);
   
       if (response.data.status === "SUCCESS") {
-        setIsBlocked(!isBlocked);
+        setIsBlocked(!isBlocked); // Toggle the UI state for blocked status
       }
     } catch (error) {
       console.error("Failed to update block status:", error);
@@ -86,7 +82,7 @@ const UserDataDetails = () => {
       const deleteUserRequest = async () => {
         try {
           const response = await axios.delete(
-            `/block-fraud-clear?userId=${id}`
+            `http://localhost:3000/api/block/block-fraud-clear?userId=${id}`
           );
           if (response.status === 200) {
             // Redirect to users data page or show success message

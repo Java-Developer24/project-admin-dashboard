@@ -30,9 +30,9 @@ const Home = () => {
       try {
         const [usersResponse, totalUsersCount, transactions, blockedUserCount] =
           await Promise.all([
-            axios.get("/get-all-users"),
+            axios.get("http://localhost:3000/api/user/get-all-users"),
             axios.get(`http://localhost:3000/api/user/total-user-count`),
-            axios.get("/transaction-history-count"),
+            axios.get("http://localhost:3000/api/history/transaction-history-count"),
             axios.get("http://localhost:3000/api/user/get-all-blocked-users-count"),
           ]);
   

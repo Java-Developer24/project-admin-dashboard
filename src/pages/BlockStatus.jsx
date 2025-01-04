@@ -21,7 +21,7 @@ const BlockStatus = () => {
     try {
       const responses = await Promise.all(
         blockTypes.map((type) =>
-          axios.get(`/get-block-status?blockType=${type.type}`)
+          axios.get(`http://localhost:3000/api/block/get-block-status?blockType=${type.type}`)
         )
       );
       const updatedTypes = responses.map((response, index) => ({
@@ -36,7 +36,7 @@ const BlockStatus = () => {
 
   const toggleBlockStatus = async (blockTypes, newStatus) => {
     try {
-      await axios.post(`/block-status-toggle`, {
+      await axios.post(`http://localhost:3000/api/block/block-status-toggle`, {
         blockType: blockTypes,
         status: newStatus,
       });
