@@ -140,7 +140,7 @@ const getDateRange = (data) => {
       <div className="w-full my-4 flex items-center justify-between">
         <Button
           variant="link"
-          onClick={navigateToSmsHistory}
+          onClick={() => navigate(`/users-data/${id}`)}
           className="text-sm font-normal text-[#8C8C8C] !no-underline p-1 h-0 flex gap-2"
         >
           <Icon.arrowLeft className="w-4 h-4" /> Sms History Details

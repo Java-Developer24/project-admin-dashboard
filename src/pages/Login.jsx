@@ -9,29 +9,51 @@ import { emailValidator } from "@/utils/validators";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const email = useInputValidation("", emailValidator);
   const password = useInputValidation("");
-  const { login } = useAuth(); // Get login function from Auth context
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const envEmail = import.meta.env.VITE_ADMIN_LOGIN_EMAIL; // Accessing environment variables
+    const envEmail = import.meta.env.VITE_ADMIN_LOGIN_EMAIL;
     const envPassword = import.meta.env.VITE_ADMIN_LOGIN_PASSWORD;
 
     if (email.value === envEmail && password.value === envPassword) {
-      login();
-      // Navigate to the home page or dashboard
-      navigate("/");
+      try {
+        const response = await fetch('http://localhost:3000/api/auth/admin-login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: email.value, password: password.value }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Store email in localStorage for MFA verification
+          localStorage.setItem('tempEmail', email.value);
+          
+          // Always redirect to MFA page - the page will handle both setup and verification
+          navigate('/mfa');
+        } else {
+          toast.error('Invalid credentials');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        toast.error('An error occurred during login');
+      }
     } else {
-      alert("Invalid credentials");
+      toast.error("Invalid credentials");
     }
   };
 

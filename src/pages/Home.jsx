@@ -106,7 +106,7 @@ const Home = () => {
             Service List
             <Icon.arrowRight className="w-4 h-4" />
           </Button>
-          <Button
+          {/* <Button
             variant="login"
             onClick={navigateToRechargeHistory}
             className="w-full text-sm font-normal h-14 text-white bg-[#282828] hover:bg-[#212121] !justify-between"
@@ -121,7 +121,7 @@ const Home = () => {
           >
             SMS History
             <Icon.arrowRight className="w-4 h-4" />
-          </Button>
+          </Button> */}
           <Button
             variant="login"
             onClick={navigateToUsersData}
@@ -138,6 +138,14 @@ const Home = () => {
             Admin Panel
             <Icon.arrowRight className="w-4 h-4" />
           </Button>
+          <Button
+  variant="login"
+  onClick={() => navigate('/server-balances')}
+  className="w-full text-sm font-normal h-14 text-white bg-[#282828] hover:bg-[#212121] !justify-between"
+>
+  Server Balances
+  <Icon.arrowRight className="w-4 h-4" />
+</Button>
           <Button
             variant="login"
             onClick={navigateToDiscount}

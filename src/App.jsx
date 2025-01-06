@@ -7,6 +7,7 @@ import { useAuth } from "./utils/AuthContext";
 import AddServiceDiscountWrapper from "@/components/layout/AddServiceDiscountWrapper";
 const Home = lazy(() => import("@/pages/Home"));
 const Login = lazy(() => import("@/pages/Login"));
+const MfaPage = lazy(() => import("@/pages/MfaPage"));
 const Service = lazy(() => import("@/pages/Service"));
 const AddService = lazy(() => import("@/pages/AddService"));
 const RechargeHistory = lazy(() => import("@/pages/RechargeHistory"));
@@ -30,6 +31,7 @@ const BlockedUser = lazy(() => import("@/pages/BlockedUser"));
 const RechargeMaintenance = lazy(() => import("@/pages/RechargeMaintenance"));
 const BlockStatus = lazy(() => import("@/pages/BlockStatus"));
 const UserDiscountDetails = lazy(() => import("@/pages/UserDiscountDetails"));
+const ServerBalances = lazy(() => import("@/pages/ServerBalances")); // Add this line
 const DiscountAfterAddingUser = lazy(() =>
   import("@/pages/DiscountAfterAddingUser")
 );
@@ -120,6 +122,14 @@ function App() {
             element={
               <ProtectRoute isAuthenticated={isAuthenticated} redirect="/login">
                 <AdminPanel />
+              </ProtectRoute>
+            }
+          />
+           <Route
+            path="/server-balances"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/login">
+                <ServerBalances />
               </ProtectRoute>
             }
           />
@@ -259,6 +269,12 @@ function App() {
               </ProtectRoute>
             }
           />
+            <Route path="/mfa" 
+             element={
+            <ProtectRoute isAuthenticated={!isAuthenticated} redirect="/mfa"> <MfaPage/></ProtectRoute>}/>
+           
+            
+           
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
