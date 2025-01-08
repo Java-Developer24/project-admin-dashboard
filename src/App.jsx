@@ -5,6 +5,7 @@ import { LayoutLoader } from "@/components/layout/Loaders";
 import axios from "axios";
 import { useAuth } from "./utils/AuthContext";
 import AddServiceDiscountWrapper from "@/components/layout/AddServiceDiscountWrapper";
+const Orders = lazy(() => import("@/pages/Orders"));
 const Home = lazy(() => import("@/pages/Home"));
 const Login = lazy(() => import("@/pages/Login"));
 const MfaPage = lazy(() => import("@/pages/MfaPage"));
@@ -31,7 +32,8 @@ const BlockedUser = lazy(() => import("@/pages/BlockedUser"));
 const RechargeMaintenance = lazy(() => import("@/pages/RechargeMaintenance"));
 const BlockStatus = lazy(() => import("@/pages/BlockStatus"));
 const UserDiscountDetails = lazy(() => import("@/pages/UserDiscountDetails"));
-const ServerBalances = lazy(() => import("@/pages/ServerBalances")); // Add this line
+const ServerBalances = lazy(() => import("@/pages/ServerBalances"));
+const Settings = lazy(() => import("@/pages/Settings"));
 const DiscountAfterAddingUser = lazy(() =>
   import("@/pages/DiscountAfterAddingUser")
 );
@@ -125,7 +127,7 @@ function App() {
               </ProtectRoute>
             }
           />
-           <Route
+          <Route
             path="/server-balances"
             element={
               <ProtectRoute isAuthenticated={isAuthenticated} redirect="/login">
@@ -162,6 +164,14 @@ function App() {
             element={
               <ProtectRoute isAuthenticated={isAuthenticated} redirect="/login">
                 <TrxAddressUpdate />
+              </ProtectRoute>
+            }
+          />
+          <Route
+            path="/admin-panel/settings"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/login">
+                <Settings />
               </ProtectRoute>
             }
           />
@@ -269,12 +279,22 @@ function App() {
               </ProtectRoute>
             }
           />
-            <Route path="/mfa" 
-             element={
-            <ProtectRoute isAuthenticated={!isAuthenticated} redirect="/mfa"> <MfaPage/></ProtectRoute>}/>
-           
-            
-           
+          <Route
+            path="/mfa"
+            element={
+              <ProtectRoute isAuthenticated={!isAuthenticated} redirect="/mfa">
+                <MfaPage />
+              </ProtectRoute>
+            }
+          />
+           <Route
+          path="/orders/:id"
+           element={
+            <ProtectRoute isAuthenticated={isAuthenticated} redirect="/login">
+               <Orders />
+            </ProtectRoute>
+          }
+        />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

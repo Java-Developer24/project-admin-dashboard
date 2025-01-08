@@ -58,7 +58,7 @@ setDiscounts((prevDiscounts) =>
     }
   };
 
-  const navigateBack = () => navigate("/discount/user");
+  const navigateBack = () => navigate("/discount/");
 
   const handleNavigateToAddDiscount = () => {
     setEmail(userEmail);

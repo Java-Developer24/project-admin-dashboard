@@ -50,7 +50,7 @@ const SmsHistoryDetails = () => {
 
     fetchSmsDetails();
     fetchUser();
-  }, [id]);
+  }, [id,]);
 
  // Filter Transaction History
 const filterTransactionHistory = (data) => {
@@ -129,6 +129,19 @@ const getDateRange = (data) => {
       )
     : [];
 
+  
+    const handleDelete = async (id) => {
+      try {
+        // Call the delete API
+         await axios.delete(`http://localhost:3000/api/history/delete-numberhistory?id=${id}`);
+        
+        // Update the state to remove the deleted item
+    setSmsDetails(prevDetails => prevDetails.filter(item => item.id !== id));
+      } catch (error) {
+        console.error("Failed to delete SMS history:", error);
+      }
+    };
+    
   const wrapStyle = {
     wordBreak: "break-word",
     whiteSpace: "normal",
@@ -190,12 +203,17 @@ const getDateRange = (data) => {
                       <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                         ID
                       </td>
-                      <td
-                        className="border-b-2 border-[#949494] p-3"
-                        style={wrapStyle}
-                      >
-                        {item.id}
-                      </td>
+                      <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
+                        <span>{item.id}</span>
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(item.id);
+                          }}
+                        >
+                          <Icon.trash className="w-4 h-4 text-red-600" />
+                        </Button>
+                       </td>
                     </tr>
                     <tr>
                       <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
@@ -213,7 +231,9 @@ const getDateRange = (data) => {
                         OTP
                       </td>
                       <td className="border-b-2 border-[#949494] p-3">
-                        <span dangerouslySetInnerHTML={{ __html: item.otps }} />
+                      <span dangerouslySetInnerHTML={{ __html: item.otps && item.otps.length > 0 ? item.otps : "N/A" }} />
+
+
                       </td>
                     </tr>
                     <tr>

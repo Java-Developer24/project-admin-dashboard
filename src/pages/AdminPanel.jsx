@@ -16,6 +16,7 @@ const AdminPanel = () => {
   const navigateToRechargeMaintenance = () =>
     navigate("/admin-panel/recharge-maintenance");
   const navigateToBlockStatus = () => navigate("/admin-panel/block-status");
+  const navigateToSettings = () => navigate("/admin-panel/settings");
 
   return (
     <>
@@ -77,6 +78,14 @@ const AdminPanel = () => {
               className="w-full text-sm font-normal h-14 text-white bg-[#282828] hover:bg-[#212121] !justify-between"
             >
               Block Status
+              <Icon.arrowRight className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="login"
+              onClick={navigateToSettings}
+              className="w-full text-sm font-normal h-14 text-white bg-[#282828] hover:bg-[#212121] !justify-between"
+            >
+              Settings
               <Icon.arrowRight className="w-4 h-4" />
             </Button>
           </div>

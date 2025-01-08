@@ -38,6 +38,19 @@ const UserRechargeHistory = () => {
     fetchUser();
   }, [id]);
 
+  const handleDelete = async (id) => {
+       try {
+      await axios.delete(`http://localhost:3000/api/history/delete-recharge-history?id=${id}`);
+         // Remove the deleted item from the state
+         setRechargeHistory(prevHistory => 
+           prevHistory.filter(item => item._id !== id)
+         );
+        
+      } catch (error) {
+        console.error("Failed to delete recharge history:", error);
+    }
+     };
+
   const navigateToRechargeHistory = () => navigate("/recharge-history");
   const wrapStyle = {
     wordBreak: "break-word",
@@ -81,11 +94,14 @@ const UserRechargeHistory = () => {
                       <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                         Transaction ID
                       </td>
-                      <td
-                        className="border-b-2 border-[#949494] p-3"
-                        style={wrapStyle}
-                      >
-                        {history.transaction_id}
+                      <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
+                        <span>{history.transaction_id}</span>
+                       <Button
+                          onClick={(e) => { e.stopPropagation();handleDelete(history.transaction_id);
+                         }}
+                       >
+                         <Icon.trash className="w-4 h-4 text-red-600" />
+                      </Button>
                       </td>
                     </tr>
                     <tr>

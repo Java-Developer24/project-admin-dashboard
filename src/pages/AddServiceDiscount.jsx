@@ -18,7 +18,7 @@ const AddServiceDiscount = ({ serviceList }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const navigateBack = () => navigate("/discount/service");
+  const navigateBack = () => navigate("/discount");
 
   const fetchDiscounts = async () => {
     try {

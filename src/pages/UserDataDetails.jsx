@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "@/components/ui/Modal";
+import  AdminDashboard from "./AdminDashboard";
 
 const UserDataDetails = () => {
   const navigate = useNavigate();
@@ -137,6 +138,10 @@ const UserDataDetails = () => {
   };
 
 
+  const handleViewOrders = () => {
+     navigate(`/orders/${id}`);
+     }
+
   const handleDeleteUserData = async () => {
     const deleteUserPromise = new Promise((resolve, reject) => {
       const deleteUserRequest = async () => {
@@ -245,13 +250,13 @@ const UserDataDetails = () => {
 
 
 
-            <div className="flex flex-col items-center justify-center gap-1">
+            {/* <div className="flex flex-col items-center justify-center gap-1">
               <h5 className="font-normal text-[#757575]">Edit Profile</h5>
               <Icon.edit
                 className="w-5 h-5 cursor-pointer"
                 onClick={handleEditClick}
               />
-            </div>
+            </div> */}
             <div className="flex flex-col items-center justify-center gap-1">
               <h5 className="font-normal text-[#757575]">Delete User Data</h5>
 
@@ -273,7 +278,7 @@ const UserDataDetails = () => {
           <div className="mt-[1.5rem] w-full border-[10px] border-[#444444] rounded-lg">
             <table className="w-full table-auto">
               <tbody>
-              <tr>
+              <tr className="border-b-2 border-[#949494] p-3">
                   <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                     User ID
                   </td>
@@ -284,7 +289,7 @@ const UserDataDetails = () => {
                     {userData._id}
                   </td>
                 </tr>
-                <tr>
+                <tr className="border-b-2 border-[#949494] p-3">
                   <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                     Email
                   </td>
@@ -295,7 +300,7 @@ const UserDataDetails = () => {
                     {userData.email}
                   </td>
                 </tr>
-                <tr>
+                <tr className="border-b-2 border-[#949494] p-3">
                   <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                     Login Type
                   </td>
@@ -306,7 +311,7 @@ const UserDataDetails = () => {
                     {userData.googleId ? "Google" : "Email"}
                   </td>
                 </tr>
-                <tr>
+                <tr className="border-b-2 border-[#949494] p-3">
                   <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                     User Password
                   </td>
@@ -319,22 +324,28 @@ const UserDataDetails = () => {
 
                   </td>
                 </tr>
-                <tr>
-                  <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">Balance</td>
-                  <td className="border-b-2 border-[#949494] p-3" style={wrapStyle}>
-                    {isEditing ? (
-                      <Input
-                        type="number"
-                        value={newBalance}
-                        onChange={handleBalanceChange}
-                        className="w-full p-2 border rounded-md no-arrows"
-                      />
-                    ) : (
-                      userData.balance
-                    )}
-                  </td>
-                </tr>
-                <tr>
+                <tr className="border-b-2 border-[#949494] p-3 w-full">
+  <td className="border-b-2 border-[#949494] p-3 px-4 text-[#959595]">Balance</td>
+
+  <td className="border-b-2  p-3 flex items-center justify-between" style={wrapStyle}>
+    {isEditing ? (
+      <Input
+        type="number"
+        value={newBalance}
+        onChange={handleBalanceChange}
+        className="w-full p-2 border rounded-md no-arrows"
+      />
+    ) : (
+      userData.balance
+    )}
+    <Icon.edit
+      className="w-5 h-5 cursor-pointer"
+      onClick={handleEditClick}
+    />
+  </td>
+</tr>
+
+                <tr className="border-b-2 border-[#949494] p-3">
                   <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">DB Balance</td>
                   <td className="border-b-2 border-[#949494] p-3" style={wrapStyle}>
                     {isEditingDBBalance ? (
@@ -356,7 +367,7 @@ const UserDataDetails = () => {
                   </td>
                 </tr>
 
-                <tr>
+                <tr className="border-b-2 border-[#949494] p-3">
                   <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                     Api Key
                   </td>
@@ -367,7 +378,7 @@ const UserDataDetails = () => {
                     {userData.api_key}
                   </td>
                 </tr>
-                <tr>
+                <tr className="border-b-2 border-[#949494] p-3">
                   <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                     Trx Address
                   </td>
@@ -378,7 +389,7 @@ const UserDataDetails = () => {
                     {userData.trxAddress}
                   </td>
                 </tr>
-                <tr>
+                <tr className="border-b-2 border-[#949494] p-3">
                   <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                     Trx Private Key
                   </td>
@@ -399,9 +410,15 @@ const UserDataDetails = () => {
             </table>
             
           </div>
-          <div className="flex justify-center gap-6 mt-6">
-              <Button className=" w-170 mr-14 py-2 bg-red-600 hover:bg-red-500 text-white font  rounded-lg" onClick={() => navigate(`/recharge-history/${id}`)}>Recharge History</Button>
-              <Button className=" py-2 w-170   ml-14 bg-green-600 hover:bg-green-500 text-white font rounded-lg transition" onClick={() => navigate(`/sms-history/${id}`)}>SMS History</Button>
+          <div className="flex justify-center w-full mt-6">
+              <Button className=" w-full mr-14 py-2 bg-red-600 hover:bg-red-500 text-white font  rounded-lg" onClick={() => navigate(`/recharge-history/${id}`)}>Recharge History</Button>
+              <Button
+      className="py-2 w-full bg-green-600 hover:bg-green-500 text-white font rounded-lg transition"
+      onClick={handleViewOrders} // Pass userId to AdminDashboard
+    >
+       My Orders
+    </Button>
+              <Button className=" py-2 w-full   ml-14 bg-green-600 hover:bg-green-500 text-white font rounded-lg transition" onClick={() => navigate(`/sms-history/${id}`)}>SMS History</Button>
             </div>
           {isEditingDBBalance && (
                       <div className="w-full flex items-center justify-center gap-4 mt-8">

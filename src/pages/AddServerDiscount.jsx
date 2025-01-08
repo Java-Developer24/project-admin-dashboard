@@ -16,7 +16,7 @@ const AddServerDiscount = () => {
 
   const navigate = useNavigate();
 
-  const navigateBack = () => navigate("/discount/server");
+  const navigateBack = () => navigate("/discount/");
 
   const fetchDiscounts = async () => {
     try {
