@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/Icons";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import axios from "axios";
+import { Switch } from "@/components/ui/Switch";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -18,6 +19,7 @@ const Settings = () => {
   const [newOtpTime, setNewOtpTime] = useState("");
   const [adminIP, setAdminIP] = useState("");
   const [newAdminIP, setNewAdminIP] = useState("");
+  const [checkOtp, setCheckOtp] = useState(false);
 
   const navigateToAdminPanel = () => navigate("/admin-panel");
 
@@ -25,17 +27,19 @@ const Settings = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const [bannerRes, disclaimerRes, timeRes,ipRes] = await Promise.all([
+        const [bannerRes, disclaimerRes, timeRes, ipRes, checkOtpRes] = await Promise.all([
           axios.get("http://localhost:3000/api/info/banner"),
           axios.get("http://localhost:3000/api/info/disclaimer"),
           axios.get("http://localhost:3000/api/user/get-time"),
-          axios.get("http://localhost:3000/api/mfa/get-admin-ip")
+          axios.get("http://localhost:3000/api/mfa/get-admin-ip"),
+          axios.get("http://localhost:3000/api/server/get-check-otp")
         ]);
        
         setBanner(bannerRes.data.message || "");
         setDisclaimer(disclaimerRes.data.content || "");
         setOtpTime(timeRes.data.otpTimeWindow || "");
-        setAdminIP(ipRes.data.adminIp)
+        setAdminIP(ipRes.data.adminIp);
+        setCheckOtp(checkOtpRes.data.status);
         
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -46,6 +50,18 @@ const Settings = () => {
     fetchSettings();
   }, []);
 
+  const handleCheckOtpToggle = async (checked) => {
+    try {
+      await axios.post("http://localhost:3000/api/server/update-check-otp", {
+        checkOtp: checked
+      });
+      setCheckOtp(checked);
+      toast.success("OTP check setting updated successfully");
+    } catch (error) {
+      console.error("Error updating OTP check setting:", error);
+      toast.error("Failed to update OTP check setting");
+    }
+  };
 
   const handleBannerUpdate = async (e) => {
     e.preventDefault();
@@ -287,6 +303,16 @@ const Settings = () => {
             </div>
           </div>
         </form>
+                    <div className="w-full text-sm font-normal h-14 text-white !bg-[#282828] !hover:bg-[#282828] !justify-between !transform-none ounded-lg mb-[60px] border-none dark p-4 mt-8">
+                  {/* Add CheckOtp Toggle at the top */}
+                  <div className="w-full flex items-center justify-between px-4 mb-8 ">
+            <h5 className="w-full text-sm font-normal  text-white  !hover:bg-[#282828] !justify-between ">Check OTP</h5>
+            <Switch
+              checked={checkOtp}
+              onCheckedChange={handleCheckOtpToggle}
+            />
+          </div>
+          </div>
       </div>
     </div>
   </>

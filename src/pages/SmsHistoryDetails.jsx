@@ -50,7 +50,7 @@ const SmsHistoryDetails = () => {
 
     fetchSmsDetails();
     fetchUser();
-  }, [id,]);
+  }, [id,smsDetails]);
 
  // Filter Transaction History
 const filterTransactionHistory = (data) => {

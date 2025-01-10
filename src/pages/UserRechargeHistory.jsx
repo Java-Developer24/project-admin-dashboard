@@ -36,7 +36,7 @@ const UserRechargeHistory = () => {
 
     fetchHistory();
     fetchUser();
-  }, [id]);
+  }, [id,rechargeHistory]);
 
   const handleDelete = async (id) => {
        try {

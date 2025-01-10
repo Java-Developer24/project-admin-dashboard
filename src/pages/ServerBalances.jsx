@@ -14,11 +14,9 @@ const ServerBalances = () => {
     server4: { balance: 0, currency: 'p' },
     server5: { balance: 0, currency: 'p' },
     server6: { balance: 0, currency: 'p' },
-    server7: { balance: 0, currency: 'p' },
+    server7: { balance: 0, currency: '$' },
     server8: { balance: 0, currency: 'p' },
-    server9: { balance: 0, currency: '$' },
-    server10: { balance: 0, currency: 'p' },
-    server11: { balance: 0, currency: 'p' }
+    
   });
   const [loading, setLoading] = useState(true);
 
@@ -26,14 +24,13 @@ const ServerBalances = () => {
     server1: "FastSMS",
     server2: "5sim",
     server3: "SMSHUB",
-    server4: "TIGERSMS",
-    server5: "GRIZZLYSMS",
-    server6: "TEMPNUMBER",
+   
+    server4: "GRIZZLYSMS",
+    server5: "TEMPNUMBER",
     server7: "SMSBOWER",
-    server8: "SMS-ACTIVATE.guru",
-    server9: "CCPAY",
-    server10: "SMS-ACTIVATION-SERVICE",
-    server11: "SMS-Man"
+    server6: "SMS-ACTIVATE.guru",
+    server8: "CCPAY",
+    
   };
 
   const fetchBalances = async () => {
