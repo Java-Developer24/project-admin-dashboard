@@ -19,7 +19,7 @@ const UserDiscountDetails = () => {
     const fetchUserDiscounts = async () => {
       try {
           const response = await axios.get(
-            `http://localhost:3000/api/user/get-user-discount-details?userId=${userId}`
+            `/api/user/get-user-discount-details?userId=${userId}`
           );
           const data = await response.data;
 
@@ -38,7 +38,7 @@ const UserDiscountDetails = () => {
   const handleDelete = async (service, server) => {
     try {
       await axios.delete(
-        `http://localhost:3000/api/user/delete-user-discount?userId=${userId}&service=${service}&server=${server}`
+        `/api/user/delete-user-discount?userId=${userId}&service=${service}&server=${server}`
       );
 
 

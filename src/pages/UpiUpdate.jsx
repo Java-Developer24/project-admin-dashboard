@@ -18,7 +18,7 @@ const UpiUpdate = () => {
   const navigate = useNavigate();
   const getApi = () =>
     axios
-      .get("http://localhost:3000/api/recharge/get-recharge-api?type=upi")
+      .get("/api/recharge/get-recharge-api?type=upi")
       .then((response) => {
         setApi(response.data.api_key);
       })
@@ -33,7 +33,7 @@ const UpiUpdate = () => {
 
   const getUPIApi = () =>
     axios
-      .get("http://localhost:3000/api/config/min-upi-amount")
+      .get("/api/config/min-upi-amount")
       .then((response) => {
         setUPIApi(response.data.minUpiAmount);
       })
@@ -55,7 +55,7 @@ const UpiUpdate = () => {
     const upiUpdatePromise = new Promise((resolve, reject) => {
       const upiUpdate = async () => {
         try {
-          const response = await axios.post("http://localhost:3000/api/config/min-upi-amount", {
+          const response = await axios.post("/api/config/min-upi-amount", {
             minUpiAmount:newUPI
           });
           setNewUPI("");
@@ -89,7 +89,7 @@ const UpiUpdate = () => {
     const upiUpdatePromise = new Promise((resolve, reject) => {
       const upiUpdate = async () => {
         try {
-          const response = await axios.post("http://localhost:3000/api/recharge/update-recharge-api", {
+          const response = await axios.post("/api/recharge/update-recharge-api", {
             recharge_type: "upi",
             newUpiId:newUpi // Use the newApiKey state
           });

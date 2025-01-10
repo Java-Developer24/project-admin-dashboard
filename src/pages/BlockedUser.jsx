@@ -14,7 +14,7 @@ const BlockedUser = () => {
   useEffect(() => {
     const fetchBlockedUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/user/get-all-blocked-users");
+        const response = await axios.get("/api/user/get-all-blocked-users");
         // Update to use response.data directly, since it's already an array
         setBlockedUsers(response.data); 
       } catch (error) {

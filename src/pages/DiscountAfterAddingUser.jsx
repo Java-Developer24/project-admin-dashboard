@@ -42,7 +42,7 @@ const DiscountAfterAddingUser = () => {
 
   const fetchUserDiscounts = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/user/get-all-user-discount");
+      const response = await axios.get("/api/user/get-all-user-discount");
       const data = await response.data;
       setUserDiscounts(data);
     } catch (error) {

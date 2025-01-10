@@ -13,7 +13,7 @@ const TrxAddressUpdate = () => {
   const navigate = useNavigate();
   const getTrxAddress = () =>
     axios
-      .get("http://localhost:3000/api/recharge/get-recharge-trx?type=trx")
+      .get("/api/recharge/get-recharge-trx?type=trx")
       .then((response) => {
         setTrxAddress(response.data.api_key);
       })
@@ -31,7 +31,7 @@ const TrxAddressUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/recharge/update-recharge-trx", {
+      const response = await axios.post("/api/recharge/update-recharge-trx", {
         recharge_type: "trx",
         api_key: trxAddress,
         newTrxAddress

@@ -22,7 +22,7 @@ const AddServiceDiscount = ({ serviceList }) => {
 
   const fetchDiscounts = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/service/get-all-service-discount");
+      const response = await axios.get("/api/service/get-all-service-discount");
       setDiscount(response.data);
       
       console.log(response.data)
@@ -44,7 +44,7 @@ const AddServiceDiscount = ({ serviceList }) => {
         return;
       }
 
-      await axios.post("http://localhost:3000/api/service/add-service-discount", {
+      await axios.post("/api/service/add-service-discount", {
         service: selectedService,
         server: serverId,
         discount: discountAmount,
@@ -61,7 +61,7 @@ const AddServiceDiscount = ({ serviceList }) => {
   const handleDelete = async (service, server) => {
     try {
       await axios.delete(
-        `http://localhost:3000/api/service/delete-service-discount?service=${service}&server=${server}`
+        `/api/service/delete-service-discount?service=${service}&server=${server}`
       );
       fetchDiscounts();
       alert("Service discount deleted successfully");

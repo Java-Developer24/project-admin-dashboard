@@ -18,7 +18,7 @@ const Service = () => {
   useEffect(() => {
     const fetchServiceData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/service/get-service-data-admin");
+        const response = await axios.get("/api/service/get-service-data-admin");
         setServiceData(response.data);
         setLoading(false);
       } catch (err) {
@@ -63,7 +63,7 @@ const Service = () => {
 
   const handleSwitchChange = async (name, serverNumber, currentBlockStatus) => {
     try {
-      await axios.post("http://localhost:3000/api/service/updateService", {
+      await axios.post("/api/service/updateService", {
         name,
         serverNumber,
         block: !currentBlockStatus,
@@ -93,7 +93,7 @@ const Service = () => {
     const deleteServicePromise = new Promise((resolve, reject) => {
       const deleteService = async () => {
         try {
-          const response = await axios.post("http://localhost:3000/api/service/deleteService", { name });
+          const response = await axios.post("/api/service/deleteService", { name });
           setServiceData((prevData) =>
             prevData.filter((service) => service.name !== name)
           );

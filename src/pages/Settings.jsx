@@ -28,11 +28,11 @@ const Settings = () => {
     const fetchSettings = async () => {
       try {
         const [bannerRes, disclaimerRes, timeRes, ipRes, checkOtpRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/info/banner"),
-          axios.get("http://localhost:3000/api/info/disclaimer"),
-          axios.get("http://localhost:3000/api/user/get-time"),
-          axios.get("http://localhost:3000/api/mfa/get-admin-ip"),
-          axios.get("http://localhost:3000/api/server/get-check-otp")
+          axios.get("/api/info/banner"),
+          axios.get("/api/info/disclaimer"),
+          axios.get("/api/user/get-time"),
+          axios.get("/api/mfa/get-admin-ip"),
+          axios.get("/api/server/get-check-otp")
         ]);
        
         setBanner(bannerRes.data.message || "");
@@ -52,7 +52,7 @@ const Settings = () => {
 
   const handleCheckOtpToggle = async (checked) => {
     try {
-      await axios.post("http://localhost:3000/api/server/update-check-otp", {
+      await axios.post("/api/server/update-check-otp", {
         checkOtp: checked
       });
       setCheckOtp(checked);
@@ -66,7 +66,7 @@ const Settings = () => {
   const handleBannerUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/info/update-banner", {
+      await axios.post("/api/info/update-banner", {
         banner: newBanner
       });
       setBanner(newBanner);
@@ -81,7 +81,7 @@ const Settings = () => {
   const handleDisclaimerUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/info/update-disclaimer", {
+      await axios.post("/api/info/update-disclaimer", {
         disclaimer: newDisclaimer
       });
       setDisclaimer(newDisclaimer);
@@ -96,7 +96,7 @@ const Settings = () => {
   const handleOtpTimeUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/user/update-time", {
+      await axios.post("/api/user/update-time", {
         time: newOtpTime
       });
       setOtpTime(newOtpTime);
@@ -111,7 +111,7 @@ const Settings = () => {
   const handleAdminIPUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/mfa/update-admin-ip", {
+      await axios.post("/api/mfa/update-admin-ip", {
         ip: newAdminIP
       });
       setAdminIP(newAdminIP);

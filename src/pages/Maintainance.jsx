@@ -18,7 +18,7 @@ const Maintenance = () => {
     // Fetch server data
     const fetchServers = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/server/get-server"); // Call the API endpoint
+        const response = await axios.get("/api/server/get-server"); // Call the API endpoint
         setServers(response.data); // Set server data
         // Find the master maintenance status
         const masterServer = response.data.find(
@@ -37,7 +37,7 @@ const Maintenance = () => {
 
   const handleMasterSwitchChange = async (isChecked) => {
     try {
-      await axios.post(`http://localhost:3000/api/service/maintenance-all-servers`, {
+      await axios.post(`/api/service/maintenance-all-servers`, {
         server: 0, // Server 0 for master maintenance
         maintenance: isChecked,
       }); // Update master maintenance status
@@ -54,7 +54,7 @@ const Maintenance = () => {
 
   const handleSwitchChange = async (serverNumber, isChecked) => {
     try {
-      await axios.post(`http://localhost:3000/api/service/maintainance-server`, {
+      await axios.post(`/api/service/maintainance-server`, {
         serverNumber: serverNumber,
         maintenance: isChecked,
       }); // Update server block status

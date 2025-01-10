@@ -36,7 +36,7 @@ const RechargeMaintenance = () => {
 
   const toggleMaintenanceStatus = async (rechargeType, newStatus) => {
     try {
-      await axios.post(`http://localhost:3000/api/recharge/updateRechargeMaintence`, {
+      await axios.post(`/api/recharge/updateRechargeMaintence`, {
         rechargeType,
         status: newStatus,
       });

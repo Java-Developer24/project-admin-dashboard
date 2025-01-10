@@ -10,7 +10,7 @@ const AddServiceDiscountWrapper = () => {
   useEffect(() => {
     const fetchServiceData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/service/get-service-data-admin");
+        const response = await axios.get("/api/service/get-service-data-admin");
         setServiceData(response.data);
       } catch (err) {
         console.log(err.message);

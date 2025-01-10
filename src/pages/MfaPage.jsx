@@ -28,7 +28,7 @@ const MfaPage = () => {
     // First check if MFA is already enabled for this user
     const checkMFAStatus = async (tempEmail) => {
       try {
-        const response = await fetch("http://localhost:3000/api/mfa/status", {
+        const response = await fetch("/api/mfa/status", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -41,7 +41,7 @@ const MfaPage = () => {
         } else {
           const tempEmail = localStorage.getItem('tempEmail');
           // If MFA is not enabled, get setup QR code
-          const setupResponse = await fetch("http://localhost:3000/api/mfa/enable", {
+          const setupResponse = await fetch("/api/mfa/enable", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const MfaPage = () => {
     e.preventDefault();
     try {
       console.log(tempEmail)
-      const response = await fetch("http://localhost:3000/api/mfa/verify", {
+      const response = await fetch("/api/mfa/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

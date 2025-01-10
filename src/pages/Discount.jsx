@@ -36,7 +36,7 @@ const Discount = () => {
     // Fetch servers
     const fetchServers = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/server/get-server");
+        const response = await axios.get("/api/server/get-server");
         const availableServers = response.data
           .filter(server => server.server !== 0)
           .map(server => ({
@@ -53,9 +53,9 @@ const Discount = () => {
     const fetchActiveDiscounts = async () => {
       try {
         const [serverDiscounts, serviceDiscounts, userDiscounts] = await Promise.all([
-          axios.get("http://localhost:3000/api/server/get-server-discount"),
-          axios.get("http://localhost:3000/api/service/get-all-service-discount"),
-          axios.get("http://localhost:3000/api/user/get-all-user-discount")
+          axios.get("/api/server/get-server-discount"),
+          axios.get("/api/service/get-all-service-discount"),
+          axios.get("/api/user/get-all-user-discount")
         ]);
 
         setActiveDiscounts({

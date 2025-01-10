@@ -32,8 +32,8 @@ const UsersData = () => {
     const fetchUsers = async () => {
       try {
         const [usersResponse, totalUsersCount] = await Promise.all([
-          axios.get("http://localhost:3000/api/user/get-all-users"),
-          axios.get(`http://localhost:3000/api/user/total-user-count`),
+          axios.get("/api/user/get-all-users"),
+          axios.get(`/api/user/total-user-count`),
         ]);
 
         const usersData = usersResponse.data;
