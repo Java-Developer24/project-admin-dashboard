@@ -41,7 +41,7 @@ const MfaPage = () => {
         } else {
           const tempEmail = localStorage.getItem('tempEmail');
           // If MFA is not enabled, get setup QR code
-          const setupResponse = await fetch("https://project-backend-xo17.onrender.comhttps://project-backend-xo17.onrender.com/api/mfa/enable", {
+          const setupResponse = await fetch("https://project-backend-xo17.onrender.com/api/mfa/enable", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
