@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-export default = {
+import tailwindcssAnimate from "tailwindcss-animate";
+export default  {
   darkMode: ["class"],
   content: [
     './pages/**/*.{js,jsx}',
