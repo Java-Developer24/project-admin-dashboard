@@ -31,7 +31,7 @@ const SmsHistoryDetails = () => {
   useEffect(() => {
     const fetchSmsDetails = async () => {
       try {
-        const response = await axios.get(`/api/history/get-transaction-history-admin?userId=${id}`);
+        const response = await axios.get(`https://project-backend-xo17.onrender.com/api/history/get-transaction-history-admin?userId=${id}`);
         setSmsDetails(Array.isArray(response.data) ? response.data : []);
         console.log(Array.isArray(response.data) ? response.data : [])
       } catch (error) {
@@ -41,7 +41,7 @@ const SmsHistoryDetails = () => {
 
     const fetchUser = async () => {
       try {
-        const user = await axios.get(`/api/user/get-user?userId=${id}`);
+        const user = await axios.get(`https://project-backend-xo17.onrender.com/api/user/get-user?userId=${id}`);
         setUserData(user.data);
       } catch (error) {
         console.error("Failed to fetch user data");
@@ -133,7 +133,7 @@ const getDateRange = (data) => {
     const handleDelete = async (id) => {
       try {
         // Call the delete API
-         await axios.delete(`/api/history/delete-numberhistory?id=${id}`);
+         await axios.delete(`https://project-backend-xo17.onrender.com/api/history/delete-numberhistory?id=${id}`);
         
         // Update the state to remove the deleted item
     setSmsDetails(prevDetails => prevDetails.filter(item => item.id !== id));

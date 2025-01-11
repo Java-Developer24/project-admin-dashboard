@@ -37,7 +37,7 @@ const ServerBalances = () => {
     try {
       setLoading(true);
       // Single request to backend that will handle all API calls
-      const response = await axios.get("/api/server/server-balances");
+      const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/server-balances");
       setBalances(response.data);
     } catch (error) {
       console.error("Error fetching balances:", error);

@@ -48,7 +48,7 @@ const AddDiscount = () => {
   useEffect(() => {
     const fetchServiceData = async () => {
       try {
-        const response = await axios.get("/api/service/get-service-data-admin");
+        const response = await axios.get("https://project-backend-xo17.onrender.com/api/service/get-service-data-admin");
         setServiceList(response.data);
       } catch (err) {
         console.log(err.message);
@@ -82,7 +82,7 @@ const AddDiscount = () => {
     }
 
     try {
-      await axios.post("/api/user/add-user-discount", {
+      await axios.post("https://project-backend-xo17.onrender.com/api/user/add-user-discount", {
         email,
         service: selectedService,
         server: selectedServer,

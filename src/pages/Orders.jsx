@@ -16,7 +16,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrderData = async () => {
       try {
-        const response = await axios.get(`/api/user/orders?userId=${id}`);
+        const response = await axios.get(`https://project-backend-xo17.onrender.com/api/user/orders?userId=${id}`);
         setOrderData(response.data[0]);
        
         if (response.data && response.data.remainingTime) {
@@ -34,7 +34,7 @@ const Orders = () => {
 
   const fetchUser = async () => {
     try {
-      const user = await axios.get(`/api/user/get-user?userId=${id}`);
+      const user = await axios.get(`https://project-backend-xo17.onrender.com/api/user/get-user?userId=${id}`);
       setUserData(user.data);
      
     } catch (error) {
@@ -122,7 +122,7 @@ const apikey=userData.api_key
 
   const handleCancel = async (apiKey) => {
     try {
-      await axios.get(`/api/service/number-cancel?api_key=${apiKey}&id=${orderData.numberId}&server=${orderData.server}`);
+      await axios.get(`https://project-backend-xo17.onrender.comhttps://project-backend-xo17.onrender.com/api/service/number-cancel?api_key=${apiKey}&id=${orderData.numberId}&server=${orderData.server}`);
       navigate(`/users-data/${id}`);
     } catch (error) {
       console.error("Failed to cancel order:", error);
@@ -133,7 +133,7 @@ const apikey=userData.api_key
 // const number=orderData.number
   const handleForceDelete = async (numberId,number) => {
     try {
-      await axios.delete(`/api/user/force-delete?userId=${id}&numberId=${numberId}&number=${number}`);
+      await axios.delete(`https://project-backend-xo17.onrender.comhttps://project-backend-xo17.onrender.com/api/user/force-delete?userId=${id}&numberId=${numberId}&number=${number}`);
       navigate(`/users-data/${id}`);
     } catch (error) {
       console.error("Failed to force delete order:", error);
@@ -142,8 +142,8 @@ const apikey=userData.api_key
 
   const handleBuyAgain = async () => {
     try {
-      await axios.post(`/api/orders/buy-again?userId=${id}`);
-      const response = await axios.get(`/api/orders?userId=${id}`);
+      await axios.post(`https://project-backend-xo17.onrender.comhttps://project-backend-xo17.onrender.com/api/orders/buy-again?userId=${id}`);
+      const response = await axios.get(`https://project-backend-xo17.onrender.comhttps://project-backend-xo17.onrender.com/api/orders?userId=${id}`);
       setOrderData(response.data);
     } catch (error) {
       console.error("Failed to buy again:", error);

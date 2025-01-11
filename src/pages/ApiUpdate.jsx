@@ -36,7 +36,7 @@ const ApiUpdate = () => {
   useEffect(() => {
     const fetchServers = async () => {
       try {
-        const response = await axios.get("/api/server/get-server");
+        const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
         const availableServers = response.data.filter(
           (server) => !server.maintainance && server.server !== 0
         );
@@ -58,7 +58,7 @@ const ApiUpdate = () => {
 
   const fetchExchangeRateAndMargin = async (serverNumber) => {
     try {
-      const response = await axios.get("/api/server/get-server");
+      const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
       const server = response.data.find(
         (s) => s.server === parseInt(serverNumber)
       );
@@ -89,11 +89,11 @@ const ApiUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/server/update-api-key", {
+      await axios.post("https://project-backend-xo17.onrender.com/api/server/update-api-key", {
         server: selectedServer,
         api_key: newApi,
       });
-      const response = await axios.get("/api/server/get-server");
+      const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
       const availableServers = response.data.filter(
         (server) => !server.maintainance && server.server !== 0
       );
@@ -110,11 +110,11 @@ const ApiUpdate = () => {
   const handleAddServerSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/server/add-server-data-admin", {
+      await axios.post("https://project-backend-xo17.onrender.com/api/server/add-server-data-admin", {
         server: serverNumberInput,
         api_key: apiKeyInput,
       });
-      const response = await axios.get("/api/server/get-server");
+      const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
       const availableServers = response.data.filter(
         (server) => !server.maintainance && server.server !== 0
       );
@@ -156,7 +156,7 @@ const ApiUpdate = () => {
   const handleExchangeRateSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/server/update-exchange-rate`, {
+      await axios.post(`https://project-backend-xo17.onrender.com/api/server/update-exchange-rate`, {
         server: selectedServer,
         exchangeRate: newExchangeRate,
       });
@@ -170,7 +170,7 @@ const ApiUpdate = () => {
   const handleMarginSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/server/update-margin-amount`, {
+      await axios.post(`https://project-backend-xo17.onrender.com/api/server/update-margin-amount`, {
         server: selectedServer,
         margin: newMargin,
       });

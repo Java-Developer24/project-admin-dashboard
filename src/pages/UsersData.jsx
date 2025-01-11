@@ -32,8 +32,8 @@ const UsersData = () => {
     const fetchUsers = async () => {
       try {
         const [usersResponse, totalUsersCount] = await Promise.all([
-          axios.get("/api/user/get-all-users"),
-          axios.get(`/api/user/total-user-count`),
+          axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-users"),
+          axios.get(`https://project-backend-xo17.onrender.com/api/user/total-user-count`),
         ]);
 
         const usersData = usersResponse.data;

@@ -18,7 +18,7 @@ const UpiUpdate = () => {
   const navigate = useNavigate();
   const getApi = () =>
     axios
-      .get("/api/recharge/get-recharge-api?type=upi")
+      .get("https://project-backend-xo17.onrender.com/api/recharge/get-recharge-api?type=upi")
       .then((response) => {
         setApi(response.data.api_key);
       })
@@ -33,7 +33,7 @@ const UpiUpdate = () => {
 
   const getUPIApi = () =>
     axios
-      .get("/api/config/min-upi-amount")
+      .get("https://project-backend-xo17.onrender.com/api/config/min-upi-amount")
       .then((response) => {
         setUPIApi(response.data.minUpiAmount);
       })
@@ -55,7 +55,7 @@ const UpiUpdate = () => {
     const upiUpdatePromise = new Promise((resolve, reject) => {
       const upiUpdate = async () => {
         try {
-          const response = await axios.post("/api/config/min-upi-amount", {
+          const response = await axios.post("https://project-backend-xo17.onrender.com/api/config/min-upi-amount", {
             minUpiAmount:newUPI
           });
           setNewUPI("");
@@ -89,7 +89,7 @@ const UpiUpdate = () => {
     const upiUpdatePromise = new Promise((resolve, reject) => {
       const upiUpdate = async () => {
         try {
-          const response = await axios.post("/api/recharge/update-recharge-api", {
+          const response = await axios.post("https://project-backend-xo17.onrender.com/api/recharge/update-recharge-api", {
             recharge_type: "upi",
             newUpiId:newUpi // Use the newApiKey state
           });

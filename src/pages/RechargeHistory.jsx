@@ -32,9 +32,9 @@ const RechargeHistory = () => {
     try {
       const [usersResponse, totalRechargeResponse, totalUsersCount] =
         await Promise.all([
-          axios.get("/api/user/get-all-users"),
-          axios.get("/api/history/get-total-recharge-balance"),
-          axios.get(`/api/user/total-user-count`),
+          axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-users"),
+          axios.get("https://project-backend-xo17.onrender.com/api/history/get-total-recharge-balance"),
+          axios.get(`https://project-backend-xo17.onrender.com/api/user/total-user-count`),
         ]);
 
       setUsers(usersResponse.data);

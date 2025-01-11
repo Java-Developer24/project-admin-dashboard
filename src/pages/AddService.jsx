@@ -21,7 +21,7 @@ const AddService = () => {
       const addService = async () => {
         try {
           // Submit to addccpayServiceNameData API
-          const response = await axios.post("/api/service/addService", {
+          const response = await axios.post("https://project-backend-xo17.onrender.com/api/service/addService", {
             name: serviceName,
             serviceName: serverNumber9,
           });

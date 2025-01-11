@@ -59,7 +59,7 @@ const UserDataDetails = () => {
 
   const fetchUser = async () => {
     try {
-      const user = await axios.get(`/api/user/get-user?userId=${id}`);
+      const user = await axios.get(`https://project-backend-xo17.onrender.com/api/user/get-user?userId=${id}`);
       setUserData(user.data);
       setIsBlocked(user.data.blocked);
       setNewBalance(user.data.balance); // Initialize new balance
@@ -80,7 +80,7 @@ const UserDataDetails = () => {
         blocked_reason: !isBlocked ? "Blocked by Admin" : null, // Set reason if blocking, else null for unblocking
       };
   
-      const response = await axios.post("/api/user/block-user", payload);
+      const response = await axios.post("https://project-backend-xo17.onrender.com/api/user/block-user", payload);
   
       if (response.data.status === "SUCCESS") {
         setIsBlocked(!isBlocked); // Toggle the UI state for blocked status
@@ -102,7 +102,7 @@ const UserDataDetails = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post("/api/user/update-user-balance", {
+      const response = await axios.post("https://project-backend-xo17.onrender.com/api/user/update-user-balance", {
         userId: id,
         new_balance: parseFloat(newBalance), // Ensure balance is a number
       });
@@ -120,7 +120,7 @@ const UserDataDetails = () => {
       const deleteUserRequest = async () => {
         try {
           const response = await axios.delete(
-            `/api/block/block-fraud-clear?userId=${id}`
+            `https://project-backend-xo17.onrender.com/api/block/block-fraud-clear?userId=${id}`
           );
           if (response.status === 200) {
             // Redirect to users data page or show success message
@@ -153,7 +153,7 @@ const UserDataDetails = () => {
       const deleteUserRequest = async () => {
         try {
           const response = await axios.delete(
-            `/api/user/delete-user-account?userId=${id}`
+            `https://project-backend-xo17.onrender.com/api/user/delete-user-account?userId=${id}`
           );
           if (response.status === 200) {
             navigate("/users-data")

@@ -17,7 +17,7 @@ const UserRechargeHistory = () => {
     const fetchHistory = async () => {
       try {
         const rechargeResponse = await axios.get(
-          `/api/history/get-user-recharge-history?userId=${id}`
+          `https://project-backend-xo17.onrender.com/api/history/get-user-recharge-history?userId=${id}`
         );
         setRechargeHistory(rechargeResponse.data);
       } catch (error) {
@@ -27,7 +27,7 @@ const UserRechargeHistory = () => {
 
     const fetchUser = async () => {
       try {
-        const user = await axios.get(`/api/user/get-user?userId=${id}`);
+        const user = await axios.get(`https://project-backend-xo17.onrender.com/api/user/get-user?userId=${id}`);
         setUserData(user.data);
       } catch (error) {
         console.error("Failed to fetch user data");
@@ -40,7 +40,7 @@ const UserRechargeHistory = () => {
 
   const handleDelete = async (id) => {
        try {
-      await axios.delete(`/api/history/delete-recharge-history?id=${id}`);
+      await axios.delete(`https://project-backend-xo17.onrender.com/api/history/delete-recharge-history?id=${id}`);
          // Remove the deleted item from the state
          setRechargeHistory(prevHistory => 
            prevHistory.filter(item => item._id !== id)
