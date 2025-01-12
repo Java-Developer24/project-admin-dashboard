@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5173:5173"  # Exposes port 5173 to the host machine
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - .:/app  # Mounts the current directory to /app in the container
+      - /app/node_modules  # Ensures node_modules is isolated and not overwritten
+    command: npm run start  # Ensure it uses the start script defined in package.json
