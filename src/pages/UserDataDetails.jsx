@@ -49,7 +49,7 @@ const UserDataDetails = () => {
     try {
       const response = await axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-blocked-users");
       if (response.data) {
-        const userBlockDetails = response.data.find(user => user.email === "balu2446madhu@gmail.com"); // Match email instead of userId
+        const userBlockDetails = response.data.find(user => user.email ); // Match email instead of userId
         if (userBlockDetails) {
           setBlockReason(userBlockDetails.blocked_reason); // Adjusted key to match the response field
           setShowModal(true);
@@ -246,13 +246,13 @@ const UserDataDetails = () => {
 
 
  {/* Modal for showing block reason */}
- <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Block Reason">
+ <Modal isOpen={showModal} onClose={() => setShowModal(false)}   title="Block Reason">
         <p className="text-white font- text-lg mb-4">{blockReason}</p>
         <div className="mt-4 flex justify-end gap-2">
           <Button className=" py-2 bg-red-600 hover:bg-red-500 text-white font-heavy  rounded-lg " onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-          <Button onClick={handleBlockToggle}>Unblock User</Button>
+          <Button className=" bg-green-600 hover:bg-green-500 text-white font  rounded-lg" onClick={handleBlockToggle}>Unblock User</Button>
         </div>
       </Modal>
 

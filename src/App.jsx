@@ -6,6 +6,7 @@ import axios from "axios";
 import { useAuth } from "./utils/AuthContext";
 import AddServiceDiscountWrapper from "@/components/layout/AddServiceDiscountWrapper";
 const Orders = lazy(() => import("@/pages/Orders"));
+const ActiveOrders = lazy(() => import("@/pages/ActiveOrders"))
 const Home = lazy(() => import("@/pages/Home"));
 const Login = lazy(() => import("@/pages/Login"));
 const MfaPage = lazy(() => import("@/pages/MfaPage"));
@@ -284,6 +285,14 @@ function App() {
             element={
               <ProtectRoute isAuthenticated={!isAuthenticated} redirect="/mfa">
                 <MfaPage />
+              </ProtectRoute>
+            }
+          />
+          <Route
+            path="/active-orders"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/login">
+                <ActiveOrders />
               </ProtectRoute>
             }
           />

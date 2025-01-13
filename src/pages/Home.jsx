@@ -139,6 +139,14 @@ const Home = () => {
           </Button>
           <Button
             variant="login"
+            onClick={() => navigate('/active-orders')}
+            className="w-full text-sm font-normal h-14 text-white bg-[#282828] hover:bg-[#212121] !justify-between"
+          >
+            Active Orders
+            <Icon.arrowRight className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="login"
             onClick={navigateToAdminPanel}
             className="w-full text-sm font-normal h-14 text-white bg-[#282828] hover:bg-[#212121] !justify-between"
           >
