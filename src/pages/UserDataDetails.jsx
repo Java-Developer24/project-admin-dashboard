@@ -9,7 +9,9 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "@/components/ui/Modal";
-import  AdminDashboard from "./AdminDashboard";
+
+import { SnapLoader } from "@/components/layout/Loaders";
+
 
 const UserDataDetails = () => {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const UserDataDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [blockReason, setBlockReason] = useState("");
 
+  const [loading, setLoading] = useState(true); // State to handle the loading state
   const navigateToUsersData = () => navigate("/users-data");
 
   const fetchUser = async () => {
@@ -32,6 +35,7 @@ const UserDataDetails = () => {
       setIsBlocked(user.data.blocked);
       setNewBalance(user.data.balance); // Initialize balance
       setNewDBBalance(user.data.dbBalance || ""); // Initialize DBbalance
+      setLoading(false)
     } catch (error) {
       console.error("Failed to fetch user data");
     }
@@ -49,6 +53,7 @@ const UserDataDetails = () => {
         if (userBlockDetails) {
           setBlockReason(userBlockDetails.blocked_reason); // Adjusted key to match the response field
           setShowModal(true);
+          
         } else {
           toast.error("No block details found for this user.");
         }
@@ -225,7 +230,11 @@ const UserDataDetails = () => {
           <Icon.arrowLeft className="w-4 h-4" /> User Data Details
         </Button>
       </div>
-
+      {loading ? (
+            <div className="h-screen flex items-center justify-center">
+            <SnapLoader />
+          </div>
+          ) : (
       <div className="flex items-center justify-center pt-[1rem]">
         <div className="bg-transparent w-full max-w-md rounded-lg mb-[60px] border-none dark">
         <div className="w-full flex items-center justify-between px-4">
@@ -333,16 +342,18 @@ const UserDataDetails = () => {
         type="number"
         value={newBalance}
         onChange={handleBalanceChange}
-        className="w-full p-2 border rounded-md no-arrows"
+        className="w-full p-2 border rounded-md no-arrows mr-5"
       />
     ) : (
       userData.balance
     )}
-    <Icon.edit
-      className="w-5 h-5 cursor-pointer"
-      onClick={handleEditClick}
-    />
+    
   </td>
+  <td>
+    <Icon.edit
+      className="text-white cursor-pointer w-5 h-5"
+      onClick={handleEditClick}
+    /></td>
 </tr>
 
                 <tr className="border-b-2 border-[#949494] p-3">
@@ -362,7 +373,7 @@ const UserDataDetails = () => {
                   <td>
                     {!isEditingDBBalance &&
                       (
-                      <Icon.edit className="text-white cursor-pointer w-5 h-5 "  onClick={handleEditDBClick} />
+                      <Icon.edit className="text-white cursor-pointer w-5 h-5 mr-3"  onClick={handleEditDBClick} />
                     )}
                   </td>
                 </tr>
@@ -410,15 +421,15 @@ const UserDataDetails = () => {
             </table>
             
           </div>
-          <div className="flex justify-center w-full mt-6">
-              <Button className=" w-full mr-14 py-2 bg-red-600 hover:bg-red-500 text-white font  rounded-lg" onClick={() => navigate(`/recharge-history/${id}`)}>Recharge History</Button>
+          <div className="flex justify-center w-full h-full mt-6  ">
+              <Button className="  py-6 bg-green-600 hover:bg-green-500 text-white font  rounded-lg" onClick={() => navigate(`/recharge-history/${id}`)}>Recharge History</Button>
               <Button
-      className="py-2 w-full bg-green-600 hover:bg-green-500 text-white font rounded-lg transition"
+      className="py-6 ml-7 bg-green-600 hover:bg-green-500 text-white font rounded-lg transition"
       onClick={handleViewOrders} // Pass userId to AdminDashboard
     >
        My Orders
     </Button>
-              <Button className=" py-2 w-full   ml-14 bg-green-600 hover:bg-green-500 text-white font rounded-lg transition" onClick={() => navigate(`/sms-history/${id}`)}>SMS History</Button>
+              <Button className=" py-6    ml-8 bg-green-600 hover:bg-green-500 text-white font rounded-lg transition" onClick={() => navigate(`/sms-history/${id}`)}>SMS History</Button>
             </div>
           {isEditingDBBalance && (
                       <div className="w-full flex items-center justify-center gap-4 mt-8">
@@ -443,7 +454,9 @@ const UserDataDetails = () => {
             </div>
           )}
         </div>
-      </div>
+      </div>)}
+
+
     </>
   );
 };

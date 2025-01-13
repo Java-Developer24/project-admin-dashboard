@@ -7,14 +7,12 @@ import { Icon } from "@/components/ui/Icons";
 
 const AddServiceDiscount = ({ serviceList }) => {
   const params = useParams();
-  const serverId = params.id;
+  const serverId = parseInt(params.id); // Get the serverId from URL params and convert it to an integer
   const navigate = useNavigate();
 
   const [margin, setMargin] = useState("");
   const [discount, setDiscount] = useState([]);
-  const [selectedService, setSelectedService] = useState(
-    serviceList[0]?.name || ""
-  );
+  const [selectedService, setSelectedService] = useState(serviceList[0]?.name || "");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -24,8 +22,7 @@ const AddServiceDiscount = ({ serviceList }) => {
     try {
       const response = await axios.get("https://project-backend-xo17.onrender.com/api/service/get-all-service-discount");
       setDiscount(response.data);
-      
-      console.log(response.data)
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching discounts:", error);
     }
@@ -60,9 +57,7 @@ const AddServiceDiscount = ({ serviceList }) => {
 
   const handleDelete = async (service, server) => {
     try {
-      await axios.delete(
-        `https://project-backend-xo17.onrender.com/api/service/delete-service-discount?service=${service}&server=${server}`
-      );
+      await axios.delete(`https://project-backend-xo17.onrender.com/api/service/delete-service-discount?service=${service}&server=${server}`);
       fetchDiscounts();
       alert("Service discount deleted successfully");
     } catch (error) {
@@ -70,10 +65,17 @@ const AddServiceDiscount = ({ serviceList }) => {
       alert("An error occurred while deleting the discount.");
     }
   };
+
+  // Filter services based on the selected server ID
+  const filteredServiceList = serverId 
+    ? serviceList.filter(service => 
+        service.servers.some(server => server.serverNumber === serverId.toString())
+      ) // Only show services containing the selected server ID
+    : serviceList;
+
   useEffect(() => {
     console.log("Current discounts state:", discount); // Log the current state of discount
-  }, [discount]); // Log whenever discount state changes
-
+  }, [discount]);
 
   return (
     <>
@@ -131,11 +133,9 @@ const AddServiceDiscount = ({ serviceList }) => {
                       className="w-full p-2 text-[#9d9d9d] bg-transparent border-b border-[#888888]"
                     />
                     <ul className="max-h-60 overflow-y-auto">
-                      {serviceList
+                      {filteredServiceList
                         .filter((service) =>
-                          service.name
-                            .toLowerCase()
-                            .includes(searchTerm.toLowerCase())
+                          service.name.toLowerCase().includes(searchTerm.toLowerCase())
                         )
                         .map((service) => (
                           <li
@@ -154,10 +154,8 @@ const AddServiceDiscount = ({ serviceList }) => {
                             {service.name}
                           </li>
                         ))}
-                      {!serviceList.some((service) =>
-                        service.name
-                          .toLowerCase()
-                          .includes(searchTerm.toLowerCase())
+                      {!filteredServiceList.some((service) =>
+                        service.name.toLowerCase().includes(searchTerm.toLowerCase())
                       ) && (
                         <li className="px-4 py-2 text-[#9d9d9d]">
                           No service found.

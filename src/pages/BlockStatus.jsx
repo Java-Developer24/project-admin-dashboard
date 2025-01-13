@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const BlockStatus = () => {
   const navigate = useNavigate();
   const [blockTypes, setBlockTypes] = useState([
-    { type: "Number_Cancel", status: false, name: "Number Cancel" },
+    // { type: "Number_Cancel", status: false, name: "Number Cancel" },
     { type: "User_Fraud", status: false, name: "User Fraud" },
   ]);
 

@@ -23,17 +23,19 @@ const Home = () => {
   const [trnCancel, setTrnCancel] = useState("0");
   const [trnPending, setTrnPending] = useState("0");
   const [blockedUser, setBlockedUser] = useState("");
+  const [totalRechargeAmount, setTotalRechargeAmount] = useState("0.00"); // State to store the total amount
 
   useEffect(() => {
     // Fetch users data on component mount
     const fetchUsers = async () => {
       try {
-        const [usersResponse, totalUsersCount, transactions, blockedUserCount] =
+        const [usersResponse, totalUsersCount, transactions, blockedUserCount,totalRechargeAmount] =
           await Promise.all([
             axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-users"),
             axios.get(`https://project-backend-xo17.onrender.com/api/user/total-user-count`),
             axios.get("https://project-backend-xo17.onrender.com/api/history/transaction-history-count"),
             axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-blocked-users-count"),
+            axios.get("https://project-backend-xo17.onrender.com/api/history/get-total-recharge-balance"),
           ]);
   
         const usersData = usersResponse.data;
@@ -49,6 +51,7 @@ const Home = () => {
         setTrnSuccess(transactions.data.successCount);
         setTrnCancel(transactions.data.cancelledCount);
         setTrnPending(transactions.data.pendingCount);
+        setTotalRechargeAmount(totalRechargeAmount.data.totalAmount)
         
         const blockedUsers = blockedUserCount.data?.blockedUser || 0;
         setBlockedUser(blockedUsers);
@@ -67,12 +70,16 @@ const Home = () => {
       <div className="bg-transparent w-full max-w-md rounded-lg mb-[60px] border-none dark">
         <h3 className="font-normal text-base text-[#8C8C8C]">
           Total Balance:{" "}
-          <span className="text-sm text-white font-normal">{totalAmount}</span>
+          <span className="text-sm text-white font-normal">₹{totalAmount}</span>
         </h3>
         <h3 className="font-normal text-base text-[#8C8C8C]">
           Total Users:{" "}
           <span className="text-sm text-white font-normal">{totalUsers}</span>
         </h3>
+        <p className="text-[#A5A5A5] text-sm">
+          Total Recharge:{" "}
+          <span className="text-white font-normal text-xs">₹{totalRechargeAmount}</span>
+        </p>
         <h3 className="font-normal text-base text-[#8C8C8C]">
           Total Selling:{" "}
           <span className="text-sm text-white font-normal">{trnSuccess}</span>

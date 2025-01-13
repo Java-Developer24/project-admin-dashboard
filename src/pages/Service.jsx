@@ -160,7 +160,7 @@ const Service = () => {
             )}
           </div>
           <div className="flex flex-col w-full relative h-[450px] md:h-[340px]">
-            <div className="w-full flex items-center justify-between">
+            {/* <div className="w-full flex items-center justify-between">
               <h5 className="p-3">Service List</h5>
               <Button
                 variant="link"
@@ -169,7 +169,7 @@ const Service = () => {
               >
                 + Add New Service
               </Button>
-            </div>
+            </div> */}
             <div className="rounded-2xl flex flex-col overflow-y-auto hide-scrollbar h-full">
               {loading ? (
                 <div className="h-full flex items-center justify-center">

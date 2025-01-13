@@ -32,19 +32,28 @@ const UsersData = () => {
     const fetchUsers = async () => {
       try {
         const [usersResponse, totalUsersCount] = await Promise.all([
-          axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-users"),
-          axios.get(`https://project-backend-xo17.onrender.com/api/user/total-user-count`),
+          axios.get(
+            "https://project-backend-xo17.onrender.com/api/user/get-all-users"
+          ),
+          axios.get(
+            `https://project-backend-xo17.onrender.com/api/user/total-user-count`
+          ),
         ]);
 
         const usersData = usersResponse.data;
 
+        // Sort users by `createdAt` in descending order
+        const sortedUsers = usersData.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
         // Calculate the total balance of all users
-        const totalBalance = usersData.reduce(
+        const totalBalance = sortedUsers.reduce(
           (accumulator, user) => accumulator + user.balance,
           0
         );
 
-        setUsers(usersData);
+        setUsers(sortedUsers);
         setTotalUsers(totalUsersCount.data.totalUserCount);
         setTotalAmount(totalBalance.toFixed(2)); // Update total amount state
         setLoading(false);
@@ -88,8 +97,7 @@ const UsersData = () => {
   const filteredData = users
     .filter((user) =>
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => a.email.localeCompare(b.email)); // Sort by email
+    );
 
   const selectedData = filteredData.slice(startIndex, startIndex + limit);
 

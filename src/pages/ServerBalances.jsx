@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/Icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { SnapLoader } from "@/components/layout/Loaders";
 
 const ServerBalances = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const ServerBalances = () => {
     server8: { balance: 0, currency: 'p' },
     
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // State to handle the loading state
 
   const serverNames = {
     server1: "FastSMS",
@@ -68,29 +69,31 @@ const ServerBalances = () => {
       </div>
 
       <div className="flex items-center justify-center pt-[1rem]">
-        <div className="bg-transparent w-full max-w-4xl rounded-lg mb-[60px] border-none dark">
+        <div className="bg-transparent w-full rounded-lg mb-[60px] border-none dark">
           {loading ? (
-            <div className="text-center text-gray-400">Loading balances...</div>
+            <div className="h-full flex items-center justify-center">
+            <SnapLoader />
+          </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {Object.entries(balances).map(([server, data], index) => (
                   <div
                     key={server}
-                    className="bg-[#282828] p-6 rounded-lg shadow-lg hover:bg-[#2a2a2a] transition-colors"
+                    className="bg-[#282828] p-2 rounded-lg shadow-lg hover:bg-[#2a2a2a] transition-colors"
                   >
                     <div className="flex flex-col space-y-2">
-                      <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold text-white">
+                      <div className="flex justify-between items-center ">
+                        <h3 className="text-sm   text-gray-200">
                           Server {index + 1}
                         </h3>
-                        <span className="text-sm text-gray-400">
+                        <span className="text-sm text-gray-200">
                           {serverNames[server]}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-400">Balance:</span>
-                        <span className="text-xl font-bold text-primary">
+                        <span className="text-gray-200 text-sm">Balance:</span>
+                        <span className="text-sm font-bold text-primary">
                           {(data.balance || 0).toFixed(2)} {data.currency || 'N/A'}
                         </span>
                       </div>
