@@ -79,9 +79,9 @@ const filterTransactionHistory = (data) => {
 
     return {
       ...displayEntry,
-      otps:
+      otp:
         successEntries
-          .flatMap((entry) => entry.otp.map((otp) => `${otp.message} (${moment(otp.date).format("DD/MM/YYYY hh:mm:ss A")})`))
+        .flatMap((entry) => entry.otp) // Directly use the OTP string
           .join(`<br><br>`) || "-",
     };
   });
@@ -136,7 +136,8 @@ const getDateRange = (data) => {
          await axios.delete(`https://project-backend-xo17.onrender.com/api/history/delete-numberhistory?id=${id}`);
         
         // Update the state to remove the deleted item
-    setSmsDetails(prevDetails => prevDetails.filter(item => item.id !== id));
+      setSmsDetails(prevsmsDetails => prevsmsDetails.filter(item => item.Id !== id));
+
       } catch (error) {
         console.error("Failed to delete SMS history:", error);
       }
@@ -204,11 +205,11 @@ const getDateRange = (data) => {
                         ID
                       </td>
                       <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
-                        <span>{item.id}</span>
+                        <span>{item.requestId??item.id}</span>
                         <Button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDelete(item.id);
+                            handleDelete(item.ID);
                           }}
                         >
                           <Icon.trash className="w-4 h-4 text-red-600" />
@@ -231,7 +232,7 @@ const getDateRange = (data) => {
                         OTP
                       </td>
                       <td className="border-b-2 border-[#949494] p-3">
-                      <span dangerouslySetInnerHTML={{ __html: item.otps && item.otps.length > 0 ? item.otps : "N/A" }} />
+                      <span dangerouslySetInnerHTML={{ __html: item.otp && item.otp.length > 0 ? item.otp : "N/A" }} />
 
 
                       </td>
@@ -257,6 +258,28 @@ const getDateRange = (data) => {
                         style={wrapStyle}
                       >
                         {item.service}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
+                        Server
+                      </td>
+                      <td
+                        className="border-b-2 border-[#949494] p-3"
+                        style={wrapStyle}
+                      >
+                        {item.server}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
+                        Price
+                      </td>
+                      <td
+                        className="border-b-2 border-[#949494] p-3"
+                        style={wrapStyle}
+                      >
+                        {item.price}
                       </td>
                     </tr>
                     <tr>

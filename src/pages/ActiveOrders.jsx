@@ -21,7 +21,7 @@ const ActiveOrders = () => {
   const fetchOrders = async () => {
     try {
       // Fetch all active orders
-      const ordersResponse = await axios.get("http://localhost:3000/api/history/get-all-active-orders");
+      const ordersResponse = await axios.get("http://project-backend-xo17.onrender.com/api/history/get-all-active-orders");
       const ordersWithUsers = await Promise.all(
         ordersResponse.data.map(async (order) => {
           // Fetch user details for each order
@@ -128,7 +128,7 @@ const ActiveOrders = () => {
 
   const handleForceDelete = async (userId, numberId, number,server,orderId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/user/force-delete?userId=${userId}&numberId=${numberId}&number=${number}&server=${server}`);
+      await axios.delete(`https://project-backend-xo17.onrender.com/api/user/force-delete?userId=${userId}&numberId=${numberId}&number=${number}&server=${server}`);
       fetchOrders(); // Refresh orders after deletion
       // Remove the deleted order from the state
     setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId)); 
