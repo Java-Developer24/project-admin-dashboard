@@ -21,7 +21,7 @@ const ActiveOrders = () => {
   const fetchOrders = async () => {
     try {
       // Fetch all active orders
-      const ordersResponse = await axios.get("http://project-backend-xo17.onrender.com/api/history/get-all-active-orders");
+      const ordersResponse = await axios.get("https://project-backend-xo17.onrender.com/api/history/get-all-active-orders");
       const ordersWithUsers = await Promise.all(
         ordersResponse.data.map(async (order) => {
           // Fetch user details for each order
