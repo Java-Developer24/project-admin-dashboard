@@ -42,9 +42,10 @@ const Login = () => {
         if (data.success) {
           // Store email in localStorage for MFA verification
           localStorage.setItem('tempEmail', email.value);
-          
-          // Always redirect to MFA page - the page will handle both setup and verification
-          navigate('/mfa');
+          login();
+           navigate('/');
+          // // Always redirect to MFA page - the page will handle both setup and verification
+          // navigate('/mfa');
         } else {
           toast.error('Invalid credentials');
         }
