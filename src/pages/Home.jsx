@@ -72,14 +72,17 @@ const Home = () => {
           Total Balance:{" "}
           <span className="text-sm text-white font-normal">₹{totalAmount}</span>
         </h3>
-        <h3 className="font-normal text-base text-[#8C8C8C]">
-          Total Users:{" "}
-          <span className="text-sm text-white font-normal">{totalUsers}</span>
-        </h3>
+        
         <p className="text-[#A5A5A5] text-sm">
           Total Recharge:{" "}
           <span className="text-white font-normal text-xs">₹{totalRechargeAmount}</span>
         </p>
+        
+        <h3 className="font-normal text-base text-[#8C8C8C]">
+          Total Users:{" "}
+          <span className="text-sm text-white font-normal">{totalUsers}</span>
+        </h3>
+        
         <h3 className="font-normal text-base text-[#8C8C8C]">
           Total Selling:{" "}
           <span className="text-sm text-white font-normal">{trnSuccess}</span>
