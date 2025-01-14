@@ -134,7 +134,7 @@ const apikey=userData.api_key
 // const number=orderData.number
   const handleForceDelete = async (numberId,number) => {
     try {
-      await axios.delete(`https://project-backend-xo17.onrender.com/api/user/force-delete?userId=${id}&numberId=${numberId}&number=${number}`);
+      await axios.delete(`https://project-backend-xo17.onrender.com/api/user/force-delete?userId=${id}&numberId=${numberId}&number=${number}&server=${orderData.server}`);
       navigate(`/users-data/${id}`);
     } catch (error) {
       console.error("Failed to force delete order:", error);
