@@ -193,39 +193,49 @@ const ActiveOrders = () => {
             </div>
           ) : (
             filteredOrders.map((order) => (
-              <div key={order._id} className="bg-[#1a1a1a] w-full rounded-lg p-6 shadow-lg mb-6">
+              <div key={order._id} className=" w-full max-w-[520px] flex flex-col items-center border-2 border-[#1b1d21] bg-[#121315] rounded-2xl p-5 ml-12">
                 <div className="border-b border-gray-700 pb-4 mb-4">
                   <h3 className="text-white text-lg font-semibold">User: {order.userEmail}</h3>
                 </div>
                 
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
+                <div className="w-full flex flex-col items-center px-4 mb-4 text-sm font-normal gap-y-2">
+                  <div className="w-full flex text-center items-center justify-between">
                     <span className="text-gray-400">Service:</span>
                     <span className="text-white">{order.service}</span>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <hr className="border-[#888888] border w-full" />
+                  <div className="w-full flex text-center items-center justify-between">
                     <span className="text-gray-400">Server:</span>
                     <span className="text-white">{order.server}</span>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <hr className="border-[#888888] border w-full" />
+                  <div className="w-full flex text-center items-center justify-between">
                     <span className="text-gray-400">Price:</span>
                     <span className="text-white">₹{order.price}</span>
                   </div>
                   
-                  <div className="bg-[#2a2a2a] p-4 rounded-lg mt-4">
-                    <div className="flex justify-center items-center space-x-2">
-                      <span className="text-white">{order.number}</span>
-                    </div>
-                  </div>
-                  <div className="text-center mt-4">
-                <p className="text-gray-400">Remaining Time</p>
+                  <hr className="border-[#888888] border w-full" />
+
+                  <div className="w-full flex border rounded-2xl items-center justify-center h-[45px]">
+              <div className="py-4 px-5 flex w-full gap-4 items-center justify-center rounded-lg text-xl font-medium">
+                  <span className="text-white">{order.number}</span>
+                  <button className="text-primary hover:text-primary/80">
+                  
+                  </button>
+                </div>
+              </div>
+                  
+                  <div className="w-full flex rounded-2xl items-center justify-center h-[60px]">
+              <div className="bg-transparent max-w-56 py-4 px-5 flex w-full items-center justify-between rounded-lg">
+                <p className=" font-normal text-lg	">Remaining Time</p>
                 <Countdown
                       expirationTime={order.expirationTime}
                       orderId={order._id}
                     />
               </div>
+              </div>
 
-                  <div className="flex flex-col gap-3 mt-6">
+                  <div className="bg-transparent pt-4 flex w-full items-center justify-center gap-4">
                     <Button
                       onClick={() => handleForceDelete(order.userId, order.numberId, order.number,order.server,order._id)}
                       className="w-full bg-red-600 hover:bg-red-700 text-white"
