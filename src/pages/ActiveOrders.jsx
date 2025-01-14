@@ -10,6 +10,7 @@ const ActiveOrders = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [transactions, setTransactions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [remainingTime, setRemainingTime] = useState(0);
   const [buttonStates,setButtonStates ]=useState()
@@ -17,6 +18,11 @@ const ActiveOrders = () => {
   useEffect(() => {
     fetchOrders();
   }, []);
+   // Poll transactions every 5 seconds
+   useEffect(() => {
+    const interval = setInterval(fetchTransactions, 1000);
+    return () => clearInterval(interval); // Clear interval on component unmount
+  }, [transactions]);
 
   const fetchOrders = async () => {
     try {
@@ -42,6 +48,8 @@ const ActiveOrders = () => {
       setLoading(false);
     }
   };
+
+       // Fetch the latest transactions
 
 
   useEffect(() => {
@@ -116,6 +124,10 @@ const ActiveOrders = () => {
     return <span className="font-mono">{remainingTime}</span>;
   };
 
+
+
+  
+
   const handleCancel = async (apiKey, numberId, server,orderId) => {
     try {
       await axios.get(`https://project-backend-xo17.onrender.com/api/service/number-cancel?api_key=${apiKey}&id=${numberId}&server=${server}`);
@@ -149,7 +161,43 @@ const ActiveOrders = () => {
   const filteredOrders = orders.filter(order => 
     order.userEmail.toLowerCase().includes(searchQuery.toLowerCase())
   );
+ 
+ // Fetch transactions for all active orders
+ const fetchTransactions = async () => {
+ 
 
+  try {
+    const transactionResponses = await Promise.all(
+      orders.map((order) =>
+        axios.get(
+          `https://project-backend-xo17.onrender.com/api/history/transaction-history-user?userId=${order.userId}`
+        )
+      )
+    );
+
+    const allTransactions = transactionResponses.flatMap(
+      (response) => response.data
+    );
+
+    setTransactions(allTransactions);
+  } catch (error) {
+    console.error("Failed to fetch transactions:", error);
+  }
+};
+ // Extract OTPs from transactions based on `numberId`
+ const getOTPFromTransaction = (numberId) => {
+  const relatedTransactions = transactions.filter(
+    (transaction) => transaction.id === numberId
+  );
+
+  if (!relatedTransactions.length) return ["Waiting for SMS"];
+
+  const otpList = relatedTransactions
+    .map((transaction) => transaction.otp)
+    .filter((otp) => otp);
+
+  return otpList.length ? otpList : ["Waiting for SMS"];
+};
   return (
     <>
       <div className="w-full my-4 flex items-center justify-between">
@@ -193,6 +241,7 @@ const ActiveOrders = () => {
             </div>
           ) : (
             filteredOrders.map((order) => (
+              
               <div key={order._id} className=" w-full max-w-[520px] flex flex-col items-center border-2 border-[#1b1d21] bg-[#121315] rounded-2xl p-5 ml-12">
                 <div className="border-b border-gray-700 pb-4 mb-4">
                   <h3 className="text-white text-lg font-semibold">User: {order.userEmail}</h3>
@@ -234,7 +283,11 @@ const ActiveOrders = () => {
                     />
               </div>
               </div>
-
+              <div className="w-full flex bg-[#444444] border-2 border-[#888888] rounded-2xl items-center justify-center max-h-[100px] overflow-y-scroll hide-scrollbar">
+                  <div className="w-full h-full flex flex-col items-center">
+                  <p>OTP: {getOTPFromTransaction(order.numberId).join(", ")}</p>
+                  </div>
+                </div>
                   <div className="bg-transparent pt-4 flex w-full items-center justify-center gap-4">
                     <Button
                       onClick={() => handleForceDelete(order.userId, order.numberId, order.number,order.server,order._id)}
