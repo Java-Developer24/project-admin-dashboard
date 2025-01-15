@@ -36,7 +36,7 @@ const Discount = () => {
     // Fetch servers
     const fetchServers = async () => {
       try {
-        const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
+        const response = await axios.get("/api/server/admin-api/server-data-get/get-server");
         const availableServers = response.data
           .filter(server => server.server !== 0)
           .map(server => ({
@@ -53,9 +53,9 @@ const Discount = () => {
     const fetchActiveDiscounts = async () => {
       try {
         const [serverDiscounts, serviceDiscounts, userDiscounts] = await Promise.all([
-          axios.get("https://project-backend-xo17.onrender.com/api/server/get-server-discount"),
-          axios.get("https://project-backend-xo17.onrender.com/api/service/get-all-service-discount"),
-          axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-user-discount")
+          axios.get("/api/server/admin-api/server-discount-update/get-server-discount"),
+          axios.get("/api/service/admin-api/server-discount-data/get-all-service-discount"),
+          axios.get("/api/user/admin-api/user-discount-data/get-all-user-discount")
         ]);
 
         setActiveDiscounts({

@@ -27,12 +27,12 @@ const ActiveOrders = () => {
   const fetchOrders = async () => {
     try {
       // Fetch all active orders
-      const ordersResponse = await axios.get("https://project-backend-xo17.onrender.com/api/history/get-all-active-orders");
+      const ordersResponse = await axios.get("/api/history/history-admin-api/get-all-active-orders");
       const ordersWithUsers = await Promise.all(
         ordersResponse.data.map(async (order) => {
           // Fetch user details for each order
           console.log(order)
-          const userResponse = await axios.get(`https://project-backend-xo17.onrender.com/api/user/get-user?userId=${order.userId}`);
+          const userResponse = await axios.get(`/api/user/user-admin-api/get-user?userId=${order.userId}`);
           console.log(userResponse)
           return {
             ...order,
@@ -140,7 +140,7 @@ const ActiveOrders = () => {
 
   const handleForceDelete = async (userId, numberId, number,server,orderId) => {
     try {
-      await axios.delete(`https://project-backend-xo17.onrender.com/api/user/force-delete?userId=${userId}&numberId=${numberId}&number=${number}&server=${server}`);
+      await axios.delete(`/api/user/admin-api/delete-user-number-data/force-delete?userId=${userId}&numberId=${numberId}&number=${number}&server=${server}`);
       fetchOrders(); // Refresh orders after deletion
       // Remove the deleted order from the state
     setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId)); 
@@ -149,14 +149,14 @@ const ActiveOrders = () => {
     }
   };
 
-  const handleBuyAgain = async (userId) => {
-    try {
-      await axios.post(`https://project-backend-xo17.onrender.com/api/orders/buy-again?userId=${userId}`);
-      fetchOrders(); // Refresh orders after buying again
-    } catch (error) {
-      console.error("Failed to buy again:", error);
-    }
-  };
+  // const handleBuyAgain = async (userId) => {
+  //   try {
+  //     await axios.post(`https://project-backend-xo17.onrender.com/api/orders/buy-again?userId=${userId}`);
+  //     fetchOrders(); // Refresh orders after buying again
+  //   } catch (error) {
+  //     console.error("Failed to buy again:", error);
+  //   }
+  // };
 
   const filteredOrders = orders.filter(order => 
     order.userEmail.toLowerCase().includes(searchQuery.toLowerCase())
@@ -301,12 +301,12 @@ const ActiveOrders = () => {
                     >
                       Cancel
                     </Button>
-                    <Button
+                    {/* <Button
                       onClick={() => handleBuyAgain(order.userId)}
                       className="w-full border border-[#38D9BA] text-[#38D9BA] hover:bg-[#38D9BA]/10"
                     >
                       Buy Again
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               </div>

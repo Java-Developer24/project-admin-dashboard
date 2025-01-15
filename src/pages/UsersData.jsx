@@ -33,10 +33,10 @@ const UsersData = () => {
       try {
         const [usersResponse, totalUsersCount] = await Promise.all([
           axios.get(
-            "https://project-backend-xo17.onrender.com/api/user/get-all-users"
+            "/api/user/admin-api/all-users/get-all-users"
           ),
           axios.get(
-            `https://project-backend-xo17.onrender.com/api/user/total-user-count`
+            `/api/user/admin-api/total-users/total-user-count`
           ),
         ]);
 

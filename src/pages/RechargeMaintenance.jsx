@@ -21,7 +21,7 @@ const RechargeMaintenance = () => {
     try {
       const responses = await Promise.all(
         rechargeTypes.map((type) =>
-          axios.get(`https://project-backend-xo17.onrender.com/api/recharge/get-recharge-maintenance?rechargeType=${type.type}`)
+          axios.get(`/api/recharge/admin-api/recharge-data-maintenance/get-recharge-maintenance?rechargeType=${type.type}`)
         )
       );
       const updatedTypes = responses.map((response, index) => ({
@@ -36,7 +36,7 @@ const RechargeMaintenance = () => {
 
   const toggleMaintenanceStatus = async (rechargeType, newStatus) => {
     try {
-      await axios.post(`https://project-backend-xo17.onrender.com/api/recharge/updateRechargeMaintence`, {
+      await axios.post(`/api/recharge/admin-api/recharge-maintence-update/updateRechargeMaintence`, {
         rechargeType,
         status: newStatus,
       });

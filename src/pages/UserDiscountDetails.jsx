@@ -19,7 +19,7 @@ const UserDiscountDetails = () => {
     const fetchUserDiscounts = async () => {
       try {
           const response = await axios.get(
-            `https://project-backend-xo17.onrender.com/api/user/get-user-discount-details?userId=${userId}`
+            `/api/user/admin-api/user-discount-data/get-user-discount-details?userId=${userId}`
           );
           const data = await response.data;
 
@@ -38,7 +38,7 @@ const UserDiscountDetails = () => {
   const handleDelete = async (service, server) => {
     try {
       await axios.delete(
-        `https://project-backend-xo17.onrender.com/api/user/delete-user-discount?userId=${userId}&service=${service}&server=${server}`
+        `/api/user/admin-api/user-discount-data-removal/delete-user-discount?userId=${userId}&service=${service}&server=${server}`
       );
 
 

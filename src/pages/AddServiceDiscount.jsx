@@ -20,7 +20,7 @@ const AddServiceDiscount = ({ serviceList }) => {
 
   const fetchDiscounts = async () => {
     try {
-      const response = await axios.get("https://project-backend-xo17.onrender.com/api/service/get-all-service-discount");
+      const response = await axios.get("/api/service/admin-api/server-discount-data/get-all-service-discount");
       setDiscount(response.data);
       console.log(response.data);
     } catch (error) {
@@ -41,7 +41,7 @@ const AddServiceDiscount = ({ serviceList }) => {
         return;
       }
 
-      await axios.post("https://project-backend-xo17.onrender.com/api/service/add-service-discount", {
+      await axios.post("/api/service/admin-api/updating-service-discount/add-service-discount", {
         service: selectedService,
         server: serverId,
         discount: discountAmount,
@@ -57,7 +57,7 @@ const AddServiceDiscount = ({ serviceList }) => {
 
   const handleDelete = async (service, server) => {
     try {
-      await axios.delete(`https://project-backend-xo17.onrender.com/api/service/delete-service-discount?service=${service}&server=${server}`);
+      await axios.delete(`/api/service/admin-api/service-discount-removal/delete-service-discount?service=${service}&server=${server}`);
       fetchDiscounts();
       alert("Service discount deleted successfully");
     } catch (error) {

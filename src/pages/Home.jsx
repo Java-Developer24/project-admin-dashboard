@@ -31,11 +31,11 @@ const Home = () => {
       try {
         const [usersResponse, totalUsersCount, transactions, blockedUserCount,totalRechargeAmount] =
           await Promise.all([
-            axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-users"),
-            axios.get(`https://project-backend-xo17.onrender.com/api/user/total-user-count`),
-            axios.get("https://project-backend-xo17.onrender.com/api/history/transaction-history-count"),
-            axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-blocked-users-count"),
-            axios.get("https://project-backend-xo17.onrender.com/api/history/get-total-recharge-balance"),
+            axios.get("/api/user/admin-api/all-users/get-all-users"),
+            axios.get(`/api/user/admin-api/total-users/total-user-count`),
+            axios.get("/api/history//history-admin-api/transaction-count/transaction-history-count"),
+            axios.get("/api/user/user-admin-api/blocked-users/get-all-blocked-users-count"),
+            axios.get("/api/history/history-admin-api/recharge-balance/get-total-recharge-balance"),
           ]);
   
         const usersData = usersResponse.data;
@@ -73,10 +73,10 @@ const Home = () => {
           <span className="text-sm text-white font-normal">₹{totalAmount}</span>
         </h3>
         
-        <p className="text-[#A5A5A5] text-sm">
+        <h3 className="text-[#A5A5A5] text-sm">
           Total Recharge:{" "}
-          <span className="text-white font-normal text-xs">₹{totalRechargeAmount}</span>
-        </p>
+          <span className="text-white font-normal text-sm">₹{totalRechargeAmount}</span>
+        </h3>
         
         <h3 className="font-normal text-base text-[#8C8C8C]">
           Total Users:{" "}

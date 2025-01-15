@@ -29,7 +29,7 @@ const Login = () => {
 
     if (email.value === envEmail && password.value === envPassword) {
       try {
-        const response = await fetch('https://project-backend-xo17.onrender.com/api/auth/admin-login', {
+        const response = await fetch('https://project-backend-xo17.onrender.com/api/auth/admin-api/admin-user-login/admin-login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -44,8 +44,8 @@ const Login = () => {
           localStorage.setItem('tempEmail', email.value);
           login();
            navigate('/');
-          // // Always redirect to MFA page - the page will handle both setup and verification
-          // navigate('/mfa');
+          // Always redirect to MFA page - the page will handle both setup and verification
+          navigate('/mfa');
         } else {
           toast.error('Invalid credentials');
         }

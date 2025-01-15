@@ -18,7 +18,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrderData = async () => {
       try {
-        const response = await axios.get(`https://project-backend-xo17.onrender.com/api/user/orders?userId=${id}`);
+        const response = await axios.get(`/api/user/admin-api/get-orders-data/orders?userId=${id}`);
         setOrderData(response.data[0]);
        
         if (response.data && response.data.remainingTime) {
@@ -34,13 +34,13 @@ const Orders = () => {
   }, [id]);
  
   // Poll transactions every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(fetchTransactions, 1000);
-    return () => clearInterval(interval); // Clear interval on component unmount
-  }, [transactions]);
+  // useEffect(() => {
+  //   const interval = setInterval(fetchTransactions, 1000);
+  //   return () => clearInterval(interval); // Clear interval on component unmount
+  // }, [transactions]);
   const fetchUser = async () => {
     try {
-      const user = await axios.get(`https://project-backend-xo17.onrender.com/api/user/get-user?userId=${id}`);
+      const user = await axios.get(`/api/user/user-admin-api/get-user?userId=${id}`);
       setUserData(user.data);
      
     } catch (error) {
@@ -139,60 +139,60 @@ const apikey=userData.api_key
 // const number=orderData.number
   const handleForceDelete = async (numberId,number) => {
     try {
-      await axios.delete(`https://project-backend-xo17.onrender.com/api/user/force-delete?userId=${id}&numberId=${numberId}&number=${number}&server=${orderData.server}`);
+      await axios.delete(`/api/user/admin-api/delete-user-number-data/force-delete?userId=${id}&numberId=${numberId}&number=${number}&server=${orderData.server}`);
       navigate(`/users-data/${id}`);
     } catch (error) {
       console.error("Failed to force delete order:", error);
     }
   };
 
-  const handleBuyAgain = async () => {
-    try {
-      await axios.post(`https://project-backend-xo17.onrender.com/api/orders/buy-again?userId=${id}`);
-      const response = await axios.get(`https://project-backend-xo17.onrender.com/api/orders?userId=${id}`);
-      setOrderData(response.data);
-    } catch (error) {
-      console.error("Failed to buy again:", error);
-    }
-  };
+  // const handleBuyAgain = async () => {
+  //   try {
+  //     await axios.post(`https://project-backend-xo17.onrender.com/api/service/get-number?userId=${id}`);
+  //     const response = await axios.get(`https://project-backend-xo17.onrender.com/api/orders?userId=${id}`);
+  //     setOrderData(response.data);
+  //   } catch (error) {
+  //     console.error("Failed to buy again:", error);
+  //   }
+  // };
 
 
    // Fetch transactions for all active orders
- const fetchTransactions = async () => {
+//  const fetchTransactions = async () => {
  
 
-  try {
-    const transactionResponses = await Promise.all(
-      orders.map((order) =>
-        axios.get(
-          `https://project-backend-xo17.onrender.com/api/history/transaction-history-user?userId=${order.userId}`
-        )
-      )
-    );
+//   try {
+//     const transactionResponses = await Promise.all(
+//       orders.map((order) =>
+//         axios.get(
+//           `https://project-backend-xo17.onrender.com/api/history/transaction-history-user?userId=${order.userId}`
+//         )
+//       )
+//     );
 
-    const allTransactions = transactionResponses.flatMap(
-      (response) => response.data
-    );
+//     const allTransactions = transactionResponses.flatMap(
+//       (response) => response.data
+//     );
 
-    setTransactions(allTransactions);
-  } catch (error) {
-    console.error("Failed to fetch transactions:", error);
-  }
-};
- // Extract OTPs from transactions based on `numberId`
- const getOTPFromTransaction = (numberId) => {
-  const relatedTransactions = transactions.filter(
-    (transaction) => transaction.id === numberId
-  );
+//     setTransactions(allTransactions);
+//   } catch (error) {
+//     console.error("Failed to fetch transactions:", error);
+//   }
+// };
+//  // Extract OTPs from transactions based on `numberId`
+//  const getOTPFromTransaction = (numberId) => {
+//   const relatedTransactions = transactions.filter(
+//     (transaction) => transaction.id === numberId
+//   );
 
-  if (!relatedTransactions.length) return ["Waiting for SMS"];
+//   if (!relatedTransactions.length) return ["Waiting for SMS"];
 
-  const otpList = relatedTransactions
-    .map((transaction) => transaction.otp)
-    .filter((otp) => otp);
+//   const otpList = relatedTransactions
+//     .map((transaction) => transaction.otp)
+//     .filter((otp) => otp);
 
-  return otpList.length ? otpList : ["Waiting for SMS"];
-};
+//   return otpList.length ? otpList : ["Waiting for SMS"];
+// };
 
   return (
     <>
@@ -248,11 +248,11 @@ const apikey=userData.api_key
                     />
               </div>
               </div>
-              <div className="w-full flex bg-[#444444] border-2 border-[#888888] rounded-2xl items-center justify-center max-h-[100px] overflow-y-scroll hide-scrollbar">
+              {/* <div className="w-full flex bg-[#444444] border-2 border-[#888888] rounded-2xl items-center justify-center max-h-[100px] overflow-y-scroll hide-scrollbar">
                   <div className="w-full h-full flex flex-col items-center">
                   <p>OTP: {getOTPFromTransaction(orderData.numberId).join(", ")}</p>
                   </div>
-                </div>
+                </div> */}
 
               <div className="bg-transparent pt-4 flex w-full items-center justify-center gap-4">
                 <Button
@@ -267,12 +267,12 @@ const apikey=userData.api_key
                 >
                   Cancel
                 </Button>
-                <Button
+                {/* <Button
                   onClick={handleBuyAgain}
                   className="w-full border border-[#38D9BA] text-[#38D9BA] hover:bg-[#38D9BA]/10"
                 >
                   Buy Again
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>

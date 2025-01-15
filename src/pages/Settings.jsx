@@ -28,11 +28,11 @@ const Settings = () => {
     const fetchSettings = async () => {
       try {
         const [bannerRes, disclaimerRes, timeRes, ipRes, checkOtpRes] = await Promise.all([
-          axios.get("https://project-backend-xo17.onrender.com/api/info/banner"),
-          axios.get("https://project-backend-xo17.onrender.com/api/info/disclaimer"),
-          axios.get("https://project-backend-xo17.onrender.com/api/user/get-time"),
-          axios.get("https://project-backend-xo17.onrender.com/api/mfa/get-admin-ip"),
-          axios.get("https://project-backend-xo17.onrender.com/api/server/get-check-otp")
+          axios.get("/api/info/admin-api/get-info-banner/banner"),
+          axios.get("/api/info/admin-api/get-disclaimer-data/disclaimer"),
+          axios.get("/api/user/admin-api/otp-timing-data/get-time"),
+          axios.get("/api/mfa/admin-api/admin-IP-data/get-admin-ip"),
+          axios.get("/api/server/admin-api/check-otp-data/get-check-otp")
         ]);
        
         setBanner(bannerRes.data.message || "");
@@ -52,7 +52,7 @@ const Settings = () => {
 
   const handleCheckOtpToggle = async (checked) => {
     try {
-      await axios.post("https://project-backend-xo17.onrender.com/api/server/update-check-otp", {
+      await axios.post("/api/server/admin-api/check-otp-update/update-check-otp", {
         checkOtp: checked
       });
       setCheckOtp(checked);
@@ -66,7 +66,7 @@ const Settings = () => {
   const handleBannerUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://project-backend-xo17.onrender.com/api/info/update-banner", {
+      await axios.post("/api/info/admin-api/banner-data-update/update-banner", {
         banner: newBanner
       });
       setBanner(newBanner);
@@ -81,7 +81,7 @@ const Settings = () => {
   const handleDisclaimerUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://project-backend-xo17.onrender.com/api/info/update-disclaimer", {
+      await axios.post("/api/info/admin-api/disclaimer-data-update/update-disclaimer", {
         disclaimer: newDisclaimer
       });
       setDisclaimer(newDisclaimer);
@@ -96,7 +96,7 @@ const Settings = () => {
   const handleOtpTimeUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://project-backend-xo17.onrender.com/api/user/update-time", {
+      await axios.post("/api/user/admin-api/otp-window-time-update/update-time", {
         time: newOtpTime
       });
       setOtpTime(newOtpTime);
@@ -111,7 +111,7 @@ const Settings = () => {
   const handleAdminIPUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://project-backend-xo17.onrender.com/api/mfa/update-admin-ip", {
+      await axios.post("/api/mfa/admin-api/admin-IP-update/update-admin-ip", {
         ip: newAdminIP
       });
       setAdminIP(newAdminIP);

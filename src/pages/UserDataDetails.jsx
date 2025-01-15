@@ -30,7 +30,7 @@ const UserDataDetails = () => {
 
   const fetchUser = async () => {
     try {
-      const user = await axios.get(`https://project-backend-xo17.onrender.com/api/user/get-user?userId=${id}`);
+      const user = await axios.get(`/api/user/user-admin-api/get-user?userId=${id}`);
       setUserData(user.data);
       setIsBlocked(user.data.blocked);
       setNewBalance(user.data.balance); // Initialize balance
@@ -47,7 +47,7 @@ const UserDataDetails = () => {
 
   const handleFetchBlockReason = async () => {
     try {
-      const response = await axios.get("https://project-backend-xo17.onrender.com/api/user/get-all-blocked-users");
+      const response = await axios.get("/api/user/admin-api/user-block-data/get-all-blocked-users");
       if (response.data) {
         const userBlockDetails = response.data.find(user => user.email ); // Match email instead of userId
         if (userBlockDetails) {
@@ -73,7 +73,7 @@ const UserDataDetails = () => {
         blocked: !isBlocked,
         blocked_reason: !isBlocked ? "Blocked by Admin" : null,
       };
-      const response = await axios.post("https://project-backend-xo17.onrender.com/api/user/block-user", payload);
+      const response = await axios.post("/api/user/admin-api/user-block-status-update/block-user", payload);
 
       if (response.data.status === "SUCCESS") {
         setIsBlocked(!isBlocked);
@@ -104,7 +104,7 @@ const UserDataDetails = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post("https://project-backend-xo17.onrender.com/api/user/update-user-balance", {
+      const response = await axios.post("/api/user/admin-api/user-balance-change/update-user-balance", {
         userId: id,
         new_balance: parseFloat(newBalance),
       });
@@ -128,7 +128,7 @@ const UserDataDetails = () => {
 
   const handleSaveDBBalance = async () => {
     try {
-      const response = await axios.post("https://project-backend-xo17.onrender.com/api/user/update-user-balances", {
+      const response = await axios.post("/api/user/admin-api/user-db-balance-change/update-user-balances", {
         userId: id,
         new_db_balance: parseFloat(newDBBalance),
       });
@@ -152,7 +152,7 @@ const UserDataDetails = () => {
       const deleteUserRequest = async () => {
         try {
           const response = await axios.delete(
-            `https://project-backend-xo17.onrender.com/api/block/block-fraud-clear?userId=${id}`
+            `/api/block/admin-api/user-block-fraud/data-clear/block-fraud-clear?userId=${id}`
           );
           if (response.status === 200) {
             // Redirect to users data page or show success message
@@ -185,7 +185,7 @@ const UserDataDetails = () => {
       const deleteUserRequest = async () => {
         try {
           const response = await axios.delete(
-            `https://project-backend-xo17.onrender.com/api/user/delete-user-account?userId=${id}`
+            `/api/user/admin-api/user-acct-remove/delete-user-account?userId=${id}`
           );
           if (response.status === 200) {
             navigate("/users-data")

@@ -36,7 +36,7 @@ const ApiUpdate = () => {
   useEffect(() => {
     const fetchServers = async () => {
       try {
-        const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
+        const response = await axios.get("/api/server/admin-api/server-data-get/get-server");
         const availableServers = response.data.filter(
           (server) => !server.maintainance && server.server !== 0
         );
@@ -58,7 +58,7 @@ const ApiUpdate = () => {
 
   const fetchExchangeRateAndMargin = async (serverNumber) => {
     try {
-      const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
+      const response = await axios.get("/api/server/admin-api/server-data-get/get-server");
       const server = response.data.find(
         (s) => s.server === parseInt(serverNumber)
       );
@@ -89,11 +89,11 @@ const ApiUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://project-backend-xo17.onrender.com/api/server/update-api-key", {
+      await axios.post("/api/server/admin-api/api-key-change/update-api-key", {
         server: selectedServer,
         api_key: newApi,
       });
-      const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
+      const response = await axios.get("/api/server/admin-api/server-data-get/get-server");
       const availableServers = response.data.filter(
         (server) => !server.maintainance && server.server !== 0
       );
@@ -107,56 +107,56 @@ const ApiUpdate = () => {
     }
   };
 
-  const handleAddServerSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("https://project-backend-xo17.onrender.com/api/server/add-server-data-admin", {
-        server: serverNumberInput,
-        api_key: apiKeyInput,
-      });
-      const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
-      const availableServers = response.data.filter(
-        (server) => !server.maintainance && server.server !== 0
-      );
-      setServers(availableServers);
-      if (availableServers.length > 0) {
-        setSelectedServer("1");
-      }
-      setServerNumberInput("");
-      setApiKeyInput("");
-      setShowAddServerForm(false);
-    } catch (error) {
-      console.error("Error adding server:", error);
-    }
-  };
+  // const handleAddServerSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await axios.post("https://project-backend-xo17.onrender.com/api/server/add-server-data-admin", {
+  //       server: serverNumberInput,
+  //       api_key: apiKeyInput,
+  //     });
+  //     const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
+  //     const availableServers = response.data.filter(
+  //       (server) => !server.maintainance && server.server !== 0
+  //     );
+  //     setServers(availableServers);
+  //     if (availableServers.length > 0) {
+  //       setSelectedServer("1");
+  //     }
+  //     setServerNumberInput("");
+  //     setApiKeyInput("");
+  //     setShowAddServerForm(false);
+  //   } catch (error) {
+  //     console.error("Error adding server:", error);
+  //   }
+  // };
 
-  const fetchTokenForServer9 = async () => {
-    try {
-      const response = await axios.get("/get-token-server9");
-      setToken(response.data.token);
-    } catch (error) {
-      console.error("Failed to fetch token for server 9:", error);
-    }
-  };
+  // const fetchTokenForServer9 = async () => {
+  //   try {
+  //     const response = await axios.get("/get-token-server9");
+  //     setToken(response.data.token);
+  //   } catch (error) {
+  //     console.error("Failed to fetch token for server 9:", error);
+  //   }
+  // };
 
-  const handleTokenSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("/add-token-server9", {
-        token: newToken,
-      });
-      setNewToken("");
-      fetchTokenForServer9();
-    } catch (error) {
-      console.error("Error updating token for server 9:", error);
-    }
-  };
+  // const handleTokenSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await axios.post("/add-token-server9", {
+  //       token: newToken,
+  //     });
+  //     setNewToken("");
+  //     fetchTokenForServer9();
+  //   } catch (error) {
+  //     console.error("Error updating token for server 9:", error);
+  //   }
+  // };
 
   // New handlers for updating exchange rate and margin
   const handleExchangeRateSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`https://project-backend-xo17.onrender.com/api/server/update-exchange-rate`, {
+      await axios.post(`/api/server/admin-api/exchange-rate-change/update-exchange-rate`, {
         server: selectedServer,
         exchangeRate: newExchangeRate,
       });
@@ -170,7 +170,7 @@ const ApiUpdate = () => {
   const handleMarginSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`https://project-backend-xo17.onrender.com/api/server/update-margin-amount`, {
+      await axios.post(`/api/server/admin-api/margin-amt-change/update-margin-amount`, {
         server: selectedServer,
         margin: newMargin,
       });
@@ -195,13 +195,13 @@ const ApiUpdate = () => {
       <div className="flex items-center justify-center pt-[1rem]">
         <div className="bg-transparent w-full max-w-md rounded-lg mb-[60px] border-none dark">
           <div className="flex justify-end">
-            <Button
+            {/* <Button
               variant="link"
               onClick={handleAddServerClick}
               className="text-sm font-normal text-[#397CFF] !no-underline p-1 h-0"
             >
               {!showAddServerForm ? "+ Add New Server" : "- Back To Server"}
-            </Button>
+            </Button> */}
           </div>
           {showAddServerForm ? (
             <form onSubmit={handleAddServerSubmit}>

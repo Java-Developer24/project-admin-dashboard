@@ -18,7 +18,7 @@ const Service = () => {
   useEffect(() => {
     const fetchServiceData = async () => {
       try {
-        const response = await axios.get("https://project-backend-xo17.onrender.com/api/service/get-service-data-admin");
+        const response = await axios.get("/api/service/admin-api/service-data/get-service-data-admin");
         setServiceData(response.data);
         setLoading(false);
       } catch (err) {
@@ -63,7 +63,7 @@ const Service = () => {
 
   const handleSwitchChange = async (name, serverNumber, currentBlockStatus) => {
     try {
-      await axios.post("https://project-backend-xo17.onrender.com/api/service/updateService", {
+      await axios.post("/api/service/admin-api/service-update/updateService", {
         name,
         serverNumber,
         block: !currentBlockStatus,
@@ -93,7 +93,7 @@ const Service = () => {
     const deleteServicePromise = new Promise((resolve, reject) => {
       const deleteService = async () => {
         try {
-          const response = await axios.post("https://project-backend-xo17.onrender.com/api/service/deleteService", { name });
+          const response = await axios.post("/api/service/admin-api/service-delete/deleteService", { name });
           setServiceData((prevData) =>
             prevData.filter((service) => service.name !== name)
           );

@@ -10,7 +10,7 @@ const AddServiceDiscountWrapper = () => {
   useEffect(() => {
     const fetchServiceData = async () => {
       try {
-        const response = await axios.get("https://project-backend-xo17.onrender.com/api/service/get-service-data-admin");
+        const response = await axios.get("/api/service/admin-api/service-data/get-service-data-admin");
         setServiceData(response.data);
       } catch (err) {
         console.log(err.message);

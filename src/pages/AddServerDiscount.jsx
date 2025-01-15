@@ -20,7 +20,7 @@ const AddServerDiscount = () => {
 
   const fetchDiscounts = async () => {
     try {
-      const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server-discount");
+      const response = await axios.get("/api/server/admin-api/server-discount-update/get-server-discount");
       setDiscounts(response.data);
     } catch (error) {
       console.error("Error fetching discounts:", error);
@@ -39,7 +39,7 @@ const AddServerDiscount = () => {
         return;
       }
 
-      await axios.post("https://project-backend-xo17.onrender.com/api/server/add-server-discount", {
+      await axios.post("/api/server/admin-api/server-discount-addup/add-server-discount", {
         server: Id,
         discount: marginPrice,
       });
@@ -53,7 +53,7 @@ const AddServerDiscount = () => {
 
   const handleDelete = async (serverId) => {
     try {
-      await axios.delete(`https://project-backend-xo17.onrender.com/api/server/delete-server-discount?server=${serverId}`);
+      await axios.delete(`/api/server/admin-api/server-discount-removal/delete-server-discount?server=${serverId}`);
       setDiscounts(
         discounts.filter((discount) => discount.server !== serverId)
       );
