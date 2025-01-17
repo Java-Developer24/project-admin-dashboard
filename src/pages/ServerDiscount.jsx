@@ -17,7 +17,7 @@ const ServerDiscount = () => {
     // Fetch server data
     const fetchServers = async () => {
       try {
-        const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server"); // Call the API endpoint
+        const response = await axios.get("/api/server/get-server"); // Call the API endpoint
         setServers(response.data); // Set server data
       } catch (error) {
         console.error("Failed to fetch servers:", error);

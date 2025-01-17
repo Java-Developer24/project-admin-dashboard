@@ -68,15 +68,17 @@ const Home = () => {
   return (
     <div className="flex items-center justify-center pt-[1rem]">
       <div className="bg-transparent w-full max-w-md rounded-lg mb-[60px] border-none dark">
+
+      <h3 className="text-[#8C8C8C] text-base">
+          Total Recharge:{" "}
+          <span className="text-white font-normal text-sm">₹{totalRechargeAmount}</span>
+        </h3>
         <h3 className="font-normal text-base text-[#8C8C8C]">
           Total Balance:{" "}
           <span className="text-sm text-white font-normal">₹{totalAmount}</span>
         </h3>
         
-        <h3 className="text-[#A5A5A5] text-sm">
-          Total Recharge:{" "}
-          <span className="text-white font-normal text-sm">₹{totalRechargeAmount}</span>
-        </h3>
+        
         
         <h3 className="font-normal text-base text-[#8C8C8C]">
           Total Users:{" "}

@@ -66,7 +66,7 @@ const Service = () => {
       await axios.post("/api/service/admin-api/service-update/updateService", {
         name,
         serverNumber,
-        block: !currentBlockStatus,
+        maintenance: !currentBlockStatus,
       });
 
       setServiceData((prevData) =>
@@ -76,7 +76,7 @@ const Service = () => {
               ...service,
               servers: service.servers.map((server) =>
                 server.serverNumber === serverNumber
-                  ? { ...server, block: !currentBlockStatus }
+                  ? { ...server, maintenance: !currentBlockStatus }
                   : server
               ),
             };
@@ -218,12 +218,12 @@ const Service = () => {
                                   Server {server.serverNumber}
                                 </p>
                                 <Switch
-                                  checked={server.block}
+                                  checked={server.maintenance}
                                   onCheckedChange={() =>
                                     handleSwitchChange(
                                       service.name,
                                       server.serverNumber,
-                                      server.block
+                                      server.maintenance
                                     )
                                   }
                                 />

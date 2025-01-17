@@ -107,50 +107,7 @@ const ApiUpdate = () => {
     }
   };
 
-  // const handleAddServerSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await axios.post("https://project-backend-xo17.onrender.com/api/server/add-server-data-admin", {
-  //       server: serverNumberInput,
-  //       api_key: apiKeyInput,
-  //     });
-  //     const response = await axios.get("https://project-backend-xo17.onrender.com/api/server/get-server");
-  //     const availableServers = response.data.filter(
-  //       (server) => !server.maintainance && server.server !== 0
-  //     );
-  //     setServers(availableServers);
-  //     if (availableServers.length > 0) {
-  //       setSelectedServer("1");
-  //     }
-  //     setServerNumberInput("");
-  //     setApiKeyInput("");
-  //     setShowAddServerForm(false);
-  //   } catch (error) {
-  //     console.error("Error adding server:", error);
-  //   }
-  // };
 
-  // const fetchTokenForServer9 = async () => {
-  //   try {
-  //     const response = await axios.get("/get-token-server9");
-  //     setToken(response.data.token);
-  //   } catch (error) {
-  //     console.error("Failed to fetch token for server 9:", error);
-  //   }
-  // };
-
-  // const handleTokenSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await axios.post("/add-token-server9", {
-  //       token: newToken,
-  //     });
-  //     setNewToken("");
-  //     fetchTokenForServer9();
-  //   } catch (error) {
-  //     console.error("Error updating token for server 9:", error);
-  //   }
-  // };
 
   // New handlers for updating exchange rate and margin
   const handleExchangeRateSubmit = async (e) => {

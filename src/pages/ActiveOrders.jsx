@@ -130,7 +130,7 @@ const ActiveOrders = () => {
 
   const handleCancel = async (apiKey, numberId, server,orderId) => {
     try {
-      await axios.get(`https://project-backend-xo17.onrender.com/api/service/number-cancel?api_key=${apiKey}&id=${numberId}&server=${server}`);
+      await axios.get(`/api/service/number-cancel?api_key=${apiKey}&id=${numberId}&server=${server}`);
       fetchOrders(); // Refresh orders after cancellation
       setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId))
     } catch (error) {
@@ -170,7 +170,7 @@ const ActiveOrders = () => {
     const transactionResponses = await Promise.all(
       orders.map((order) =>
         axios.get(
-          `https://project-backend-xo17.onrender.com/api/history/transaction-history-user?userId=${order.userId}`
+          `/api/history/transaction-history-user?userId=${order.userId}`
         )
       )
     );

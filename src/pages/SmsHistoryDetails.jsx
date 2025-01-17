@@ -133,7 +133,7 @@ const getDateRange = (data) => {
     const handleDelete = async (id) => {
       try {
         // Call the delete API
-         await axios.delete(`https://project-backend-xo17.onrender.com/api/history/delete-numberhistory?id=${id}`);
+         await axios.delete(`/api/history/delete-numberhistory?id=${id}`);
         
         // Update the state to remove the deleted item
       setSmsDetails(prevsmsDetails => prevsmsDetails.filter(item => item.Id !== id));

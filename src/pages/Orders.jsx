@@ -128,15 +128,13 @@ const apikey=userData.api_key
 
   const handleCancel = async (apiKey) => {
     try {
-      await axios.get(`https://project-backend-xo17.onrender.com/api/service/number-cancel?api_key=${apiKey}&id=${orderData.numberId}&server=${orderData.server}`);
+      await axios.get(`/api/service/number-cancel?api_key=${apiKey}&id=${orderData.numberId}&server=${orderData.server}`);
       navigate(`/users-data/${id}`);
     } catch (error) {
       console.error("Failed to cancel order:", error);
     }
   };
-// const numberId=orderData.requestId
-// console.log(orderData.requestId)
-// const number=orderData.number
+
   const handleForceDelete = async (numberId,number) => {
     try {
       await axios.delete(`/api/user/admin-api/delete-user-number-data/force-delete?userId=${id}&numberId=${numberId}&number=${number}&server=${orderData.server}`);
