@@ -140,10 +140,10 @@ const Settings = () => {
       const token = localStorage.getItem("token"); // Retrieve token from localStorage
       
       // Show toast that services data is being updated
-      toast.info("Services data is being updated...");
+      toast.success("Services data is being updated...");
 
       // Make API call to fetch and compare services
-      const response = await axios.get("/admin-api/service-data-update/fetch-update-compare-services", {
+      const response = await axios.get("/api/service/admin-api/service-data-update/fetch-update-compare-services", {
         headers: {
           Authorization: `Bearer ${token}`, // Add token to Authorization header
         },
@@ -192,7 +192,7 @@ const Settings = () => {
                 type="text"
                 disabled
                 className="w-full h-12 pl-3 rounded-lg disabled:text-white disabled:!border-[#e0effe] focus:border-none disabled:opacity-100 disabled:bg-[#9D9D9D]/50"
-                value={banner}
+                value={banner || ""} // Fallback to empty string
               />
             </div>
             <div>
@@ -236,7 +236,7 @@ const Settings = () => {
                 type="text"
                 disabled
                 className="w-full h-12 pl-3 rounded-lg disabled:text-white disabled:!border-[#e0effe] focus:border-none disabled:opacity-100 disabled:bg-[#9D9D9D]/50"
-                value={otpTime}
+                value={otpTime || ""} // Fallback to empty string
               />
             </div>
             <div>
@@ -278,7 +278,7 @@ const Settings = () => {
                 type="text"
                 disabled
                 className="w-full h-12 pl-3 rounded-lg disabled:text-white disabled:!border-[#e0effe] focus:border-none disabled:opacity-100 disabled:bg-[#9D9D9D]/50"
-                value={adminIP}
+                value={adminIP || ""} // Fallback to empty string
               />
             </div>
             <div>
