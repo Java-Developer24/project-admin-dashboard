@@ -39,10 +39,15 @@ const DiscountAfterAddingUser = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [userDiscounts, setUserDiscounts] = useState([]);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
 
   const fetchUserDiscounts = async () => {
     try {
-      const response = await axios.get("/api/user/admin-api/user-discount-data/get-all-user-discount");
+      const response = await axios.get("/api/user/admin-api/user-discount-data/get-all-user-discount", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       const data = await response.data;
       setUserDiscounts(data);
     } catch (error) {

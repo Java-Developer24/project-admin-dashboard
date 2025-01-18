@@ -10,16 +10,21 @@ import { useNavigate } from "react-router-dom";
 const TrxAddressUpdate = () => {
   const [newTrxAddress, setNewTrxAddress] = useState("");
   const [trxAddress, setTrxAddress] = useState("");
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   const navigate = useNavigate();
   const getTrxAddress = () =>
     axios
-      .get("/api/recharge/admin-api/recharge-api-data-trx/get-recharge-trx?type=trx")
-      .then((response) => {
-        setTrxAddress(response.data.api_key);
-      })
-      .catch((error) => {
-        console.error("Error fetching servers:", error);
-      });
+  .get("/api/recharge/admin-api/recharge-api-data-trx/get-recharge-trx?type=trx", {
+    headers: {
+      Authorization: `Bearer ${token}`, // Include token in Authorization header
+    },
+  })
+  .then((response) => {
+    setTrxAddress(response.data.api_key);
+  })
+  .catch((error) => {
+    console.error("Error fetching servers:", error);
+  });
 
   useEffect(() => {
     // Fetch servers when the component mounts
@@ -31,12 +36,19 @@ const TrxAddressUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/recharge/admin-api/recharge-data-update-trx/update-recharge-trx", {
-        recharge_type: "trx",
-        api_key: trxAddress,
-        newTrxAddress
-      // Use the newApiKey state
-      });
+      const response = await axios.post(
+        "/api/recharge/admin-api/recharge-data-update-trx/update-recharge-trx", 
+        {
+          recharge_type: "trx",
+          api_key: trxAddress,
+          newTrxAddress
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in Authorization header
+          },
+        }
+      );
       setNewTrxAddress("");
       getTrxAddress();
       console.log(response.data);

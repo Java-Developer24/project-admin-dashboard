@@ -10,12 +10,17 @@ const UnsendTrx = () => {
   const navigate = useNavigate();
   const navigateToHome = () => navigate("/");
   const [unsendTrx, setUnsendTrx] = useState([]);
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage or another storage method
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const rechargeResponse = await axios.get("/api/unsendtrx/admin-api/unsend-data-get/unsend-trx");
+        const rechargeResponse = await axios.get("/api/unsendtrx/admin-api/unsend-data-get/unsend-trx", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add token to the Authorization header
+          },
+        });
         setUnsendTrx(rechargeResponse.data.data);
       } catch (error) {
         console.error("Failed to fetch history data", error);
@@ -27,7 +32,11 @@ const UnsendTrx = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/unsendtrx/admin-api/unsend-data-delete/unsend-trx?id=${id}`);
+      await axios.delete(`/api/unsendtrx/admin-api/unsend-data-delete/unsend-trx?id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add token to the Authorization header
+        },
+      });
       setUnsendTrx((prevUnsendTrx) =>
         prevUnsendTrx.filter((trx) => trx._id !== id)
       );

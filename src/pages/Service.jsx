@@ -15,10 +15,19 @@ const Service = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   useEffect(() => {
     const fetchServiceData = async () => {
       try {
-        const response = await axios.get("/api/service/admin-api/service-data/get-service-data-admin");
+        const response = await axios.get(
+          "/api/service/admin-api/service-data/get-service-data-admin",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+            },
+          }
+        );
+        
         setServiceData(response.data);
         setLoading(false);
       } catch (err) {
@@ -63,11 +72,19 @@ const Service = () => {
 
   const handleSwitchChange = async (name, serverNumber, currentBlockStatus) => {
     try {
-      await axios.post("/api/service/admin-api/service-update/updateService", {
-        name,
-        serverNumber,
-        maintenance: !currentBlockStatus,
-      });
+      await axios.post(
+        "/api/service/admin-api/service-update/updateService",
+        {
+          name,
+          serverNumber,
+          maintenance: !currentBlockStatus,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          },
+        }
+      );
 
       setServiceData((prevData) =>
         prevData.map((service) => {
@@ -93,7 +110,15 @@ const Service = () => {
     const deleteServicePromise = new Promise((resolve, reject) => {
       const deleteService = async () => {
         try {
-          const response = await axios.post("/api/service/admin-api/service-delete/deleteService", { name });
+          const response = await axios.post(
+            "/api/service/admin-api/service-delete/deleteService",
+            { name }, // Request body
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }
+          );
           setServiceData((prevData) =>
             prevData.filter((service) => service.name !== name)
           );

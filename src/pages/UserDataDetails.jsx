@@ -27,10 +27,15 @@ const UserDataDetails = () => {
 
   const [loading, setLoading] = useState(true); // State to handle the loading state
   const navigateToUsersData = () => navigate("/users-data");
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
 
   const fetchUser = async () => {
     try {
-      const user = await axios.get(`/api/user/user-admin-api/get-user?userId=${id}`);
+      const user = await axios.get(`/api/user/user-admin-api/get-user?userId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
+      });
       setUserData(user.data);
       setIsBlocked(user.data.blocked);
       setNewBalance(user.data.balance); // Initialize balance
@@ -73,7 +78,15 @@ const UserDataDetails = () => {
         blocked: !isBlocked,
         blocked_reason: !isBlocked ? "Blocked by Admin" : null,
       };
-      const response = await axios.post("/api/user/admin-api/user-block-status-update/block-user", payload);
+      const response = await axios.post(
+        "/api/user/admin-api/user-block-status-update/block-user",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          },
+        }
+      );
 
       if (response.data.status === "SUCCESS") {
         setIsBlocked(!isBlocked);
@@ -104,10 +117,18 @@ const UserDataDetails = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post("/api/user/admin-api/user-balance-change/update-user-balance", {
-        userId: id,
-        new_balance: parseFloat(newBalance),
-      });
+      const response = await axios.post(
+        "/api/user/admin-api/user-balance-change/update-user-balance",
+        {
+          userId: id,
+          new_balance: parseFloat(newBalance),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          },
+        }
+      );
       if (response.status === 200) {
         setUserData((prevData) => ({ ...prevData, balance: newBalance }));
         setIsEditing(false);
@@ -131,6 +152,10 @@ const UserDataDetails = () => {
       const response = await axios.post("/api/user/admin-api/user-db-balance-change/update-user-balances", {
         userId: id,
         new_db_balance: parseFloat(newDBBalance),
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
       });
       if (response.status === 200) {
         setUserData((prevData) => ({ ...prevData, dbBalance: newDBBalance }));
@@ -152,7 +177,12 @@ const UserDataDetails = () => {
       const deleteUserRequest = async () => {
         try {
           const response = await axios.delete(
-            `/api/block/admin-api/user-block-fraud/data-clear/block-fraud-clear?userId=${id}`
+            `/api/block/admin-api/user-block-fraud/data-clear/block-fraud-clear?userId=${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }
           );
           if (response.status === 200) {
             // Redirect to users data page or show success message
@@ -185,7 +215,12 @@ const UserDataDetails = () => {
       const deleteUserRequest = async () => {
         try {
           const response = await axios.delete(
-            `/api/user/admin-api/user-acct-remove/delete-user-account?userId=${id}`
+            `/api/user/admin-api/user-acct-remove/delete-user-account?userId=${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }
           );
           if (response.status === 200) {
             navigate("/users-data")

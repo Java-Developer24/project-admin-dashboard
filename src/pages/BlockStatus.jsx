@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const BlockStatus = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   const [blockTypes, setBlockTypes] = useState([
     // { type: "Number_Cancel", status: false, name: "Number Cancel" },
     { type: "User_Fraud", status: false, name: "User Fraud" },
@@ -21,7 +22,14 @@ const BlockStatus = () => {
     try {
       const responses = await Promise.all(
         blockTypes.map((type) =>
-          axios.get(`/api/block/admin-api/block-status-data/get-block-status?blockType=${type.type}`)
+          axios.get(
+            `/api/block/admin-api/block-status-data/get-block-status?blockType=${type.type}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add token to Authorization header
+              },
+            }
+          )
         )
       );
       const updatedTypes = responses.map((response, index) => ({
@@ -36,10 +44,18 @@ const BlockStatus = () => {
 
   const toggleBlockStatus = async (blockTypes, newStatus) => {
     try {
-      await axios.post(`/api/block/admin-api/block-status-update/block-status-toggle`, {
-        blockType: blockTypes,
-        status: newStatus,
-      });
+      await axios.post(
+        `/api/block/admin-api/block-status-update/block-status-toggle`, 
+        {
+          blockType: blockTypes,
+          status: newStatus,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add token to Authorization header
+          },
+        }
+      );
       setBlockTypes((prevTypes) =>
         prevTypes.map((type) =>
           type.type === blockTypes ? { ...type, status: newStatus } : type

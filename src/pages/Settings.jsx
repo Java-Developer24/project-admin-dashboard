@@ -22,21 +22,31 @@ const Settings = () => {
   const [checkOtp, setCheckOtp] = useState(false);
 
   const navigateToAdminPanel = () => navigate("/admin-panel");
-
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   // Fetch current settings
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const [bannerRes, disclaimerRes, timeRes, ipRes, checkOtpRes] = await Promise.all([
+        const [bannerRes, timeRes, ipRes, checkOtpRes] = await Promise.all([
           axios.get("/api/info/admin-api/get-info-banner/banner"),
-          axios.get("/api/info/admin-api/get-disclaimer-data/disclaimer"),
-          axios.get("/api/user/admin-api/otp-timing-data/get-time"),
-          axios.get("/api/mfa/admin-api/admin-IP-data/get-admin-ip"),
-          axios.get("/api/server/admin-api/check-otp-data/get-check-otp")
+          axios.get("/api/user/admin-api/otp-timing-data/get-time", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add token to Authorization header
+            },
+          }),
+          axios.get("/api/mfa/admin-api/admin-IP-data/get-admin-ip", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add token to Authorization header
+            },
+          }),
+          axios.get("/api/server/admin-api/check-otp-data/get-check-otp", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add token to Authorization header
+            },
+          }),
         ]);
        
         setBanner(bannerRes.data.message || "");
-        setDisclaimer(disclaimerRes.data.content || "");
         setOtpTime(timeRes.data.otpTimeWindow || "");
         setAdminIP(ipRes.data.adminIp);
         setCheckOtp(checkOtpRes.data.status);
@@ -54,6 +64,10 @@ const Settings = () => {
     try {
       await axios.post("/api/server/admin-api/check-otp-update/update-check-otp", {
         checkOtp: checked
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add token to Authorization header
+        },
       });
       setCheckOtp(checked);
       toast.success("OTP check setting updated successfully");
@@ -68,6 +82,10 @@ const Settings = () => {
     try {
       await axios.post("/api/info/admin-api/banner-data-update/update-banner", {
         banner: newBanner
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add token to the Authorization header
+        },
       });
       setBanner(newBanner);
       setNewBanner("");
@@ -78,26 +96,16 @@ const Settings = () => {
     }
   };
 
-  const handleDisclaimerUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("/api/info/admin-api/disclaimer-data-update/update-disclaimer", {
-        disclaimer: newDisclaimer
-      });
-      setDisclaimer(newDisclaimer);
-      setNewDisclaimer("");
-      toast.success("Disclaimer updated successfully");
-    } catch (error) {
-      console.error("Error updating disclaimer:", error);
-      toast.error("Failed to update disclaimer");
-    }
-  };
-
+ 
   const handleOtpTimeUpdate = async (e) => {
     e.preventDefault();
     try {
       await axios.post("/api/user/admin-api/otp-window-time-update/update-time", {
         time: newOtpTime
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add token to the Authorization header
+        },
       });
       setOtpTime(newOtpTime);
       setNewOtpTime("");
@@ -113,6 +121,10 @@ const Settings = () => {
     try {
       await axios.post("/api/mfa/admin-api/admin-IP-update/update-admin-ip", {
         ip: newAdminIP
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add token to the Authorization header
+        },
       });
       setAdminIP(newAdminIP);
       setNewAdminIP("");
@@ -120,6 +132,35 @@ const Settings = () => {
     } catch (error) {
       console.error("Error updating Admin IP:", error);
       toast.error("Failed to update Admin IP");
+    }
+  };
+
+  const fetchServiceData = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      
+      // Show toast that services data is being updated
+      toast.info("Services data is being updated...");
+
+      // Make API call to fetch and compare services
+      const response = await axios.get("/admin-api/service-data-update/fetch-update-compare-services", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add token to Authorization header
+        },
+      });
+
+      // Check for success response
+      if (response.status === 200 && response.data.msg) {
+        // Show success message from the server in a toast
+        toast.success(response.data.msg);
+      } else {
+        // Handle unexpected responses
+        toast.error("Unexpected response from the server.");
+      }
+    } catch (err) {
+      console.error("Error fetching service data:", err);
+      // Show error toast for failure
+      toast.error("Failed to fetch and update service data.");
     }
   };
   return (
@@ -178,47 +219,7 @@ const Settings = () => {
           </div>
         </form>
 
-        {/* Disclaimer Section */}
-        <form onSubmit={handleDisclaimerUpdate} className="mb-8">
-          <div className="space-y-4">
-            <div>
-              <Label
-                htmlFor="currentDisclaimer"
-                className="block text-base text-[#9d9d9d] font-normal py-3"
-              >
-                Current Disclaimer
-              </Label>
-              <Input
-                id="currentDisclaimer"
-                type="text"
-                disabled
-                className="w-full h-12 pl-3 rounded-lg disabled:text-white disabled:!border-[#e0effe] focus:border-none disabled:opacity-100 disabled:bg-[#9D9D9D]/50"
-                value={disclaimer}
-              />
-            </div>
-            <div>
-              <Label
-                htmlFor="newDisclaimer"
-                className="block text-base text-[#9d9d9d] font-normal py-3"
-              >
-                New Disclaimer
-              </Label>
-              <Input
-                id="newDisclaimer"
-                type="text"
-                placeholder="Enter new disclaimer text"
-                className="w-full h-12 pl-3 rounded-lg text-[#9d9d9d] !placeholder-[#9d9d9d] bg-transparent border-[#e0effe] focus:border-none"
-                value={newDisclaimer}
-                onChange={(e) => setNewDisclaimer(e.target.value)}
-              />
-            </div>
-            <div className="flex justify-center gap-4">
-              <Button type="submit" className="py-1 px-8 text-xs bg-[#129BFF] text-white hover:bg-[#129BFF]">
-                Update Disclaimer
-              </Button>
-            </div>
-          </div>
-        </form>
+       
 
         {/* OTP Check Timing Section */}
         <form onSubmit={handleOtpTimeUpdate} className="mb-8">
@@ -313,7 +314,26 @@ const Settings = () => {
             />
           </div>
           </div>
+    
+          <div className="mt-6 flex justify-center">
+          <Label
+                
+                className="block text-base text-[#9d9d9d] font-normal py-3 pr-3"
+              >
+                Fetch Services List
+              </Label>
+              <div className="flex justify-center gap-4">
+                <Button
+                 onClick={fetchServiceData}
+                  className="bg-primary hover:bg-primary/90 text-white"
+                 
+                >
+               Services list
+                </Button>
+                </div>
+              </div>
       </div>
+      
     </div>
   </>
   );

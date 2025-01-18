@@ -10,6 +10,14 @@ const ActiveOrders = lazy(() => import("@/pages/ActiveOrders"))
 const Home = lazy(() => import("@/pages/Home"));
 const Login = lazy(() => import("@/pages/Login"));
 const MfaPage = lazy(() => import("@/pages/MfaPage"));
+const MfapageForServiceList = lazy(() => import("@/pages/MfapageForServiceList"));
+const MfapageforUserData = lazy(() => import("@/pages/MfapageforUserData"));
+const MfapageforActiveOrders=lazy(()=>import ("@/pages/MfapageforActiveOrders"))
+const MfapageforDiscount = lazy(() => import("@/pages/MfapageforDiscount"));
+const MfapageforAdminPanel=lazy(()=>import ("@/pages/MfapageforAdminPanel"))
+const MfapageforUnsendTrx=lazy(()=>import ("@/pages/MfapageforUnsendTrx"))
+const MfapageforBlockedUsers=lazy(()=>import ("@/pages/MfapageforBlockedUsers"))
+
 const Service = lazy(() => import("@/pages/Service"));
 const AddService = lazy(() => import("@/pages/AddService"));
 const RechargeHistory = lazy(() => import("@/pages/RechargeHistory"));
@@ -287,6 +295,86 @@ function App() {
                 <MfaPage />
               </ProtectRoute>
             }
+          />
+          <Route
+            path="/mfapageforServiceList"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforServiceList">
+                <MfapageForServiceList />
+              </ProtectRoute>
+               
+              
+            }
+          />
+           <Route
+            path="/mfapageforUserData"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforUserData">
+                <MfapageforUserData />
+              </ProtectRoute>
+               
+              
+            }
+          />
+          MfapageforActiveOrders
+          <Route
+            path="/mfapageforActiveOrders"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforUserData">
+                <MfapageforActiveOrders />
+              </ProtectRoute>
+               
+              
+            }
+            
+          />
+          MfapageforAdminPanel
+          <Route
+            path="/mfapageforAdminPanel"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforAdminPanel">
+                <MfapageforAdminPanel />
+              </ProtectRoute>
+               
+              
+            }
+            
+          />
+          
+          <Route
+            path="/mfapageforDiscount"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforDiscount">
+                <MfapageforDiscount />
+              </ProtectRoute>
+               
+              
+            }
+            
+          />
+          
+          <Route
+            path="/mfapageforUnsendTrx"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforUnsendTrx">
+                <MfapageforUnsendTrx />
+              </ProtectRoute>
+               
+              
+            }
+            
+          />
+          
+          <Route
+            path="/mfapageforBlockedUsers"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforBlockedUsers">
+                <MfapageforBlockedUsers />
+              </ProtectRoute>
+               
+              
+            }
+            
           />
           <Route
             path="/active-orders"

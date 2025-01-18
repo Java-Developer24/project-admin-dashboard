@@ -10,11 +10,15 @@ const BlockedUser = () => {
   const navigateToHome = () => navigate("/");
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage or another storage method
   useEffect(() => {
     const fetchBlockedUsers = async () => {
       try {
-        const response = await axios.get("/api/user/admin-api/user-block-data/get-all-blocked-users");
+        const response = await axios.get("/api/user/admin-api/user-block-data/get-all-blocked-users", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add token to the Authorization header
+          },
+        });
         // Update to use response.data directly, since it's already an array
         setBlockedUsers(response.data); 
       } catch (error) {

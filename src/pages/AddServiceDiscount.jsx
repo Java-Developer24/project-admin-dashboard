@@ -15,12 +15,16 @@ const AddServiceDiscount = ({ serviceList }) => {
   const [selectedService, setSelectedService] = useState(serviceList[0]?.name || "");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
   const navigateBack = () => navigate("/discount");
 
   const fetchDiscounts = async () => {
     try {
-      const response = await axios.get("/api/service/admin-api/server-discount-data/get-all-service-discount");
+      const response = await axios.get("/api/service/admin-api/server-discount-data/get-all-service-discount", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       setDiscount(response.data);
       console.log(response.data);
     } catch (error) {
@@ -45,6 +49,10 @@ const AddServiceDiscount = ({ serviceList }) => {
         service: selectedService,
         server: serverId,
         discount: discountAmount,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
       });
       setSelectedService(serviceList[0]?.name || "");
       setMargin("");
@@ -57,7 +65,11 @@ const AddServiceDiscount = ({ serviceList }) => {
 
   const handleDelete = async (service, server) => {
     try {
-      await axios.delete(`/api/service/admin-api/service-discount-removal/delete-service-discount?service=${service}&server=${server}`);
+      await axios.delete(`/api/service/admin-api/service-discount-removal/delete-service-discount?service=${service}&server=${server}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       fetchDiscounts();
       alert("Service discount deleted successfully");
     } catch (error) {

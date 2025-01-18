@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import toast from "react-hot-toast";
 import AppLayout from "@/components/layout/AppLayout";
 
-const MfaPage = () => {
+const MfapageForServiceList = () => {
   const [mfaCode, setMfaCode] = useState("");
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [isMFAEnabled, setIsMFAEnabled] = useState(false);
@@ -82,8 +82,8 @@ const MfaPage = () => {
 
       if (data.message==="2FA verified successfully. Access granted.") {
         login();
-       
-        navigate("/");
+
+        navigate("/service");
         toast.success(
           isMFAEnabled ? "MFA verification successful" : "MFA setup successful",
           { autoClose: 5000 } // 5000 milliseconds = 5 seconds
@@ -156,4 +156,4 @@ const MfaPage = () => {
   );
 };
 
-export default AppLayout()(MfaPage);
+export default AppLayout()(MfapageForServiceList);

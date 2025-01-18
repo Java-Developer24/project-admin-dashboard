@@ -8,6 +8,7 @@ import axios from "axios";
 
 const RechargeMaintenance = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   const [rechargeTypes, setRechargeTypes] = useState([
     { type: "upi", status: false },
     { type: "trx", status: false },
@@ -36,10 +37,18 @@ const RechargeMaintenance = () => {
 
   const toggleMaintenanceStatus = async (rechargeType, newStatus) => {
     try {
-      await axios.post(`/api/recharge/admin-api/recharge-maintence-update/updateRechargeMaintence`, {
-        rechargeType,
-        status: newStatus,
-      });
+      await axios.post(
+        "/api/recharge/admin-api/recharge-maintence-update/updateRechargeMaintence", 
+        {
+          rechargeType,
+          status: newStatus,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in Authorization header
+          },
+        }
+      );
       setRechargeTypes((prevTypes) =>
         prevTypes.map((type) =>
           type.type === rechargeType ? { ...type, status: newStatus } : type

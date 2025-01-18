@@ -25,14 +25,31 @@ const SmsHistoryDetails = () => {
   // State for pagination
   const [transactionLimit, setTransactionLimit] = useState(10);
   const [transactionCurrentPage, setTransactionCurrentPage] = useState(1);
+  const [totalUsedAmount, setTotalUsedAmount] = useState(0); // State for total used amount
 
   const navigateToSmsHistory = () => navigate("/sms-history");
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
 
   useEffect(() => {
     const fetchSmsDetails = async () => {
       try {
-        const response = await axios.get(`/api/history/admin-api/transaction-history-data/get-transaction-history-admin?userId=${id}`);
-        setSmsDetails(Array.isArray(response.data) ? response.data : []);
+        const response = await axios.get(
+          `/api/history/admin-api/transaction-history-data/get-transaction-history-admin?userId=${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          }
+        );
+        const data = Array.isArray(response.data) ? response.data : [];
+        setSmsDetails(data);
+        // Calculate the total used amount for successful orders with OTP
+      const totalAmount = data
+      .filter((entry) => entry.status === "SUCCESS" && entry.otp.length > 0) // Check if OTP is received
+      .reduce((sum, entry) => sum + (parseFloat(entry.price) || 0), 0);
+    console.log(totalAmount);
+    setTotalUsedAmount(totalAmount);                 
+          
         console.log(Array.isArray(response.data) ? response.data : [])
       } catch (error) {
         console.error("Failed to fetch SMS history details:", error);
@@ -41,7 +58,11 @@ const SmsHistoryDetails = () => {
 
     const fetchUser = async () => {
       try {
-        const user = await axios.get(`/api/user/user-admin-api/get-user?userId=${id}`);
+        const user = await axios.get(`/api/user/user-admin-api/get-user?userId=${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          },
+        });
         setUserData(user.data);
       } catch (error) {
         console.error("Failed to fetch user data");
@@ -50,7 +71,7 @@ const SmsHistoryDetails = () => {
 
     fetchSmsDetails();
     fetchUser();
-  }, [id,smsDetails]);
+  }, [id]);
 
  // Filter Transaction History
 const filterTransactionHistory = (data) => {
@@ -89,7 +110,7 @@ const filterTransactionHistory = (data) => {
   return preparedData;
 };
 
-// Filter and Sort
+// Filter and Sort Transaction History
 let filteredTransactionHistory = filterTransactionHistory(smsDetails);
 
 if (tranFilter === "Success") {
@@ -102,12 +123,10 @@ if (tranFilter === "Success") {
   );
 }
 
+// Sorting based on date_time in descending order
 const sortedFilteredTransactionHistory = filteredTransactionHistory
-  .sort((a, b) =>
-    moment(b.date_time).isBefore(moment(a.date_time)) ? 1 : -1
-  )
-  .reverse();
-
+  .filter((entry) => entry.date_time) // Ensure valid date_time
+  .sort((a, b) => moment(b.date_time).diff(moment(a.date_time)));
 // Get Date Range
 const getDateRange = (data) => {
   if (data.length === 0) return "No data available";
@@ -121,22 +140,28 @@ const getDateRange = (data) => {
     setTransactionCurrentPage(1); // Reset to the first page when limit changes
   };
 
-  const startIndexTransaction = (transactionCurrentPage - 1) * transactionLimit;
-  const transactionData = Array.isArray(sortedFilteredTransactionHistory)
-    ? sortedFilteredTransactionHistory.slice(
-        startIndexTransaction,
-        startIndexTransaction + transactionLimit
-      )
-    : [];
+  // Apply Pagination
+const startIndexTransaction = (transactionCurrentPage - 1) * transactionLimit;
+const transactionData = sortedFilteredTransactionHistory.slice(
+  startIndexTransaction,
+  startIndexTransaction + transactionLimit
+);
 
   
     const handleDelete = async (id) => {
       try {
         // Call the delete API
-         await axios.delete(`/api/history/delete-numberhistory?id=${id}`);
+        await axios.delete(
+          `/api/history/delete-numberhistory?id=${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          }
+        );
         
         // Update the state to remove the deleted item
-      setSmsDetails(prevsmsDetails => prevsmsDetails.filter(item => item.Id !== id));
+      setSmsDetails(prevsmsDetails => prevsmsDetails.filter(item => item.ID !== id));
 
       } catch (error) {
         console.error("Failed to delete SMS history:", error);
@@ -169,11 +194,14 @@ const getDateRange = (data) => {
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-12">
             <Filter setTranFilter={setTranFilter} transFilter={tranFilter} />
-            <p className="min-w-fit text-sm">
+            <p className="min-w-fit text-sm pr-12  ">
               Total: {filteredTransactionHistory.length}
             </p>
+            <div className="min-w-fit text-sm">
+            Total Used Balance: ₹{totalUsedAmount.toFixed(2)}
+            </div>
           </div>
           <div className="flex items-center justify-center gap-4">
             <p className="text-[#A5A5A5] text-sm">
@@ -201,20 +229,15 @@ const getDateRange = (data) => {
                       </td>
                     </tr>
                     <tr>
-                      <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
+                    <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                         ID
                       </td>
-                      <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
-                        <span>{item.requestId??item.id}</span>
-                        <Button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(item.ID);
-                          }}
-                        >
-                          <Icon.trash className="w-4 h-4 text-red-600" />
-                        </Button>
-                       </td>
+                      <td
+                        className="border-b-2 border-[#949494] p-3"
+                        style={wrapStyle}
+                      >
+                        {item.requestId}
+                      </td>
                     </tr>
                     <tr>
                       <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
@@ -232,7 +255,7 @@ const getDateRange = (data) => {
                         OTP
                       </td>
                       <td className="border-b-2 border-[#949494] p-3">
-                      <span dangerouslySetInnerHTML={{ __html: item.otp && item.otp.length > 0 ? item.otp : "N/A" }} />
+                      <span  >{  item.otp??"N/A"}</span>
 
 
                       </td>
@@ -286,9 +309,19 @@ const getDateRange = (data) => {
                       <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                         Status
                       </td>
-                      <td className="border-b-2 border-[#949494] p-3">
-                        {item.status}
-                      </td>
+                      
+                      <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
+                        <span>{item.status}</span>
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(item.ID);
+                          }}
+                        >
+                          <Icon.trash className="w-4 h-4 text-red-600" />
+                        </Button>
+                       </td>
+                      
                     </tr>
                   </tbody>
                 </table>

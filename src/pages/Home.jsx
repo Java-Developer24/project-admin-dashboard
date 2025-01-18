@@ -8,14 +8,14 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
 
-  const navigateToService = () => navigate("/service");
+  const navigateToService = () => navigate("/mfapageforServiceList");
   const navigateToRechargeHistory = () => navigate("/recharge-history");
-  const navigateToUsersData = () => navigate("/users-data");
+  const navigateToUsersData = () => navigate("/mfapageforUserData");
   const navigateToSMSHistory = () => navigate("/sms-history");
-  const navigateToAdminPanel = () => navigate("/admin-panel");
-  const navigateToDiscount = () => navigate("/discount");
-  const navigateToUnsendTrx = () => navigate("/unsend-trx");
-  const navigateToBlockedUser = () => navigate("/blocked-users");
+  const navigateToAdminPanel = () => navigate("/mfapageforAdminPanel");
+  const navigateToDiscount = () => navigate("/mfapageforDiscount");
+  const navigateToUnsendTrx = () => navigate("/mfapageforUnsendTrx");
+  const navigateToBlockedUser = () => navigate("/mfapageforBlockedUsers");
 
   const [totalAmount, setTotalAmount] = useState("0.00"); // State to store the total amount
   const [totalUsers, setTotalUsers] = useState("0");
@@ -24,18 +24,38 @@ const Home = () => {
   const [trnPending, setTrnPending] = useState("0");
   const [blockedUser, setBlockedUser] = useState("");
   const [totalRechargeAmount, setTotalRechargeAmount] = useState("0.00"); // State to store the total amount
-
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   useEffect(() => {
     // Fetch users data on component mount
     const fetchUsers = async () => {
       try {
         const [usersResponse, totalUsersCount, transactions, blockedUserCount,totalRechargeAmount] =
           await Promise.all([
-            axios.get("/api/user/admin-api/all-users/get-all-users"),
-            axios.get(`/api/user/admin-api/total-users/total-user-count`),
-            axios.get("/api/history//history-admin-api/transaction-count/transaction-history-count"),
-            axios.get("/api/user/user-admin-api/blocked-users/get-all-blocked-users-count"),
-            axios.get("/api/history/history-admin-api/recharge-balance/get-total-recharge-balance"),
+            axios.get("/api/user/admin-api/all-users/get-all-users", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }),
+            axios.get(`/api/user/admin-api/total-users/total-user-count`, {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }),
+            axios.get("/api/history/history-admin-api/transaction-count/transaction-history-count", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }),
+            axios.get("/api/user/user-admin-api/blocked-users/get-all-blocked-users-count", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }),
+            axios.get("/api/history/history-admin-api/recharge-balance/get-total-recharge-balance", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            })
           ]);
   
         const usersData = usersResponse.data;
@@ -144,7 +164,7 @@ const Home = () => {
           </Button>
           <Button
             variant="login"
-            onClick={() => navigate('/active-orders')}
+            onClick={() => navigate('/mfapageforActiveOrders')}
             className="w-full text-sm font-normal h-14 text-white bg-[#282828] hover:bg-[#212121] !justify-between"
           >
             Active Orders

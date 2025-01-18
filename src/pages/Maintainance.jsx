@@ -13,12 +13,19 @@ const Maintenance = () => {
   const [masterMaintenace, setMasterMaintenace] = useState(false); // To handle master maintenance status
 
   const navigateBack = () => navigate("/admin-panel");
-
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   useEffect(() => {
     // Fetch server data
     const fetchServers = async () => {
       try {
-        const response = await axios.get("/api/server/admin-api/server-data-get/get-server"); // Call the API endpoint
+        const response = await axios.get(
+          "/api/server/admin-api/server-data-get/get-server",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          }
+        );// Call the API endpoint
         setServers(response.data); // Set server data
         // Find the master maintenance status
         const masterServer = response.data.find(
@@ -37,10 +44,18 @@ const Maintenance = () => {
 
   const handleMasterSwitchChange = async (isChecked) => {
     try {
-      await axios.post(`/api/service/admin-api/servers-maintence/maintenance-all-servers`, {
-        server: 0, // Server 0 for master maintenance
-        maintenance: isChecked,
-      }); // Update master maintenance status
+       await axios.post(
+        `/api/service/admin-api/servers-maintence/maintenance-all-servers`,
+        {
+          server: 0, // Server 0 for master maintenance
+          maintenance: isChecked,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          },
+        }
+      );// Update master maintenance status
       setMasterMaintenace(isChecked);
       setServers((prevServers) =>
         prevServers.map((server) =>
@@ -57,6 +72,10 @@ const Maintenance = () => {
       await axios.post(`/api/service/admin-api/getting-server-maintaince/maintainance-server`, {
         serverNumber: serverNumber,
         maintenance: isChecked,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
       }); // Update server block status
       setServers((prevServers) =>
         prevServers.map((server) =>

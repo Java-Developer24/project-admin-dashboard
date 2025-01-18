@@ -13,8 +13,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    host: '0.0.0.0', // Expose the server to all network interfaces
-    port: 5173,       // Optional: specify the port (if you need to change it)
-  },
+  // server: {
+  //   host: '0.0.0.0', // Expose the server to all network interfaces
+  //   port: 5173,       // Optional: specify the port (if you need to change it)
+  // },
 });

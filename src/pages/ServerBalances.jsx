@@ -8,6 +8,7 @@ import { SnapLoader } from "@/components/layout/Loaders";
 
 const ServerBalances = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   const [balances, setBalances] = useState({
     server1: { balance: 0, currency: 'p' },
     server2: { balance: 0, currency: 'p' },
@@ -38,7 +39,11 @@ const ServerBalances = () => {
     try {
       setLoading(true);
       // Single request to backend that will handle all API calls
-      const response = await axios.get("/api/server/admin-api/balances-get-server/server-balances");
+      const response  = await axios.get("/api/server/admin-api/balances-get-server/server-balances", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add token to the Authorization header
+        },
+      });
       setBalances(response.data);
     } catch (error) {
       console.error("Error fetching balances:", error);

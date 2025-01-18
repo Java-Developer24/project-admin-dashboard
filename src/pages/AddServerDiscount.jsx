@@ -10,6 +10,7 @@ import axios from "axios";
 const AddServerDiscount = () => {
   const [margin, setMargin] = useState("");
   const [discounts, setDiscounts] = useState([]);
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage or another storage method
 
   const params = useParams();
   const Id = params.id;
@@ -20,7 +21,11 @@ const AddServerDiscount = () => {
 
   const fetchDiscounts = async () => {
     try {
-      const response = await axios.get("/api/server/admin-api/server-discount-update/get-server-discount");
+      const response = await axios.get("/api/server/admin-api/server-discount-update/get-server-discount", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
       setDiscounts(response.data);
     } catch (error) {
       console.error("Error fetching discounts:", error);
@@ -39,10 +44,18 @@ const AddServerDiscount = () => {
         return;
       }
 
-      await axios.post("/api/server/admin-api/server-discount-addup/add-server-discount", {
-        server: Id,
-        discount: marginPrice,
-      });
+      await axios.post(
+        "/api/server/admin-api/server-discount-addup/add-server-discount",
+        {
+          server: Id,
+          discount: marginPrice,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        }
+      );
       setMargin("");
       fetchDiscounts();
     } catch (error) {
@@ -53,7 +66,14 @@ const AddServerDiscount = () => {
 
   const handleDelete = async (serverId) => {
     try {
-      await axios.delete(`/api/server/admin-api/server-discount-removal/delete-server-discount?server=${serverId}`);
+      await axios.delete(
+        `/api/server/admin-api/server-discount-removal/delete-server-discount?server=${serverId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        }
+      );
       setDiscounts(
         discounts.filter((discount) => discount.server !== serverId)
       );
@@ -139,7 +159,10 @@ const AddServerDiscount = () => {
                         {discount.server}
                       </td>
                       <td className="p-2 font-normal text-sm">
-                        {discount.discount.toFixed(2)}
+                      { discount && discount.discount !== null && !isNaN(discount.discount) ? 
+                    <span>{discount.discount.toFixed(2)}</span> : ""
+                           
+}
                       </td>
                       <td className="p-2 font-normal text-sm">
                         <Button onClick={() => handleDelete(discount.server)}>

@@ -20,6 +20,7 @@ const Discount = () => {
   const [selectedDiscountType, setSelectedDiscountType] = useState("");
   const [selectedServer, setSelectedServer] = useState("");
   const [servers, setServers] = useState([]);
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage or another storage method
   const [activeDiscounts, setActiveDiscounts] = useState({
     serverDiscounts: [],
     serviceDiscounts: [],
@@ -36,7 +37,11 @@ const Discount = () => {
     // Fetch servers
     const fetchServers = async () => {
       try {
-        const response = await axios.get("/api/server/admin-api/server-data-get/get-server");
+        const response = await axios.get("/api/server/admin-api/server-data-get/get-server", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add token to the Authorization header
+          },
+        });
         const availableServers = response.data
           .filter(server => server.server !== 0)
           .map(server => ({
@@ -53,9 +58,21 @@ const Discount = () => {
     const fetchActiveDiscounts = async () => {
       try {
         const [serverDiscounts, serviceDiscounts, userDiscounts] = await Promise.all([
-          axios.get("/api/server/admin-api/server-discount-update/get-server-discount"),
-          axios.get("/api/service/admin-api/server-discount-data/get-all-service-discount"),
-          axios.get("/api/user/admin-api/user-discount-data/get-all-user-discount")
+          await axios.get("/api/server/admin-api/server-discount-update/get-server-discount", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add token to the Authorization header
+            },
+          }),
+          await axios.get("/api/service/admin-api/server-discount-data/get-all-service-discount", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add token to the Authorization header
+            },
+          }),
+          await axios.get("/api/user/admin-api/user-discount-data/get-all-user-discount", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add token to the Authorization header
+            },
+          })
         ]);
 
         setActiveDiscounts({

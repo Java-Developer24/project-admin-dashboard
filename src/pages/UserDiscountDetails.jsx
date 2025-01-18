@@ -14,13 +14,18 @@ const UserDiscountDetails = () => {
   const [discounts, setDiscounts] = useState([]);
 
   const { setEmail } = useAuth();
-
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
   useEffect(() => {
     const fetchUserDiscounts = async () => {
       try {
-          const response = await axios.get(
-            `/api/user/admin-api/user-discount-data/get-user-discount-details?userId=${userId}`
-          );
+        const response = await axios.get(
+          `/api/user/admin-api/user-discount-data/get-user-discount-details?userId=${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+            },
+          }
+        );
           const data = await response.data;
 
         if (data.length > 0) {
@@ -38,9 +43,13 @@ const UserDiscountDetails = () => {
   const handleDelete = async (service, server) => {
     try {
       await axios.delete(
-        `/api/user/admin-api/user-discount-data-removal/delete-user-discount?userId=${userId}&service=${service}&server=${server}`
+        `/api/user/admin-api/user-discount-data-removal/delete-user-discount?userId=${userId}&service=${service}&server=${server}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+          },
+        }
       );
-
 
 
       // Remove the deleted discount from the state

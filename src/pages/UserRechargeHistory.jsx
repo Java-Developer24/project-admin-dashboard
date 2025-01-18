@@ -11,23 +11,37 @@ const UserRechargeHistory = () => {
   const [rechargeHistory, setRechargeHistory] = useState([]);
   const [userData, setUserData] = useState({});
 
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   const { id } = useParams();
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
         const rechargeResponse = await axios.get(
-          `/api/history/admin-api/recharge-user-history/get-user-recharge-history?userId=${id}`
+          `/api/history/admin-api/recharge-user-history/get-user-recharge-history?userId=${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          }
         );
-        setRechargeHistory(rechargeResponse.data);
+        const sortedData = rechargeResponse.data.sort((a, b) => {
+          const dateA = moment(a.date_time, "DD/MM/YYYY hh:mm:ss A").toDate();
+          const dateB = moment(b.date_time, "DD/MM/YYYY hh:mm:ss A").toDate();
+          return dateB - dateA; // Descending order
+        });
+        setRechargeHistory(sortedData);
       } catch (error) {
         console.error("Failed to fetch history data");
       }
     };
-
     const fetchUser = async () => {
       try {
-        const user = await axios.get(`/api/user/user-admin-api/get-user?userId=${id}`);
+        const user = await axios.get(`/api/user/user-admin-api/get-user?userId=${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          },
+        });
         setUserData(user.data);
       } catch (error) {
         console.error("Failed to fetch user data");
@@ -36,15 +50,22 @@ const UserRechargeHistory = () => {
 
     fetchHistory();
     fetchUser();
-  }, [id,rechargeHistory]);
+  }, [id]);
 
   const handleDelete = async (id) => {
        try {
-      await axios.delete(`/api/history/admin-api/recharge-history-delete/delete-recharge-history?id=${id}`);
-         // Remove the deleted item from the state
-         setRechargeHistory(prevHistory => 
-           prevHistory.filter(item => item._id !== id)
-         );
+        await axios.delete(
+          `/api/history/admin-api/recharge-history-delete/delete-recharge-history?id=${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          }
+        );
+        
+        setRechargeHistory(prevsmsDetails => prevsmsDetails.filter(item => item.transaction_id !== id));
+         console.log("After delete:", rechargeHistory);
+        
         
       } catch (error) {
         console.error("Failed to delete recharge history:", error);
@@ -86,7 +107,7 @@ const UserRechargeHistory = () => {
             rechargeHistory.map((history, index) => (
               <div
                 className="mt-[1.5rem] w-full border-[10px] border-[#444444] rounded-lg"
-                key={index}
+                key={history.transaction_id}
               >
                 <table className="w-full table-auto">
                   <tbody>
@@ -96,12 +117,7 @@ const UserRechargeHistory = () => {
                       </td>
                       <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
                         <span>{history.transaction_id}</span>
-                       <Button
-                          onClick={(e) => { e.stopPropagation();handleDelete(history.transaction_id);
-                         }}
-                       >
-                         <Icon.trash className="w-4 h-4 text-red-600" />
-                      </Button>
+                       
                       </td>
                     </tr>
                     <tr>
@@ -134,16 +150,19 @@ const UserRechargeHistory = () => {
                         className="border-b-2 border-[#949494] p-3"
                         style={wrapStyle}
                       >
-                        {moment(
-  history.date_time, // Input date string from backend
-  "DD/MM/YYYY[T]hh:mm A" // Input format
-).format("DD/MM/YYYY hh:mm:ss A")}
+                        {moment(history.date_time, "DD/MM/YYYY hh:mm:ss A").format("DD/MM/YYYY hh:mm:ss A") }
                       </td>
                     </tr>
                     <tr>
-                      <td className="p-3 px-5 text-[#959595]">Status</td>
-                      <td className="p-3" style={wrapStyle}>
-                        {history.status}
+                      <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">Status</td>
+                      <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
+                        <span>{history.status}</span>
+                        <Button
+                          onClick={(e) => { e.stopPropagation();handleDelete(history.transaction_id);
+                         }}
+                       >
+                         <Icon.trash className="w-4 h-4 text-red-600" />
+                      </Button>
                       </td>
                     </tr>
                   </tbody>

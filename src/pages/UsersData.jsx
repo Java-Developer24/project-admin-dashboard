@@ -26,18 +26,22 @@ const UsersData = () => {
   const navigate = useNavigate();
 
   const navigateToHome = () => navigate("/");
-
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   useEffect(() => {
     // Fetch users data on component mount
     const fetchUsers = async () => {
       try {
         const [usersResponse, totalUsersCount] = await Promise.all([
-          axios.get(
-            "/api/user/admin-api/all-users/get-all-users"
-          ),
-          axios.get(
-            `/api/user/admin-api/total-users/total-user-count`
-          ),
+          axios.get("/api/user/admin-api/all-users/get-all-users", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          }),
+          axios.get("/api/user/admin-api/total-users/total-user-count", {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          }),
         ]);
 
         const usersData = usersResponse.data;

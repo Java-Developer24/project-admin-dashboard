@@ -14,17 +14,21 @@ const UpiUpdate = () => {
   const[newUPI,setNewUPI]=useState("")
   const [api, setApi] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   const navigate = useNavigate();
   const getApi = () =>
     axios
-      .get("/api/recharge/admin-api/recharge-api-data/get-recharge-api?type=upi")
-      .then((response) => {
-        setApi(response.data.api_key);
-      })
-      .catch((error) => {
-        console.error("Error fetching servers:", error);
-      });
+  .get("/api/recharge/admin-api/recharge-api-data/get-recharge-api?type=upi", {
+    headers: {
+      Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+    },
+  })
+  .then((response) => {
+    setApi(response.data.api_key);
+  })
+  .catch((error) => {
+    console.error("Error fetching servers:", error);
+  });
 
   useEffect(() => {
     // Fetch servers when the component mounts
@@ -55,9 +59,15 @@ const UpiUpdate = () => {
     const upiUpdatePromise = new Promise((resolve, reject) => {
       const upiUpdate = async () => {
         try {
-          const response = await axios.post("/api/config/admin-api/min-upi-amt-update/min-upi-amount", {
-            minUpiAmount:newUPI
-          });
+          const response = await axios.post(
+            "/api/config/admin-api/min-upi-amt-update/min-upi-amount",
+            { minUpiAmount: newUPI },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }
+          );
           setNewUPI("");
           getUPIApi();
           resolve(response);
@@ -89,10 +99,18 @@ const UpiUpdate = () => {
     const upiUpdatePromise = new Promise((resolve, reject) => {
       const upiUpdate = async () => {
         try {
-          const response = await axios.post("/api/recharge/admin-api/recharge-data-update-api/update-recharge-api", {
-            recharge_type: "upi",
-            newUpiId:newUpi // Use the newApiKey state
-          });
+          const response = await axios.post(
+            "/api/recharge/admin-api/recharge-data-update-api/update-recharge-api",
+            {
+              recharge_type: "upi",
+              newUpiId: newUpi, // Use the newApiKey state
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
+            }
+          );
           setNewUpi("");
           getApi();
           resolve(response);

@@ -44,11 +44,16 @@ const AddDiscount = () => {
   );
   const [serverList, setServerList] = useState([]);
   const [selectedServer, setSelectedServer] = useState("");
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
 
   useEffect(() => {
     const fetchServiceData = async () => {
       try {
-        const response = await axios.get("/api/service/admin-api/service-data/get-service-data-admin");
+        const response = await axios.get("/api/service/admin-api/service-data/get-service-data-admin", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        });
         setServiceList(response.data);
       } catch (err) {
         console.log(err.message);
@@ -82,12 +87,21 @@ const AddDiscount = () => {
     }
 
     try {
-      await axios.post("/api/user/admin-api/user-discount-addup/add-user-discount", {
-        email,
-        service: selectedService,
-        server: selectedServer,
-        discount,
-      });
+    
+await axios.post(
+  "/api/user/admin-api/user-discount-addup/add-user-discount",
+  {
+    email,
+    service: selectedService,
+    server: selectedServer,
+    discount,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+    },
+  }
+);
 
       navigateToDiscount();
     } catch (error) {

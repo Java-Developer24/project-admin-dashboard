@@ -14,7 +14,7 @@ const ActiveOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [remainingTime, setRemainingTime] = useState(0);
   const [buttonStates,setButtonStates ]=useState()
-
+  const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -27,12 +27,20 @@ const ActiveOrders = () => {
   const fetchOrders = async () => {
     try {
       // Fetch all active orders
-      const ordersResponse = await axios.get("/api/history/history-admin-api/get-all-active-orders");
+      const ordersResponse = await axios.get("/api/history/history-admin-api/get-all-active-orders", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
+      });
       const ordersWithUsers = await Promise.all(
         ordersResponse.data.map(async (order) => {
           // Fetch user details for each order
           console.log(order)
-          const userResponse = await axios.get(`/api/user/user-admin-api/get-user?userId=${order.userId}`);
+          const userResponse = await axios.get(`/api/user/user-admin-api/get-user?userId=${order.userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+            },
+          });
           console.log(userResponse)
           return {
             ...order,
@@ -130,7 +138,16 @@ const ActiveOrders = () => {
 
   const handleCancel = async (apiKey, numberId, server,orderId) => {
     try {
-      await axios.get(`/api/service/number-cancel?api_key=${apiKey}&id=${numberId}&server=${server}`);
+       await axios.get(`/api/service/number-cancel`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
+        params: {
+          api_key: apiKey,  // Pass api_key as query parameter
+          id: numberId,     // Pass id as query parameter
+          server: server,   // Pass server as query parameter
+        },
+      });
       fetchOrders(); // Refresh orders after cancellation
       setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId))
     } catch (error) {
@@ -140,7 +157,14 @@ const ActiveOrders = () => {
 
   const handleForceDelete = async (userId, numberId, number,server,orderId) => {
     try {
-      await axios.delete(`/api/user/admin-api/delete-user-number-data/force-delete?userId=${userId}&numberId=${numberId}&number=${number}&server=${server}`);
+      axios.delete(
+        `/api/user/admin-api/delete-user-number-data/force-delete?userId=${userId}&numberId=${numberId}&number=${number}&server=${server}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          },
+        }
+      );
       fetchOrders(); // Refresh orders after deletion
       // Remove the deleted order from the state
     setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId)); 
@@ -285,7 +309,18 @@ const ActiveOrders = () => {
               </div>
               <div className="w-full flex bg-[#444444] border-2 border-[#888888] rounded-2xl items-center justify-center max-h-[100px] overflow-y-scroll hide-scrollbar">
                   <div className="w-full h-full flex flex-col items-center">
-                  <p>OTP: {getOTPFromTransaction(order.numberId).join(", ")}</p>
+                  <p> {getOTPFromTransaction(order.numberId).map(
+                      (otp, index, arr) => (
+                        <React.Fragment key={index}>
+                          <div className="bg-transparent py-4 px-5 flex w-full items-center justify-center">
+                            <h3 className="font-normal text-sm">{otp}</h3>
+                          </div>
+                          {index < arr.length - 1 && (
+                            <hr className="border-[#888888] border w-full" />
+                          )}
+                        </React.Fragment>
+                      )
+                    )}</p>
                   </div>
                 </div>
                   <div className="bg-transparent pt-4 flex w-full items-center justify-center gap-4">

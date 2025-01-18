@@ -26,7 +26,8 @@ const ApiUpdate = () => {
   const [servers, setServers] = useState([]);
   const [token, setToken] = useState("");
   const [newToken, setNewToken] = useState("");
-
+  const token1 = localStorage.getItem('token'); // Assuming the token is stored in localStorage after login
+  
   // New state variables for exchange rate and margin
   const [exchangeRate, setExchangeRate] = useState("");
   const [newExchangeRate, setNewExchangeRate] = useState("");
@@ -36,7 +37,14 @@ const ApiUpdate = () => {
   useEffect(() => {
     const fetchServers = async () => {
       try {
-        const response = await axios.get("/api/server/admin-api/server-data-get/get-server");
+        const response = await axios.get(
+          "/api/server/admin-api/server-data-get/get-server",
+          {
+            headers: {
+              Authorization: `Bearer ${token1}`, // Add the token1 to the Authorization header
+            },
+          }
+        );
         const availableServers = response.data.filter(
           (server) => !server.maintainance && server.server !== 0
         );
@@ -58,7 +66,14 @@ const ApiUpdate = () => {
 
   const fetchExchangeRateAndMargin = async (serverNumber) => {
     try {
-      const response = await axios.get("/api/server/admin-api/server-data-get/get-server");
+      const response = await axios.get(
+        "/api/server/admin-api/server-data-get/get-server",
+        {
+          headers: {
+            Authorization: `Bearer ${token1}`, // Add the token1 to the Authorization header
+          },
+        }
+      );
       const server = response.data.find(
         (s) => s.server === parseInt(serverNumber)
       );
@@ -89,11 +104,26 @@ const ApiUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/server/admin-api/api-key-change/update-api-key", {
-        server: selectedServer,
-        api_key: newApi,
-      });
-      const response = await axios.get("/api/server/admin-api/server-data-get/get-server");
+      await axios.post(
+        "/api/server/admin-api/api-key-change/update-api-key",
+        {
+          server: selectedServer,
+          api_key: newApi,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token1}`, // Add the token1 to the Authorization header
+          },
+        }
+      );
+      const response = await axios.get(
+        "/api/server/admin-api/server-data-get/get-server",
+        {
+          headers: {
+            Authorization: `Bearer ${token1}`, // Add the token1 to the Authorization header
+          },
+        }
+      );
       const availableServers = response.data.filter(
         (server) => !server.maintainance && server.server !== 0
       );
@@ -113,10 +143,18 @@ const ApiUpdate = () => {
   const handleExchangeRateSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/server/admin-api/exchange-rate-change/update-exchange-rate`, {
-        server: selectedServer,
-        exchangeRate: newExchangeRate,
-      });
+      await axios.post(
+        "/api/server/admin-api/exchange-rate-change/update-exchange-rate",
+        {
+          server: selectedServer,
+          exchangeRate: newExchangeRate,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token1}`, // Add the token1 to the Authorization header
+          },
+        }
+      );
       fetchExchangeRateAndMargin(selectedServer);
       setNewExchangeRate(""); // Refresh the exchange rate after updating
     } catch (error) {
@@ -127,10 +165,18 @@ const ApiUpdate = () => {
   const handleMarginSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/server/admin-api/margin-amt-change/update-margin-amount`, {
-        server: selectedServer,
-        margin: newMargin,
-      });
+      await axios.post(
+        "/api/server/admin-api/margin-amt-change/update-margin-amount",
+        {
+          server: selectedServer,
+          margin: newMargin,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token1}`, // Add the token1 to the Authorization header
+          },
+        }
+      );
       fetchExchangeRateAndMargin(selectedServer); // Refresh the margin after updating
       setNewMargin("");
     } catch (error) {
