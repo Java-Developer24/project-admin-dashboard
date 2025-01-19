@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/Switch"; // Assuming you have a Switch c
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const RechargeMaintenance = () => {
   const navigate = useNavigate();
@@ -56,6 +57,16 @@ const RechargeMaintenance = () => {
       );
     } catch (error) {
       console.error("Error toggling maintenance status:", error);
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        toast.error(error.response.data.message || "Failed to update OTP check setting");
+      } else if (error.request) {
+        // Request was made but no response was received
+        toast.error("No response received from server");
+      } else {
+        // Something went wrong in setting up the request
+        toast.error(`Error: ${error.message}`);
+      }
     }
   };
 

@@ -30,9 +30,21 @@ const Service = () => {
         
         setServiceData(response.data);
         setLoading(false);
-      } catch (err) {
+      } catch (error) {
         console.log(err.message);
-        setLoading(false);
+        
+        
+        if (error.response) {
+          // Server responded with a status other than 2xx
+          toast.error(error.response.data.message || "Failed to update OTP check setting");
+        } else if (error.request) {
+          // Request was made but no response was received
+          toast.error("No response received from server");
+        } else {
+          // Something went wrong in setting up the request
+          toast.error(`Error: ${error.message}`);
+        }
+        setLoading(false)
       }
     };
 

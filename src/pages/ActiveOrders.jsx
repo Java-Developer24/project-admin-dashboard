@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { SnapLoader } from "@/components/layout/Loaders";
+import toast from "react-hot-toast";
 
 const ActiveOrders = () => {
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ const ActiveOrders = () => {
       setLoading(false);
     } catch (error) {
       console.error("Failed to fetch orders:", error);
+      
       setLoading(false);
     }
   };

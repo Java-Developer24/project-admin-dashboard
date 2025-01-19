@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/Icons";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const BlockedUser = () => {
   const navigate = useNavigate();
@@ -23,6 +24,16 @@ const BlockedUser = () => {
         setBlockedUsers(response.data); 
       } catch (error) {
         console.error("Failed to fetch blocked users data", error);
+        if (error.response) {
+          // Server responded with a status other than 2xx
+          toast.error(error.response.data.message || "Failed to update OTP check setting");
+        } else if (error.request) {
+          // Request was made but no response was received
+          toast.error("No response received from server");
+        } else {
+          // Something went wrong in setting up the request
+          toast.error(`Error: ${error.message}`);
+        }
       }
     };
   

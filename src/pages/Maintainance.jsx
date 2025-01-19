@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/Switch";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Maintenance = () => {
   const navigate = useNavigate();
@@ -33,7 +34,17 @@ const Maintenance = () => {
         );
         setMasterMaintenace(masterServer?.maintenance || false); // Set master maintenance status
       } catch (error) {
-        console.error("Failed to fetch servers:", error);
+        // Check if error response exists and extract message
+    if (error.response) {
+      // Server responded with a status other than 2xx
+      toast.error(error.response.data.message || "Failed to update OTP check setting");
+    } else if (error.request) {
+      // Request was made but no response was received
+      toast.error("No response received from server");
+    } else {
+      // Something went wrong in setting up the request
+      toast.error(`Error: ${error.message}`);
+    }
       } finally {
         setLoading(false);
       }

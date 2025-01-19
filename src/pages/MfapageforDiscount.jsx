@@ -12,53 +12,62 @@ const MfapageforDiscount = () => {
   const [mfaCode, setMfaCode] = useState("");
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [isMFAEnabled, setIsMFAEnabled] = useState(false);
+  const [isMFASetupComplete, setIsMFASetupComplete] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const tempEmail = localStorage.getItem('tempEmail');
-   
+    const tempEmail = localStorage.getItem("tempEmail");
+
     if (!tempEmail) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
-   
-    console.log(tempEmail)
-    // First check if MFA is already enabled for this user
-    const checkMFAStatus = async (tempEmail) => {
+    // Function to check MFA status
+    const checkMFAStatus = async () => {
       try {
         const response = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/status", {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ tempEmail }),
         });
+
         const data = await response.json();
-        console.log(data.is2FAEnabled)
-        if (data.is2FAEnabled ) {
+
+        if (data.success && data.is2FAEnabled && data.is2FASetupComplete) {
+          // MFA is fully enabled and set up
           setIsMFAEnabled(true);
-        } else {
-          const tempEmail = localStorage.getItem('tempEmail');
-          // If MFA is not enabled, get setup QR code
+          setIsMFASetupComplete(true);
+        } else if (data.success && data.is2FAEnabled && !data.is2FASetupComplete) {
+          // MFA is enabled but not set up
+          setIsMFAEnabled(true);
+          setIsMFASetupComplete(false);
+
           const setupResponse = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/enable", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },body: JSON.stringify({ tempEmail }),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tempEmail }),
           });
-          
-          const setupData = await setupResponse.json();
-          if (setupData) {
-           console.log(setupData)
-             // Check what is logged in the console
 
-            setQrCodeUrl(setupData.qrCodeUrl);
+          const setupData = await setupResponse.json();
+          if (setupData.qrCodeUrl) {
+            setQrCodeUrl(setupData.qrCodeUrl); // Show QR code for setup
           }
+        } else if (data.success && !data.is2FAEnabled) {
+          // MFA is disabled
+          toast.success("MFA is not enabled. Redirecting...");
+          login();
+          navigate("/discount")// Redirect to desired page
+        } else {
+          // Handle unexpected states
+          toast.error("Unexpected MFA state. Please contact support.");
         }
       } catch (error) {
         console.error("Error checking MFA status:", error);
-        toast.error("Failed to check MFA status");
+        toast.error("Failed to check MFA status.");
       }
     };
 
@@ -66,34 +75,32 @@ const MfapageforDiscount = () => {
   }, [navigate]);
 
   const handleVerifyMFA = async (e) => {
-    const tempEmail = localStorage.getItem('tempEmail');
     e.preventDefault();
+    const tempEmail = localStorage.getItem("tempEmail");
+
     try {
-      console.log(tempEmail)
       const response = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ tempEmail,mfaCode }),
+        body: JSON.stringify({ tempEmail, mfaCode }),
       });
 
       const data = await response.json();
 
-      if (data.message==="2FA verified successfully. Access granted.") {
+      if (data.message === "2FA verified successfully. Access granted.") {
         login();
-
-        navigate("/discount")
+        navigate("/discount") // Navigate to the main page
         toast.success(
-          isMFAEnabled ? "MFA verification successful" : "MFA setup successful",
-          { autoClose: 5000 } // 5000 milliseconds = 5 seconds
+          isMFAEnabled ? "MFA verification successful" : "MFA setup successful"
         );
       } else {
-        toast.error("Invalid MFA code");
+        toast.error("Invalid MFA code.");
       }
     } catch (error) {
-      console.error("MFA verification error:", error);
-      toast.error("Failed to verify MFA code");
+      console.error("Error verifying MFA:", error);
+      toast.error("Failed to verify MFA code.");
     }
   };
 
@@ -102,21 +109,25 @@ const MfapageforDiscount = () => {
       <Card className="bg-transparent w-full max-w-md rounded-lg mb-[60px] border-none dark">
         <CardHeader>
           <CardTitle className="text-center text-[28px] font-medium">
-            {isMFAEnabled ? "Enter MFA Code" : "Setup MFA Authentication"}
+            {isMFAEnabled
+              ? isMFASetupComplete
+                ? "Enter MFA Code"
+                : "Setup MFA Authentication"
+              : "MFA Disabled"}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          {!isMFAEnabled && qrCodeUrl && (
+          {!isMFASetupComplete && qrCodeUrl && (
             <div className="mb-6">
               <p className="text-[#9d9d9d] mb-4 text-center">
                 Scan this QR code with your authenticator app
               </p>
               <div className="flex justify-center mb-4">
-                <img 
-                       src={qrCodeUrl} // The base64 string already includes the data:image/png;base64 prefix
-                          alt="MFA QR Code" 
-                      className="w-48 h-48"
-                      />
+                <img
+                  src={qrCodeUrl}
+                  alt="MFA QR Code"
+                  className="w-48 h-48"
+                />
               </div>
             </div>
           )}
@@ -128,7 +139,9 @@ const MfapageforDiscount = () => {
                   htmlFor="mfaCode"
                   className="block text-sm text-[#9d9d9d] font-normal py-1"
                 >
-                  {isMFAEnabled ? "Enter Code from Authenticator" : "Enter Code from Authenticator to Complete Setup"}
+                  {isMFASetupComplete
+                    ? "Enter Code from Authenticator"
+                    : "Enter Code to Complete Setup"}
                 </Label>
                 <Input
                   id="mfaCode"
@@ -146,7 +159,7 @@ const MfapageforDiscount = () => {
                 variant="login"
                 className="w-full text-sm font-normal mt-4"
               >
-                {isMFAEnabled ? "Verify Code" : "Complete MFA Setup"}
+                {isMFASetupComplete ? "Verify Code" : "Complete MFA Setup"}
               </Button>
             </div>
           </form>
