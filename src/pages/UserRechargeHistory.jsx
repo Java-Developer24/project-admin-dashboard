@@ -115,7 +115,7 @@ const UserRechargeHistory = () => {
                       <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
                         Transaction ID
                       </td>
-                      <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
+                      <td className="border-b-2 border-[#949494] p-3 " style={wrapStyle}>
                         <span>{history.transaction_id}</span>
                        
                       </td>
@@ -155,14 +155,16 @@ const UserRechargeHistory = () => {
                     </tr>
                     <tr>
                       <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">Status</td>
-                      <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
+                      <td className="border-b-2 border-[#949494] p-3 	justify-between	 items-center	 " style={wrapStyle}>
                         <span>{history.status}</span>
-                        <Button
+                        <span className="pl-5 ml-12">
+                        <Button 
                           onClick={(e) => { e.stopPropagation();handleDelete(history.transaction_id);
                          }}
                        >
-                         <Icon.trash className="w-4 h-4 text-red-600" />
+                         <Icon.trash className=" w-4 h-4 text-red-600 " />
                       </Button>
+                      </span>
                       </td>
                     </tr>
                   </tbody>

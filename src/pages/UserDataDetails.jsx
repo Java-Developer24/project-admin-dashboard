@@ -52,7 +52,11 @@ const UserDataDetails = () => {
 
   const handleFetchBlockReason = async () => {
     try {
-      const response = await axios.get("/api/user/admin-api/user-block-data/get-all-blocked-users");
+      const response = await axios.get("/api/user/admin-api/user-block-data/get-all-blocked-users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.data) {
         const userBlockDetails = response.data.find(user => user.email ); // Match email instead of userId
         if (userBlockDetails) {
