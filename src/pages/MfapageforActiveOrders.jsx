@@ -144,7 +144,7 @@ const MfapageforActiveOrders = () => {
         <CardContent className="p-6">
           {!isMFAEnabled ? (
             <div className="text-center text-[#9d9d9d]">
-              <p>MFA is disabled. Redirecting you to the User data page...</p>
+              <p>MFA is disabled. Redirecting you to the Active Orders page...</p>
             </div>
           ) : (
             <>
