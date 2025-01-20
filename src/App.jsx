@@ -17,6 +17,7 @@ const MfapageforDiscount = lazy(() => import("@/pages/MfapageforDiscount"));
 const MfapageforAdminPanel=lazy(()=>import ("@/pages/MfapageforAdminPanel"))
 const MfapageforUnsendTrx=lazy(()=>import ("@/pages/MfapageforUnsendTrx"))
 const MfapageforBlockedUsers=lazy(()=>import ("@/pages/MfapageforBlockedUsers"))
+const MfapageforServerBalance=lazy(()=>import ("@/pages/MfapageforServerBalance"))
 
 const Service = lazy(() => import("@/pages/Service"));
 const AddService = lazy(() => import("@/pages/AddService"));
@@ -322,6 +323,17 @@ function App() {
             element={
               <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforUserData">
                 <MfapageforActiveOrders />
+              </ProtectRoute>
+               
+              
+            }
+            
+          />
+            <Route
+            path="/mfapageforServerBalance"
+            element={
+              <ProtectRoute isAuthenticated={isAuthenticated} redirect="/mfapageforServerBalance">
+                <MfapageforServerBalance />
               </ProtectRoute>
                
               

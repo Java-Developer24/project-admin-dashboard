@@ -194,14 +194,16 @@ const transactionData = sortedFilteredTransactionHistory.slice(
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-12">
+          <div className="flex items-center justify-center  w-full max-w-md  ">
             <Filter setTranFilter={setTranFilter} transFilter={tranFilter} />
-            <p className="min-w-fit text-sm pr-12  ">
+            <p className="min-w-fit text-sm pr-8  ">
               Total: {filteredTransactionHistory.length}
             </p>
-            <div className="min-w-fit text-sm">
-            Total Used Balance: ₹{totalUsedAmount.toFixed(2)}
-            </div>
+            {tranFilter === "Success" && (
+    <div className="min-w-fit text-sm">
+      Used Balance: ₹{totalUsedAmount.toFixed(2)}
+    </div>
+  )}
           </div>
           <div className="flex items-center justify-center gap-4">
             <p className="text-[#A5A5A5] text-sm">

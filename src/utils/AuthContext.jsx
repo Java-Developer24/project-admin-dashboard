@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("isAuthenticated"); // Optionally remove the key from local storage
+    localStorage.removeItem("tempEmail");
+    localStorage.removeItem("token");
   };
 
   return (

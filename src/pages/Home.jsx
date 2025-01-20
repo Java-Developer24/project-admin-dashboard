@@ -10,9 +10,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const navigateToService = () => navigate("/mfapageforServiceList");
-  const navigateToRechargeHistory = () => navigate("/recharge-history");
   const navigateToUsersData = () => navigate("/mfapageforUserData");
-  const navigateToSMSHistory = () => navigate("/sms-history");
   const navigateToAdminPanel = () => navigate("/mfapageforAdminPanel");
   const navigateToDiscount = () => navigate("/mfapageforDiscount");
   const navigateToUnsendTrx = () => navigate("/mfapageforUnsendTrx");
@@ -189,9 +187,11 @@ const Home = () => {
             Admin Panel
             <Icon.arrowRight className="w-4 h-4" />
           </Button>
+
+          
           <Button
   variant="login"
-  onClick={() => navigate('/server-balances')}
+  onClick={() => navigate('/mfapageforServerBalance')}
   className="w-full text-sm font-normal h-14 text-white bg-[#282828] hover:bg-[#212121] !justify-between"
 >
   Server Balances
