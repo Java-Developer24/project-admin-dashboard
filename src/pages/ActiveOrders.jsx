@@ -138,7 +138,7 @@ const ActiveOrders = () => {
 
   
 
-  const handleCancel = async (apiKey, numberId, server,orderId) => {
+  const handleCancel = async (apiKey, Id, server,orderId) => {
     try {
        await axios.get(`/api/service/cancel-number`, {
         headers: {
@@ -146,7 +146,7 @@ const ActiveOrders = () => {
         },
         params: {
           api_key: apiKey,  // Pass api_key as query parameter
-          Id: numberId,     // Pass id as query parameter
+          Id: Id,     // Pass id as query parameter
           server: server,   // Pass server as query parameter
         },
       });
@@ -157,10 +157,10 @@ const ActiveOrders = () => {
     }
   };
 
-  const handleForceDelete = async (userId, numberId, number,server,orderId) => {
+  const handleForceDelete = async (userId, Id, number,server,orderId) => {
     try {
       axios.delete(
-        `/api/user/admin-api/delete-user-number-data/force-delete?userId=${userId}&numberId=${numberId}&number=${number}&server=${server}`,
+        `/api/user/admin-api/delete-user-number-data/force-delete?userId=${userId}&numberId=${Id}&number=${number}&server=${server}`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Add the token to the Authorization header
@@ -311,7 +311,7 @@ const ActiveOrders = () => {
               </div>
               <div className="w-full flex bg-[#444444] border-2 border-[#888888] rounded-2xl items-center justify-center max-h-[100px] overflow-y-scroll hide-scrollbar">
                   <div className="w-full h-full flex flex-col items-center">
-                  <p> {getOTPFromTransaction(order.numberId).map(
+                  <p> {getOTPFromTransaction(order.Id).map(
                       (otp, index, arr) => (
                         <React.Fragment key={index}>
                           <div className="bg-transparent py-4 px-5 flex w-full items-center justify-center">
@@ -327,13 +327,13 @@ const ActiveOrders = () => {
                 </div>
                   <div className="bg-transparent pt-4 flex w-full items-center justify-center gap-4">
                     <Button
-                      onClick={() => handleForceDelete(order.userId, order.numberId, order.number,order.server,order._id)}
+                      onClick={() => handleForceDelete(order.userId, order.Id, order.number,order.server,order._id)}
                       className="w-full bg-red-600 hover:bg-red-700 text-white"
                     >
                       Force Delete
                     </Button>
                     <Button
-                      onClick={() => handleCancel(order.apiKey, order.numberId, order.server,order._id)}
+                      onClick={() => handleCancel(order.apiKey, order.Id, order.server,order._id)}
                       className="w-full bg-[#38D9BA] hover:bg-[#38D9BA]/80 text-white"
                     >
                       Cancel
