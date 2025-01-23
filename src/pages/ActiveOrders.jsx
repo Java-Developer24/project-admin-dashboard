@@ -146,7 +146,7 @@ const ActiveOrders = () => {
         },
         params: {
           api_key: apiKey,  // Pass api_key as query parameter
-          id: numberId,     // Pass id as query parameter
+          Id: numberId,     // Pass id as query parameter
           server: server,   // Pass server as query parameter
         },
       });
