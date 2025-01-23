@@ -140,7 +140,7 @@ const ActiveOrders = () => {
 
   const handleCancel = async (apiKey, numberId, server,orderId) => {
     try {
-       await axios.get(`/api/service/number-cancel`, {
+       await axios.get(`/api/service/cancel-number`, {
         headers: {
           Authorization: `Bearer ${token}`, // Add the token to the Authorization header
         },
