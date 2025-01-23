@@ -268,7 +268,7 @@ const ActiveOrders = () => {
           ) : (
             filteredOrders.map((order) => (
               
-              <div key={order._id} className=" w-full max-w-[520px] flex flex-col items-center border-2 border-[#1b1d21] bg-[#121315] rounded-2xl p-5 ml-12">
+              <div key={order._id} className=" w-full max-w-[520px] flex flex-col items-center border-2 border-[#1b1d21] bg-[#121315] rounded-2xl p-5 ">
                 <div className="border-b border-gray-700 pb-4 mb-4">
                   <h3 className="text-white text-lg font-semibold">User: {order.userEmail}</h3>
                 </div>

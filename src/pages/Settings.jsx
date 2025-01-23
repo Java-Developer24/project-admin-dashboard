@@ -346,45 +346,47 @@ const Settings = () => {
       <div className="bg-transparent w-full max-w-md rounded-lg mb-[60px] border-none dark">
         {/* Banner Section */}
         <form onSubmit={handleBannerUpdate} className="mb-8">
-          <div className="space-y-4">
-            <div>
-              <Label
-                htmlFor="currentBanner"
-                className="block text-base text-[#9d9d9d] font-normal py-3"
-              >
-                Current Banner
-              </Label>
-              <Input
-                id="currentBanner"
-                type="text"
-                disabled
-                className="w-full h-12 pl-3 rounded-lg disabled:text-white disabled:!border-[#e0effe] focus:border-none disabled:opacity-100 disabled:bg-[#9D9D9D]/50"
-                value={banner || ""} // Fallback to empty string
-              />
-            </div>
-            <div>
-              <Label
-                htmlFor="newBanner"
-                className="block text-base text-[#9d9d9d] font-normal py-3"
-              >
-                New Banner
-              </Label>
-              <Input
-                id="newBanner"
-                type="text"
-                placeholder="Enter new banner text"
-                className="w-full h-12 pl-3 rounded-lg text-[#9d9d9d] !placeholder-[#9d9d9d] bg-transparent border-[#e0effe] focus:border-none"
-                value={newBanner}
-                onChange={(e) => setNewBanner(e.target.value)}
-              />
-            </div>
-            <div className="flex justify-center gap-4">
-              <Button type="submit" className="py-1 px-8 text-xs bg-[#129BFF] text-white hover:bg-[#129BFF]">
-                Update Banner
-              </Button>
-            </div>
-          </div>
-        </form>
+  <div className="space-y-4">
+    <div>
+      <Label
+        htmlFor="currentBanner"
+        className="block text-base text-[#9d9d9d] font-normal py-3"
+      >
+        Current Banner
+      </Label>
+      <textarea
+        id="currentBanner"
+        disabled
+        className="w-full h-24 pl-3 rounded-lg disabled:text-white disabled:!border-[#e0effe] focus:border-none disabled:opacity-100 disabled:bg-[#9D9D9D]/50"
+        value={banner || ""} // Fallback to empty string
+      />
+    </div>
+    <div>
+      <Label
+        htmlFor="newBanner"
+        className="block text-base text-[#9d9d9d] font-normal py-3"
+      >
+        New Banner
+      </Label>
+      <textarea
+        id="newBanner"
+        placeholder="Enter new banner text"
+        className="w-full h-24 pl-3 rounded-lg text-[#9d9d9d] !placeholder-[#9d9d9d] bg-transparent border-[#e0effe] focus:border-none"
+        value={newBanner}
+        onChange={(e) => setNewBanner(e.target.value)}
+      />
+    </div>
+    <div className="flex justify-center gap-4">
+      <Button
+        type="submit"
+        className="py-1 px-8 text-xs bg-[#129BFF] text-white hover:bg-[#129BFF]"
+      >
+        Update Banner
+      </Button>
+    </div>
+  </div>
+</form>
+
 
        
 
