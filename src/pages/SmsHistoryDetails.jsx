@@ -238,7 +238,7 @@ const transactionData = sortedFilteredTransactionHistory.slice(
                         className="border-b-2 border-[#949494] p-3"
                         style={wrapStyle}
                       >
-                        {item.requestId}
+                        {item.id}
                       </td>
                     </tr>
                     <tr>
