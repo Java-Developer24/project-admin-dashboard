@@ -371,7 +371,7 @@ const Settings = () => {
       <textarea
         id="newBanner"
         placeholder="Enter new banner text"
-        className="w-full h-24 pl-3 rounded-lg text-[#9d9d9d] !placeholder-[#9d9d9d] bg-transparent border-[#e0effe] focus:border-none"
+        className="w-full h-24 pl-3 rounded-lg text-[#9d9d9d] !placeholder-[#9d9d9d] bg-[#9D9D9D]/50 border-[#e0effe]  focus:border-none"
         value={newBanner}
         onChange={(e) => setNewBanner(e.target.value)}
       />

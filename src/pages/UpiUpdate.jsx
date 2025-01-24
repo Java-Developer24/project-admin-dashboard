@@ -90,6 +90,7 @@ const UpiUpdate = () => {
             }
           );
           setNewUPI("");
+          
           getUPIApi();
           resolve(response);
         } catch (error) {

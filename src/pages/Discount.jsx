@@ -51,73 +51,82 @@ const Discount = () => {
           }));
         setServers(availableServers);
       } catch (error) {
-        console.error("Failed to fetch servers:", error);
-        if (error.response) {
-          // Server responded with a status other than 2xx
-          toast.error(error.response.data.message || "Failed to update OTP check setting");
-        } else if (error.request) {
-          // Request was made but no response was received
-          toast.error("No response received from server");
-        } else {
-          // Something went wrong in setting up the request
-          toast.error(`Error: ${error.message}`);
-        }
-      }
-    };
-
-    // Fetch active discounts
-    const fetchActiveDiscounts = async () => {
-      try {
-        const [serverDiscounts, serviceDiscounts, userDiscounts] = await Promise.all([
-          await axios.get("/api/server/admin-api/server-discount-update/get-server-discount", {
-            headers: {
-              Authorization: `Bearer ${token}`, // Add token to the Authorization header
-            },
-          }),
-          await axios.get("/api/service/admin-api/server-discount-data/get-all-service-discount", {
-            headers: {
-              Authorization: `Bearer ${token}`, // Add token to the Authorization header
-            },
-          }),
-          await axios.get("/api/user/admin-api/user-discount-data/get-all-user-discount", {
-            headers: {
-              Authorization: `Bearer ${token}`, // Add token to the Authorization header
-            },
-          })
-        ]);
-
-        setActiveDiscounts({
-          serverDiscounts: serverDiscounts.data || [],
-          serviceDiscounts: serviceDiscounts.data || [],
-          userDiscounts: userDiscounts.data || []
-        });
-      } catch (error) {
-        console.error("Failed to fetch active discounts:", error);
-        if (error.response) {
-          // Server responded with a status other than 2xx
-          toast.error(error.response.data.message || "Failed to update OTP check setting");
-        } else if (error.request) {
-          // Request was made but no response was received
-          toast.error("No response received from server");
-        } else {
-          // Something went wrong in setting up the request
-          toast.error(`Error: ${error.message}`);
-        }
+        handleError(error);
       }
     };
 
     fetchServers();
-    fetchActiveDiscounts();
   }, []);
-
-  const navigateBack = () => navigate("/");
 
   const handleDiscountTypeChange = (value) => {
     setSelectedDiscountType(value);
-    setSelectedServer("");
+    setSelectedServer(""); // Reset server selection
     
-    if (value === "user") {
-      navigate("/discount/user");
+    if (value === "server") {
+      fetchServerDiscounts();  // Fetch server-specific discounts
+    } else if (value === "service") {
+      fetchServiceDiscounts();  // Fetch service-specific discounts
+    } else if (value === "user") {
+      fetchUserDiscounts();  // Navigate to user-specific discount
+    }
+  };
+
+  const fetchServerDiscounts = async () => {
+    try {
+      const response = await axios.get("/api/server/admin-api/server-discount-update/get-server-discount", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setActiveDiscounts((prevState) => ({
+        ...prevState,
+        serverDiscounts: response.data || [],
+      }));
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const fetchServiceDiscounts = async () => {
+    try {
+      const response = await axios.get("/api/service/admin-api/server-discount-data/get-all-service-discount", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setActiveDiscounts((prevState) => ({
+        ...prevState,
+        serviceDiscounts: response.data || [],
+      }));
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const fetchUserDiscounts = async () => {
+    try {
+      const response = await axios.get("/api/user/admin-api/user-discount-data/get-all-user-discount", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setActiveDiscounts((prevState) => ({
+        ...prevState,
+        userDiscounts: response.data || [],
+      }));
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleError = (error) => {
+    console.error("Error:", error);
+    if (error.response) {
+      toast.error(error.response.data.message || "Error fetching data");
+    } else if (error.request) {
+      toast.error("No response received from the server");
+    } else {
+      toast.error(`Error: ${error.message}`);
     }
   };
 
@@ -130,76 +139,75 @@ const Discount = () => {
     }
   };
 
- // In src/pages/Discount.jsx
-
-// Modify the renderActiveDiscounts function to make items clickable:
-
-const renderActiveDiscounts = () => {
-  return (
-    <div className="mt-8">
-      <h3 className="text-lg font-semibold mb-4">Active Discounts</h3>
-      
-      {/* Server Discounts */}
-      {activeDiscounts.serverDiscounts.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-md font-medium mb-2">Server Discounts</h4>
-          <div className="bg-[#282828] p-4 rounded-lg">
-            {activeDiscounts.serverDiscounts.map((discount, index) => (
-              <div 
-                key={index} 
-                className="flex justify-between items-center mb-2 cursor-pointer hover:bg-[#333333] p-2 rounded"
-                onClick={() => navigate(`/discount/server/${discount.server}`)}
-              >
-                <span>Server {discount.server}</span>
-                <span>Rs {discount.discount}.00</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Service Discounts */}
-      {activeDiscounts.serviceDiscounts.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-md font-medium mb-2">Service Discounts</h4>
-          <div className="bg-[#282828] p-4 rounded-lg">
-            {activeDiscounts.serviceDiscounts.map((discount, index) => (
-              <div 
-                key={index} 
-                className="flex justify-between items-center mb-2 cursor-pointer hover:bg-[#333333] p-2 rounded"
-                onClick={() => navigate(`/discount/service/${discount.server}`)}
-              >
-                <span>{discount.service}</span>
-                <div>
+  // Render active discounts
+  const renderActiveDiscounts = () => {
+    return (
+      <div className="mt-8">
+        <h3 className="text-lg font-semibold mb-4">Active Discounts</h3>
+        
+        {/* Server Discounts */}
+        {activeDiscounts.serverDiscounts.length > 0 && (
+          <div className="mb-6">
+            <h4 className="text-md font-medium mb-2">Server Discounts</h4>
+            <div className="bg-[#282828] p-4 rounded-lg">
+              {activeDiscounts.serverDiscounts.map((discount, index) => (
+                <div 
+                  key={index} 
+                  className="flex justify-between items-center mb-2 cursor-pointer hover:bg-[#333333] p-2 rounded"
+                  onClick={() => navigate(`/discount/server/${discount.server}`)}
+                >
                   <span>Server {discount.server}</span>
-                  <span className="ml-4">Rs {discount.discount}.00</span>
+                  <span>Rs {discount.discount}.00</span>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* User Discounts */}
-      {activeDiscounts.userDiscounts.length > 0 && (
-        <div className="mb-6">
-          <h4 className="text-md font-medium mb-2">User Discounts</h4>
-          <div className="bg-[#282828] p-4 rounded-lg">
-            {activeDiscounts.userDiscounts.map((discount, index) => (
-              <div 
-                key={index} 
-                className="flex justify-between items-center mb-2 cursor-pointer hover:bg-[#333333] p-2 rounded"
-                onClick={() => navigate(`/discount/user/${discount.userId._id}`)}
-              >
-                <span>{discount.userId.email}</span>
-              </div>
-            ))}
+        {/* Service Discounts */}
+        {activeDiscounts.serviceDiscounts.length > 0 && (
+          <div className="mb-6">
+            <h4 className="text-md font-medium mb-2">Service Discounts</h4>
+            <div className="bg-[#282828] p-4 rounded-lg">
+              {activeDiscounts.serviceDiscounts.map((discount, index) => (
+                <div 
+                  key={index} 
+                  className="flex justify-between items-center mb-2 cursor-pointer hover:bg-[#333333] p-2 rounded"
+                  onClick={() => navigate(`/discount/service/${discount.server}`)}
+                >
+                  <span>{discount.service}</span>
+                  <div>
+                    <span>Server {discount.server}</span>
+                    <span className="ml-4">Rs {discount.discount}.00</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
-};
+        )}
+
+        {/* User Discounts */}
+        {activeDiscounts.userDiscounts.length > 0 && (
+          <div className="mb-6">
+            <h4 className="text-md font-medium mb-2">User Discounts</h4>
+            <div className="bg-[#282828] p-4 rounded-lg">
+              {activeDiscounts.userDiscounts.map((discount, index) => (
+                <div 
+                  key={index} 
+                  className="flex justify-between items-center mb-2 cursor-pointer hover:bg-[#333333] p-2 rounded"
+                  onClick={() => navigate(`/discount/user/${discount.userId._id}`)}
+                >
+                  <span>{discount.userId.email}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const navigateBack = () => navigate("/");
 
   return (
     <>

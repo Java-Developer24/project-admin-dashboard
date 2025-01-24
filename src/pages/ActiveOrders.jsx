@@ -159,15 +159,15 @@ const ActiveOrders = () => {
 
   const handleForceDelete = async (userId, Id, number,server,orderId) => {
     try {
-      axios.delete(
-        `/api/user/admin-api/delete-user-number-data/force-delete?userId=${userId}&numberId=${Id}&number=${number}&server=${server}`,
+      await axios.delete(
+        `/api/user/admin-api/delete-user-number-data/force-delete?userId=${userId}&numberId=${Id}&number=${number}`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Add the token to the Authorization header
           },
         }
       );
-      fetchOrders(); // Refresh orders after deletion
+      await fetchOrders(); // Refresh orders after deletion
       // Remove the deleted order from the state
     setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId)); 
     } catch (error) {
@@ -211,9 +211,9 @@ const ActiveOrders = () => {
   }
 };
  // Extract OTPs from transactions based on `numberId`
- const getOTPFromTransaction = (numberId) => {
+ const getOTPFromTransaction = (Id) => {
   const relatedTransactions = transactions.filter(
-    (transaction) => transaction.id === numberId
+    (transaction) => transaction.Id === Id
   );
 
   if (!relatedTransactions.length) return ["Waiting for SMS"];

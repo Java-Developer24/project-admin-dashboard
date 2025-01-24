@@ -61,6 +61,7 @@ const TrxAddressUpdate = () => {
         }
       );
       setNewTrxAddress("");
+      toast.success("Trx Address updated successfully");
       getTrxAddress();
       console.log(response.data);
       // Handle success case

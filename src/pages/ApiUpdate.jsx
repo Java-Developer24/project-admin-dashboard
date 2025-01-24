@@ -143,6 +143,7 @@ const ApiUpdate = () => {
         setSelectedServer("1");
       }
       setNewApi("");
+      toast.success("API Key updated successfully");
     } catch (error) {
       console.error("Error updating API:", error);
     }
@@ -168,6 +169,7 @@ const ApiUpdate = () => {
       );
       fetchExchangeRateAndMargin(selectedServer);
       setNewExchangeRate(""); // Refresh the exchange rate after updating
+      toast.success("Exchange rate updated successfully");
     } catch (error) {
       console.error("Error updating exchange rate:", error);
     }
@@ -190,6 +192,7 @@ const ApiUpdate = () => {
       );
       fetchExchangeRateAndMargin(selectedServer); // Refresh the margin after updating
       setNewMargin("");
+      toast.success("Margin updated successfully");
     } catch (error) {
       console.error("Error updating margin:", error);
     }
