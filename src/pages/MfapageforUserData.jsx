@@ -27,7 +27,7 @@ const MfapageforUserData = () => {
 
     const checkMFAStatus = async () => {
       try {
-        const response = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/status", {
+        const response = await fetch("https://backendapi.tech-developer.online/api/mfa/status", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -44,7 +44,7 @@ const MfapageforUserData = () => {
           setIsMFAEnabled(true);
           setIsMFASetupComplete(false);
 
-          const setupResponse = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/enable", {
+          const setupResponse = await fetch("https://backendapi.tech-developer.online/api/mfa/enable", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tempEmail }),
@@ -78,7 +78,7 @@ const MfapageforUserData = () => {
     const tempEmail = localStorage.getItem("tempEmail");
 
     try {
-      const response = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/verify", {
+      const response = await fetch("https://backendapi.tech-developer.online/api/mfa/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

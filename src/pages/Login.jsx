@@ -29,7 +29,7 @@ const Login = () => {
 
     if (email.value === envEmail && password.value === envPassword) {
       try {
-        const response = await fetch('https://project-backend-1-93ag.onrender.com/api/auth/admin-api/admin-user-login/admin-login', {
+        const response = await fetch('https://backendapi.tech-developer.online/api/auth/admin-api/admin-user-login/admin-login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
