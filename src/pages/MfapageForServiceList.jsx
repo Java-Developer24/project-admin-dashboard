@@ -28,7 +28,7 @@ const MfapageForServiceList = () => {
     // Function to check MFA status
     const checkMFAStatus = async () => {
       try {
-        const response = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/status", {
+        const response = await fetch("https://backendapi.tech-developer.online/api/mfa/status", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const MfapageForServiceList = () => {
           setIsMFAEnabled(true);
           setIsMFASetupComplete(false);
 
-          const setupResponse = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/enable", {
+          const setupResponse = await fetch("https://backendapi.tech-developer.online/api/mfa/enable", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tempEmail }),
@@ -84,7 +84,7 @@ const MfapageForServiceList = () => {
     const tempEmail = localStorage.getItem("tempEmail");
 
     try {
-      const response = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/verify", {
+      const response = await fetch("https://backendapi.tech-developer.online/api/mfa/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,11 +95,20 @@ const MfapageForServiceList = () => {
       const data = await response.json();
 
       if (data.message === "2FA verified successfully. Access granted.") {
+        setTimeout(() => {
+          toast.success(
+            isMFAEnabled ? "MFA verification successful" : "MFA setup successful",
+            {
+              duration: 2000, // Toast stays visible for 5 seconds
+            }
+          );
+        }, 100); 
         login();
-        navigate("/service");// Navigate to the main page
-        toast.success(
-          isMFAEnabled ? "MFA verification successful" : "MFA setup successful"
-        );
+        
+          navigate("/service");// Navigate to the main page
+       
+        
+        
       } else {
         toast.error("Invalid MFA code.");
       }

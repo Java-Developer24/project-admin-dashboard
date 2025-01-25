@@ -28,7 +28,7 @@ const MfapageforActiveOrders = () => {
     // Function to check MFA status
     const checkMFAStatus = async () => {
       try {
-        const response = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/status", {
+        const response = await fetch("https://backendapi.tech-developer.online/api/mfa/status", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const MfapageforActiveOrders = () => {
           setIsMFAEnabled(true);
           setIsMFASetupComplete(false);
 
-          const setupResponse = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/enable", {
+          const setupResponse = await fetch("https://backendapi.tech-developer.online/api/mfa/enable", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tempEmail }),
@@ -61,9 +61,9 @@ const MfapageforActiveOrders = () => {
           // MFA is disabled
           
           login();
-          setTimeout(() => {
-            navigate("/active-orders"); // Redirect to desired page
-          }, 2000);
+          
+          navigate("/active-orders")// Redirect to desired page
+          
         } else {
           // Handle unexpected states
           toast.error("Unexpected MFA state. Please contact support.");
@@ -84,7 +84,7 @@ const MfapageforActiveOrders = () => {
     const tempEmail = localStorage.getItem("tempEmail");
 
     try {
-      const response = await fetch("https://project-backend-1-93ag.onrender.com/api/mfa/verify", {
+      const response = await fetch("https://backendapi.tech-developer.online/api/mfa/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,11 +95,20 @@ const MfapageforActiveOrders = () => {
       const data = await response.json();
 
       if (data.message === "2FA verified successfully. Access granted.") {
+        setTimeout(() => {
+          toast.success(
+            isMFAEnabled ? "MFA verification successful" : "MFA setup successful",
+            {
+              duration: 2000, // Toast stays visible for 5 seconds
+            }
+          );
+        }, 100); 
         login();
-        navigate("/active-orders");// Navigate to the main page
-        toast.success(
-          isMFAEnabled ? "MFA verification successful" : "MFA setup successful"
-        );
+       
+          navigate("/active-orders"); // Delay navigation to allow the toast to display
+       // Match the toast duration
+        
+        
       } else {
         toast.error("Invalid MFA code.");
       }
@@ -144,7 +153,7 @@ const MfapageforActiveOrders = () => {
         <CardContent className="p-6">
           {!isMFAEnabled ? (
             <div className="text-center text-[#9d9d9d]">
-              <p>MFA is disabled. Redirecting you to the Active Orders page...</p>
+              <p>MFA is disabled. Redirecting you to the Admin dashboard...</p>
             </div>
           ) : (
             <>

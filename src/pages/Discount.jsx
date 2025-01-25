@@ -63,13 +63,15 @@ const Discount = () => {
     setSelectedServer(""); // Reset server selection
     
     if (value === "server") {
-      fetchServerDiscounts();  // Fetch server-specific discounts
+      fetchServerDiscounts(); // Fetch server-specific discounts
     } else if (value === "service") {
-      fetchServiceDiscounts();  // Fetch service-specific discounts
+      fetchServiceDiscounts(); // Fetch service-specific discounts
     } else if (value === "user") {
-      fetchUserDiscounts();  // Navigate to user-specific discount
+      // Redirect to the user discount page directly
+      navigate("/discount/user"); // Navigate to the user discount overview page
     }
   };
+  
 
   const fetchServerDiscounts = async () => {
     try {
