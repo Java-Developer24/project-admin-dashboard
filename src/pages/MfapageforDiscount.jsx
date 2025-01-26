@@ -95,16 +95,14 @@ const MfapageforDiscount = () => {
       const data = await response.json();
 
       if (data.message === "2FA verified successfully. Access granted.") {
-        setTimeout(() => {
+       
           toast.success(
-            isMFAEnabled ? "MFA verification successful" : "MFA setup successful",
-            {
-              duration: 2000, // Toast stays visible for 5 seconds
-            }
-          );
-        }, 100); 
+            isMFAEnabled ? "MFA verification successful" : "MFA setup successful", );
+    
         login();
+      
           navigate("/discount");// Navigate to the main page
+      
        
         
         
@@ -118,6 +116,10 @@ const MfapageforDiscount = () => {
     }
   };
 
+  useEffect(() => {
+    // Clear all toasts when the component unmounts
+    return () => toast.dismiss()
+  }, [])
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">

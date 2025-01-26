@@ -89,19 +89,15 @@ const MfapageforUserData = () => {
       const data = await response.json();
 
       if (data.message === "2FA verified successfully. Access granted.") {
-        
-       
-        setTimeout(() => {
-          toast.success(
-            isMFAEnabled ? "MFA verification successful" : "MFA setup successful",
-            {
-              duration: 2000, // Toast stays visible for 5 seconds
-            }
-          );
-        }, 100); // Delay toast display by 2 seconds
+        toast.success(isMFAEnabled ? "MFA verification successful" : "MFA setup successful", {
+          duration: 3000,
+          position: "top-center",
+        })
         login();
-        
+       
           navigate("/users-data");
+      
+          
         
         
         
@@ -113,6 +109,12 @@ const MfapageforUserData = () => {
       toast.error("Failed to verify MFA code.");
     }
   };
+
+  useEffect(() => {
+    // Clear all toasts when the component unmounts
+    return () => toast.dismiss()
+  }, [])
+
 
   if (loading) {
     return (

@@ -96,18 +96,17 @@ const MfaPage = () => {
 
       if (data.message === "2FA verified successfully. Access granted.") {
         
-        setTimeout(() => {
+       
           toast.success(
-            isMFAEnabled ? "MFA verification successful" : "MFA setup successful",
-            {
-              duration: 2000, // Toast stays visible for 5 seconds
-            }
-          );
-        }, 100); 
+            isMFAEnabled ? "MFA verification successful" : "MFA setup successful",  );
+   
 
         login();
-        
-        navigate("/");// Navigate to the main page
+        setTimeout(() => {
+          navigate("/"); // Delay navigation to allow the toast to display
+          // Match the toast duration
+        }, 2000);
+       
        
       } else {
         toast.error("Invalid MFA code.");
