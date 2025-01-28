@@ -74,7 +74,7 @@ const Settings = () => {
         setBanner(bannerRes.data.message || "");
         setOtpTime(timeRes.data.otpTimeWindow || "");
         setAdminIP(ipRes.data.adminIp);
-        setCheckOtp(checkOtpRes.data.status);
+        setCheckOtp(checkOtpRes.data.checkOtp);
         setMfaCheck(mfaCheckRes.data.is2FAEnabled)
         setAPIAdminIP(apiIpRes.data.apiadminIP)
         setMinutes(jobRun.data.minute)

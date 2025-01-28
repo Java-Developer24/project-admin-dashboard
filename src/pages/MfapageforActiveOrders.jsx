@@ -93,8 +93,8 @@ const MfapageforActiveOrders = () => {
 
       if (data.message === "2FA verified successfully. Access granted.") {
         toast.success(isMFAEnabled ? "MFA verification successful" : "MFA setup successful", {
-          duration: 3000,
-          position: "top-center",
+          
+          
         })
         login()
         // Delay navigation to allow the toast to be visible

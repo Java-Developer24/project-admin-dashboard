@@ -90,8 +90,8 @@ const MfapageforUserData = () => {
 
       if (data.message === "2FA verified successfully. Access granted.") {
         toast.success(isMFAEnabled ? "MFA verification successful" : "MFA setup successful", {
-          duration: 3000,
-          position: "top-center",
+          
+         
         })
         login();
        

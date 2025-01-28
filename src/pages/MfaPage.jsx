@@ -102,10 +102,10 @@ const MfaPage = () => {
    
 
         login();
-        setTimeout(() => {
+       
           navigate("/"); // Delay navigation to allow the toast to display
           // Match the toast duration
-        }, 2000);
+       
        
        
       } else {
@@ -116,6 +116,10 @@ const MfaPage = () => {
       toast.error("Failed to verify MFA code.");
     }
   };
+  useEffect(() => {
+    // Clear all toasts when the component unmounts
+    return () => toast.dismiss()
+  }, [])
 
   if (loading) {
     return (
