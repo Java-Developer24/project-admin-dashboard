@@ -16,9 +16,9 @@ const ServerBalances = () => {
     server3: { balance: 0, currency: '$' },
     server4: { balance: 0, currency: 'p' },
     server5: { balance: 0, currency: 'p' },
-    server6: { balance: 0, currency: 'p' },
-    server7: { balance: 0, currency: '$' },
-    server8: { balance: 0, currency: 'p' },
+    server6: { balance: 0, currency: '$' },
+    server7: { balance: 0, currency: 'p' },
+    server8: { balance: 0, currency: '$' },
     
   });
   const [loading, setLoading] = useState(true); // State to handle the loading state

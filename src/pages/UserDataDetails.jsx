@@ -50,29 +50,33 @@ const UserDataDetails = () => {
     fetchUser();
   }, [id]);
 
-  const handleFetchBlockReason = async () => {
+  
+  const handleFetchBlockReason = async (userId) => {
     try {
-      const response = await axios.get("/api/user/admin-api/user-block-data/get-all-blocked-users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.data) {
-        const userBlockDetails = response.data.find(user => user.email ); // Match email instead of userId
-        if (userBlockDetails) {
-          setBlockReason(userBlockDetails.blocked_reason); // Adjusted key to match the response field
-          setShowModal(true);
-          
-        } else {
-          toast.error("No block details found for this user.");
+      const response = await axios.post(
+        "/api/user//admin-api/user-block-data/get-user-block-status",
+        { userId: id }, // Send userId in request body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+  
+      if (response.data.length > 0) {
+        const userBlockDetails = response.data[0]; // API returns an array
+  
+        setBlockReason(userBlockDetails.blocked_reason); // Set block reason
+        setShowModal(true);
       } else {
-        console.error("Failed to fetch block details:", response.data.message);
+        toast.error("No block details found for this user.");
       }
     } catch (error) {
       console.error("Error fetching block details:", error);
+      toast.error("Failed to fetch block details.");
     }
   };
+  
   
 
   const handleBlockToggle = async () => {
