@@ -28,7 +28,7 @@ const MfapageforActiveOrders = () => {
     // Function to check MFA status
     const checkMFAStatus = async () => {
       try {
-        const response = await fetch("https://backendapi.tech-developer.online/api/mfa/status", {
+        const response = await fetch("https://api.paidsms.org/api/mfa/status", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const MfapageforActiveOrders = () => {
           setIsMFAEnabled(true)
           setIsMFASetupComplete(false)
 
-          const setupResponse = await fetch("https://backendapi.tech-developer.online/api/mfa/enable", {
+          const setupResponse = await fetch("https://api.paidsms.org/api/mfa/enable", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tempEmail }),
@@ -81,7 +81,7 @@ const MfapageforActiveOrders = () => {
     const tempEmail = localStorage.getItem("tempEmail")
 
     try {
-      const response = await fetch("https://backendapi.tech-developer.online/api/mfa/verify", {
+      const response = await fetch("https://api.paidsms.org/api/mfa/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

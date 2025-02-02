@@ -30,8 +30,9 @@ const ServerBalances = () => {
    
     server4: "GRIZZLYSMS",
     server5: "TEMPNUMBER",
-    server7: "SMSBOWER",
     server6: "SMS-ACTIVATE.guru",
+    server7: "SMSBOWER",
+    
     server8: "CCPAY",
     
   };
