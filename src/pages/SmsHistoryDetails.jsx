@@ -308,11 +308,13 @@ const transactionData = sortedFilteredTransactionHistory.slice(
                       </td>
                     </tr>
                     <tr>
-                      <td className="border-b-2 border-[#949494] p-3 px-5 text-[#959595]">
+                      <td className="border-b-2 border-[#949494]  px-5 text-[#959595]">
                         Status
                       </td>
                       
-                      <td className="border-b-2 border-[#949494] p-3 flex justify-between items-center" style={wrapStyle}>
+                     
+                      <td className="border-b-2 border-[#949494] p-3   ">
+                      <td 	 className="justify-between	 items-center flex" style={wrapStyle}>
                         <span>{item.status}</span>
                         <Button
                           onClick={(e) => {
@@ -322,6 +324,7 @@ const transactionData = sortedFilteredTransactionHistory.slice(
                         >
                           <Icon.trash className="w-4 h-4 text-red-600" />
                         </Button>
+                       </td>
                        </td>
                       
                     </tr>
