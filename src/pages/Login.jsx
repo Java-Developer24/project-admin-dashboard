@@ -29,7 +29,7 @@ const Login = () => {
 
     if (email.value  && password.value) {
       try {
-        const response = await fetch('http://localhost:3000/api/auth/admin-api/admin-user-login/admin-login', {
+        const response = await fetch('/api/auth/admin-api/admin-user-login/admin-login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
