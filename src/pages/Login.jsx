@@ -27,9 +27,9 @@ const Login = () => {
     const envEmail = import.meta.env.VITE_ADMIN_LOGIN_EMAIL;
     const envPassword = import.meta.env.VITE_ADMIN_LOGIN_PASSWORD;
 
-    if (email.value === envEmail && password.value === envPassword) {
+    if (email.value  && password.value) {
       try {
-        const response = await fetch('https://api.paidsms.org/api/auth/admin-api/admin-user-login/admin-login', {
+        const response = await fetch('http://localhost:3000/api/auth/admin-api/admin-user-login/admin-login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
