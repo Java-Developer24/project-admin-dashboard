@@ -29,7 +29,7 @@ const Login = () => {
 
     if (email.value  && password.value) {
       try {
-        const response = await fetch('/api/auth/admin-api/admin-user-login/admin-login', {
+        const response = await fetch('https://api.paidsms.org/api/auth/admin-api/admin-user-login/admin-login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
